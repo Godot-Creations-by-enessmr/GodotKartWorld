@@ -1,0 +1,155 @@
+[gd_resource type="VisualShader" load_steps=16 format=3 uid="uid://dca0eoqira5p5"]
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_akmaa"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+op_type = 3
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_kyldx"]
+constant = 0.25
+
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_f6k6l"]
+function = 31
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_4e4pt"]
+input_name = "normal"
+
+[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_0o6kd"]
+parameter_name = "Splatmap"
+texture_filter = 6
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_n6c22"]
+parameter_name = "NoiseNormal"
+hint = 1
+default_value_enabled = true
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_g5e00"]
+expanded_output_ports = [0]
+source = 5
+
+[sub_resource type="VisualShaderNodeCustom" id="VisualShaderNodeCustom_rjb84"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(0, 0, 0), 2, Vector3(0, 0, 0), 3, 1.0]
+initialized = true
+
+[sub_resource type="VisualShaderNodeClamp" id="VisualShaderNodeClamp_myjke"]
+default_input_values = [0, 0.0, 1, 0.5, 2, 1.0]
+
+[sub_resource type="VisualShaderNodeTextureParameterTriplanar" id="VisualShaderNodeTextureParameterTriplanar_g5hhk"]
+parameter_name = "NoiseTexture"
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_h4obs"]
+parameter_name = "terrain_color_0"
+qualifier = 1
+default_value_enabled = true
+default_value = Color(0.396078, 0.929412, 0.129412, 1)
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_8k5dn"]
+parameter_name = "terrain_color_1"
+qualifier = 1
+default_value_enabled = true
+default_value = Color(0.88, 0.744333, 0.66, 1)
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_oxglm"]
+parameter_name = "terrain_color_2"
+qualifier = 1
+default_value_enabled = true
+default_value = Color(1, 0.78, 0.45, 1)
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_guj8d"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+op_type = 3
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_2krdr"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+op_type = 3
+
+[resource]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
+
+uniform sampler2D NoiseTexture;
+
+
+// TextureParameterTriplanar
+	vec4 triplanar_texture(sampler2D p_sampler, vec3 p_weights, vec3 p_triplanar_pos) {
+		vec4 samp = vec4(0.0);
+		samp += texture(p_sampler, p_triplanar_pos.xy) * p_weights.z;
+		samp += texture(p_sampler, p_triplanar_pos.xz) * p_weights.y;
+		samp += texture(p_sampler, p_triplanar_pos.zy * vec2(-1.0, 1.0)) * p_weights.x;
+		return samp;
+	}
+
+	uniform vec3 triplanar_scale = vec3(1.0, 1.0, 1.0);
+	uniform vec3 triplanar_offset;
+	uniform float triplanar_sharpness = 0.5;
+
+	varying vec3 triplanar_power_normal;
+	varying vec3 triplanar_pos;
+
+void vertex() {
+// TextureParameterTriplanar
+	{
+		triplanar_power_normal = pow(abs(NORMAL), vec3(triplanar_sharpness));
+		triplanar_power_normal /= dot(triplanar_power_normal, vec3(1.0));
+		triplanar_pos = VERTEX * triplanar_scale + triplanar_offset;
+		triplanar_pos *= vec3(1.0, -1.0, 1.0);
+	}
+}
+
+void fragment() {
+// TextureParameterTriplanar:4
+	vec4 n_out4p0 = triplanar_texture(NoiseTexture, triplanar_power_normal, triplanar_pos);
+
+
+// FloatFunc:13
+	float n_out13p0 = 1.0 - n_out4p0.x;
+
+
+// Clamp:31
+	float n_in31p1 = 0.50000;
+	float n_in31p2 = 1.00000;
+	float n_out31p0 = clamp(n_out13p0, n_in31p1, n_in31p2);
+
+
+// FloatConstant:12
+	float n_out12p0 = 0.250000;
+
+
+// Output:0
+	ROUGHNESS = n_out31p0;
+	SPECULAR = n_out12p0;
+
+
+}
+"
+nodes/fragment/0/position = Vector2(280, 460)
+nodes/fragment/2/node = SubResource("VisualShaderNodeTexture2DParameter_0o6kd")
+nodes/fragment/2/position = Vector2(-2840, 520)
+nodes/fragment/3/node = SubResource("VisualShaderNodeTexture_g5e00")
+nodes/fragment/3/position = Vector2(-2420, 720)
+nodes/fragment/4/node = SubResource("VisualShaderNodeTextureParameterTriplanar_g5hhk")
+nodes/fragment/4/position = Vector2(-1240, 620)
+nodes/fragment/5/node = SubResource("VisualShaderNodeColorParameter_h4obs")
+nodes/fragment/5/position = Vector2(-2220, -100)
+nodes/fragment/6/node = SubResource("VisualShaderNodeColorParameter_8k5dn")
+nodes/fragment/6/position = Vector2(-2220, 100)
+nodes/fragment/7/node = SubResource("VisualShaderNodeColorParameter_oxglm")
+nodes/fragment/7/position = Vector2(-2220, 300)
+nodes/fragment/8/node = SubResource("VisualShaderNodeMix_guj8d")
+nodes/fragment/8/position = Vector2(-1720, 120)
+nodes/fragment/9/node = SubResource("VisualShaderNodeMix_2krdr")
+nodes/fragment/9/position = Vector2(-1520, 180)
+nodes/fragment/10/node = SubResource("VisualShaderNodeMix_akmaa")
+nodes/fragment/10/position = Vector2(-1340, 260)
+nodes/fragment/12/node = SubResource("VisualShaderNodeFloatConstant_kyldx")
+nodes/fragment/12/position = Vector2(-60, 520)
+nodes/fragment/13/node = SubResource("VisualShaderNodeFloatFunc_f6k6l")
+nodes/fragment/13/position = Vector2(-420, 420)
+nodes/fragment/14/node = SubResource("VisualShaderNodeInput_4e4pt")
+nodes/fragment/14/position = Vector2(-720, 800)
+nodes/fragment/20/node = SubResource("VisualShaderNodeFloatParameter_n6c22")
+nodes/fragment/20/position = Vector2(-420, 980)
+nodes/fragment/30/node = SubResource("VisualShaderNodeCustom_rjb84")
+nodes/fragment/30/position = Vector2(-80, 800)
+nodes/fragment/31/node = SubResource("VisualShaderNodeClamp_myjke")
+nodes/fragment/31/position = Vector2(-80, 340)
+nodes/fragment/connections = PackedInt32Array(2, 0, 3, 2, 5, 0, 8, 1, 3, 1, 8, 2, 8, 0, 9, 0, 3, 2, 9, 2, 9, 0, 10, 0, 7, 0, 10, 1, 3, 3, 10, 2, 12, 0, 0, 4, 4, 0, 13, 0, 6, 0, 9, 1, 13, 0, 31, 0, 31, 0, 0, 3)

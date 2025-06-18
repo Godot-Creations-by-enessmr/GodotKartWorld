@@ -1,0 +1,25 @@
+[gd_scene load_steps=6 format=3 uid="uid://ckpdq72am535g"]
+
+[ext_resource type="PackedScene" uid="uid://pe0gvno6wupo" path="res://environment/levels/woods/woods.tscn" id="1_n0mom"]
+[ext_resource type="PackedScene" uid="uid://c34ci0r02fbv8" path="res://player/player.tscn" id="2_icvg0"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_u4fby"]
+
+[sub_resource type="Sky" id="Sky_oc215"]
+sky_material = SubResource("ProceduralSkyMaterial_u4fby")
+
+[sub_resource type="Environment" id="Environment_gsu2v"]
+background_mode = 2
+sky = SubResource("Sky_oc215")
+
+[node name="Node3D" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_gsu2v")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.997542, 0.0686088, 0.0142298, 0.0586577, 0.7066, 0.705178, 0.0383266, 0.704279, -0.708888, 0, 10.6971, 0)
+
+[node name="test" parent="." instance=ExtResource("1_n0mom")]
+
+[node name="Player" parent="." instance=ExtResource("2_icvg0")]

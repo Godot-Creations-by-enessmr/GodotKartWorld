@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://dg25e8yln6wea"]
+
+[ext_resource type="Script" uid="uid://dnmboat3sqbt1" path="res://player/player.gd" id="1_oul6g"]
+[ext_resource type="Script" uid="uid://b4qki7c3s65xy" path="res://player/camera_controller.gd" id="2_rkbax"]
+[ext_resource type="PackedScene" uid="uid://btvbhyy5ht8ti" path="res://player/karts/kart.tscn" id="3_g1dw6"]
+[ext_resource type="Script" uid="uid://ufnfriojeahl" path="res://player/player_input_manager.gd" id="4_yw30f"]
+
+[node name="Player" type="Node3D" node_paths=PackedStringArray("kart", "camera")]
+script = ExtResource("1_oul6g")
+kart = NodePath("Kart")
+camera = NodePath("CameraPivot")
+
+[node name="CameraPivot" type="Node3D" parent="." node_paths=PackedStringArray("kart", "camera")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.563, 0)
+script = ExtResource("2_rkbax")
+kart = NodePath("../Kart")
+camera = NodePath("Pivot2/Camera3D")
+camera_reset_delay = 0.5
+
+[node name="Pivot2" type="Node3D" parent="CameraPivot"]
+transform = Transform3D(1, 0, 0, 0, 0.866026, 0.5, 0, -0.5, 0.866026, 0, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="CameraPivot/Pivot2"]
+transform = Transform3D(1, 0, 0, 0, 1, -2.98023e-08, 0, 2.98023e-08, 1, 0, -1.19209e-07, 5)
+current = true
+fov = 90.0
+
+[node name="Kart" parent="." instance=ExtResource("3_g1dw6")]
+
+[node name="PlayerInputManager" type="Node" parent="."]
+script = ExtResource("4_yw30f")

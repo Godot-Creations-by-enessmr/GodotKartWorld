@@ -1,0 +1,32 @@
+[gd_scene load_steps=8 format=3 uid="uid://ckpdq72am535g"]
+
+[ext_resource type="Environment" uid="uid://0lam7vhmk4jq" path="res://environment/levels/island/environment_settings.tres" id="1_effn5"]
+[ext_resource type="PackedScene" uid="uid://cv0f1s0wymtp1" path="res://game/game_manager.tscn" id="1_sl782"]
+[ext_resource type="CameraAttributesPractical" uid="uid://cohydrwdcdt8n" path="res://environment/levels/island/camera_attributes.tres" id="2_76jwb"]
+[ext_resource type="PackedScene" uid="uid://c34ci0r02fbv8" path="res://player/player.tscn" id="2_icvg0"]
+[ext_resource type="PackedScene" uid="uid://7jusdbeu0yp8" path="res://environment/levels/island/island.tscn" id="5_rnavg"]
+[ext_resource type="PackedScene" uid="uid://bt7r47f4tqfiw" path="res://enemies/mushrooms/lesser_shrooms/lesser_shroom.tscn" id="6_74idw"]
+[ext_resource type="PackedScene" uid="uid://d336ol7nf3cxq" path="res://enemies/structures/spawners/mushroom/mushroom_spawner.tscn" id="7_fymg5"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("1_effn5")
+camera_attributes = ExtResource("2_76jwb")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.997542, 0.0686088, 0.0142298, 0.0586577, 0.7066, 0.705178, 0.0383266, 0.704279, -0.708888, 0, 10.6971, 0)
+shadow_enabled = true
+
+[node name="GameManager" parent="." instance=ExtResource("1_sl782")]
+
+[node name="Player" parent="." instance=ExtResource("2_icvg0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 14.6296, 0)
+
+[node name="test" parent="." instance=ExtResource("5_rnavg")]
+
+[node name="LesserShroom" parent="." instance=ExtResource("6_74idw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.48861, 14.2117, -10.2144)
+
+[node name="MushroomSpawner" parent="." instance=ExtResource("7_fymg5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.4196, 12.7307, -18.2745)

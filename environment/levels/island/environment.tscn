@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://28weu640y5oo"]
+
+[ext_resource type="PackedScene" uid="uid://blp2pms20j38t" path="res://environment/levels/island/environment.glb" id="1_vdona"]
+[ext_resource type="Material" uid="uid://cua8eok2wwbl8" path="res://environment/terrain/terrain_mat.tres" id="2_mo3sl"]
+[ext_resource type="Material" uid="uid://bpibc1nfl30gu" path="res://environment/water/water_material.tres" id="2_xxbeq"]
+[ext_resource type="Material" uid="uid://cn2gduakar32o" path="res://environment/levels/island/sand_mat.tres" id="4_rqet8"]
+
+[node name="environment" instance=ExtResource("1_vdona")]
+
+[node name="Island" parent="." index="0" groups=["Environment"]]
+surface_material_override/0 = ExtResource("2_mo3sl")
+
+[node name="StaticBody3D" parent="Island" index="0"]
+collision_mask = 0
+
+[node name="Floor" parent="." index="1"]
+surface_material_override/0 = ExtResource("4_rqet8")
+
+[node name="StaticBody3D" parent="Floor" index="0"]
+collision_mask = 0
+
+[node name="Water" parent="." index="2"]
+material_override = ExtResource("2_xxbeq")
+
+[node name="GrassCollider" parent="." index="3"]
+collision_layer = 8
+collision_mask = 0

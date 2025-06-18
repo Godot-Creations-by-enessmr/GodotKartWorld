@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://0eh0u5pnb1ki"]
+
+[ext_resource type="Script" path="res://environment/clouds/cloud_spawner.gd" id="1_05grv"]
+[ext_resource type="PackedScene" uid="uid://ck6egnxrcvrhq" path="res://environment/clouds/cloud.tscn" id="2_k0bl0"]
+
+[node name="Cloud Spawner" type="Node3D"]
+script = ExtResource("1_05grv")
+cloud_count = 100
+cloud_scene = ExtResource("2_k0bl0")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+visible = false
+size = Vector3(200, 20, 200)

@@ -1,0 +1,55 @@
+[gd_scene load_steps=8 format=3 uid="uid://btvbhyy5ht8ti"]
+
+[ext_resource type="Script" uid="uid://whwiqs4rjsoj" path="res://player/karts/kart.gd" id="1_cyw3l"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_kqu6x"]
+size = Vector3(1.125, 0.75, 2.25)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kqu6x"]
+albedo_color = Color(1, 0.25, 0.25, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_67si0"]
+albedo_color = Color(0.28, 0.28, 0.28, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_j640v"]
+top_radius = 0.3
+bottom_radius = 0.3
+height = 1.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_k55co"]
+size = Vector3(1.5, 0.25, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_oul6g"]
+size = Vector3(1.1, 1.1, 2.2)
+
+[node name="Kart" type="RigidBody3D" node_paths=PackedStringArray("ground_raycast")]
+script = ExtResource("1_cyw3l")
+ground_raycast = NodePath("RayCast3D")
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55946, 0)
+mesh = SubResource("BoxMesh_kqu6x")
+surface_material_override/0 = SubResource("StandardMaterial3D_kqu6x")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Mesh"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, -0.292006, 0.591333)
+material_override = SubResource("StandardMaterial3D_67si0")
+mesh = SubResource("CylinderMesh_j640v")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Mesh"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, -0.292, -0.591)
+material_override = SubResource("StandardMaterial3D_67si0")
+mesh = SubResource("CylinderMesh_j640v")
+
+[node name="Mesh" type="MeshInstance3D" parent="Mesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.390476, 1)
+mesh = SubResource("BoxMesh_k55co")
+surface_material_override/0 = SubResource("StandardMaterial3D_kqu6x")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.563, 0)
+shape = SubResource("BoxShape3D_oul6g")
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+target_position = Vector3(0, -0.2, 0)
