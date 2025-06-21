@@ -29,4 +29,4 @@ func _process(delta: float) -> void:
 	if _camera_reset_cooldown < 0:
 		var wish_basis := kart.global_basis
 		var t = 1 -pow(0.2, 2 * delta)
-		global_basis = global_basis.slerp(wish_basis, t)
+		global_basis = global_basis.orthonormalized().slerp(wish_basis, t)
