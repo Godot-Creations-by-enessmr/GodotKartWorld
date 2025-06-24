@@ -6,6 +6,7 @@
 [ext_resource type="Material" uid="uid://cn2gduakar32o" path="res://environment/levels/island/sand_mat.tres" id="4_rqet8"]
 
 [node name="environment" instance=ExtResource("1_vdona")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 
 [node name="Island" parent="." index="0" groups=["Environment"]]
 surface_material_override/0 = ExtResource("2_mo3sl")

@@ -6,13 +6,23 @@ class_name WaterBuoyancy extends Node3D
 @export var damping_coefficient: float = 2.0
 @export var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 @export var align_to_normal: bool = false
+@onready var parent : Node3D = $"../"
 
 var water_level: float = 0.0
 var water_normal: Vector3 = Vector3.UP
 var water_force: Vector3 = Vector3.ZERO
 
+func is_on_water() -> bool:
+	return water_level >= parent.global_position.y	
+
+func get_water_height() -> float:
+	return water_level
+
+func get_surface_normal() -> Vector3:
+	return water_normal
+
 func _physics_process(delta: float) -> void:
-	var depth := water_level - global_position.y
+	var depth := water_level - parent.global_position.y
 	if depth <= 0.0:
 		water_force = Vector3.ZERO
 		return

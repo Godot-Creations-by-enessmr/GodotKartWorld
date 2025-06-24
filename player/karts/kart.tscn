@@ -13,45 +13,49 @@ albedo_color = Color(1, 0.25, 0.25, 1)
 [sub_resource type="BoxMesh" id="BoxMesh_k55co"]
 size = Vector3(1.5, 0.25, 0.5)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_oul6g"]
-size = Vector3(1.1, 0.75, 2.22158)
+[sub_resource type="SphereShape3D" id="SphereShape3D_krwk8"]
 
-[node name="Kart" type="VehicleBody3D" node_paths=PackedStringArray("water_buoyancy")]
-mass = 500.0
+[node name="Kart" type="CharacterBody3D"]
 script = ExtResource("1_cyw3l")
-water_buoyancy = NodePath("WaterBuoyancy")
 
-[node name="Mesh" type="MeshInstance3D" parent="."]
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="Mesh" type="MeshInstance3D" parent="Visual"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.382298, 0)
 mesh = SubResource("BoxMesh_kqu6x")
+skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_kqu6x")
 
-[node name="Mesh" type="MeshInstance3D" parent="Mesh"]
+[node name="Mesh" type="MeshInstance3D" parent="Visual/Mesh"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.390476, 1)
 mesh = SubResource("BoxMesh_k55co")
 surface_material_override/0 = SubResource("StandardMaterial3D_kqu6x")
 
+[node name="VehicleWheel3D" parent="Visual" instance=ExtResource("2_k70jy")]
+transform = Transform3D(-1, 0, -5.96046e-08, 0, 1, 0, 5.96046e-08, 0, -1, -0.575, 0.0747575, -0.6)
+steering_enabled = true
+traction_enabled = true
+
+[node name="VehicleWheel3D2" parent="Visual" instance=ExtResource("2_k70jy")]
+transform = Transform3D(-1, 0, -5.96046e-08, 0, 1, 0, 5.96046e-08, 0, -1, 0.575, 0.0747575, -0.6)
+steering_enabled = true
+traction_enabled = true
+
+[node name="VehicleWheel3D3" parent="Visual" instance=ExtResource("2_k70jy")]
+transform = Transform3D(-1, 0, -5.96046e-08, 0, 1, 0, 5.96046e-08, 0, -1, -0.575, 0.0747575, 0.6)
+
+[node name="VehicleWheel3D4" parent="Visual" instance=ExtResource("2_k70jy")]
+transform = Transform3D(-1, 0, -5.96046e-08, 0, 1, 0, 5.96046e-08, 0, -1, 0.575, 0.0747575, 0.6)
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.385839, -0.0107909)
-shape = SubResource("BoxShape3D_oul6g")
-
-[node name="VehicleWheel3D" parent="." instance=ExtResource("2_k70jy")]
-transform = Transform3D(-1, 0, -5.96046e-08, 0, 1, 0, 5.96046e-08, 0, -1, -0.575, 0.166794, -0.6)
-use_as_traction = true
-use_as_steering = true
-
-[node name="VehicleWheel3D2" parent="." instance=ExtResource("2_k70jy")]
-transform = Transform3D(-1, 0, -5.96046e-08, 0, 1, 0, 5.96046e-08, 0, -1, 0.575, 0.166794, -0.6)
-use_as_traction = true
-use_as_steering = true
-
-[node name="VehicleWheel3D3" parent="." instance=ExtResource("2_k70jy")]
-transform = Transform3D(-1, 0, -5.96046e-08, 0, 1, 0, 5.96046e-08, 0, -1, -0.575, 0.166794, 0.6)
-
-[node name="VehicleWheel3D4" parent="." instance=ExtResource("2_k70jy")]
-transform = Transform3D(-1, 0, -5.96046e-08, 0, 1, 0, 5.96046e-08, 0, -1, 0.575, 0.166794, 0.6)
+shape = SubResource("SphereShape3D_krwk8")
 
 [node name="WaterBuoyancy" type="Node3D" parent="."]
 script = ExtResource("3_krwk8")
 max_depth = 10.0
 fluid_density = 998.0
+
+[node name="DebugLabel" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
