@@ -2,26 +2,26 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ke31vyfc6upc"
-path="res://.godot/imported/splatmap_topdown.png-428f7cec8bce4b36b1c44c0c93ce0bf0.ctex"
+uid="uid://daq1qi53rucdq"
+path="res://.godot/imported/banner.png-8ee27b3b5af0c6e04c667908bd5698ae.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://environment/levels/island/splatmap_topdown.png"
-dest_files=["res://.godot/imported/splatmap_topdown.png-428f7cec8bce4b36b1c44c0c93ce0bf0.ctex"]
+source_file="res://banner.png"
+dest_files=["res://.godot/imported/banner.png-8ee27b3b5af0c6e04c667908bd5698ae.ctex"]
 
 [params]
 
-compress/mode=1
+compress/mode=0
 compress/high_quality=false
-compress/lossy_quality=0.18
+compress/lossy_quality=0.7
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
@@ -31,4 +31,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=0
+detect_3d/compress_to=1

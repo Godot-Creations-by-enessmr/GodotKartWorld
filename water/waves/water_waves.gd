@@ -1,13 +1,15 @@
 extends Node
 
-############################################################################
-
 @export var texture_resolution : Vector2i = Vector2i(512, 512)
-@export var texture_size : Vector2 = Vector2(512, 512)
+@export var texture_size : Vector2 = Vector2(64, 64)
+@export var texture_offset : Vector3 = Vector3.ZERO
 @export var water_material : ShaderMaterial
 @export_range(1.0, 10.0, 0.1) var damp : float = 1.0
 
-var ripple_texture_centers := [Vector3.ZERO, Vector3.ZERO, Vector3.ZERO]
+var ripple_texture_centers : Array[Vector2i] = [Vector2i.ZERO, Vector2i.ZERO, Vector2i.ZERO]
+var texture_pixel_offset : Vector2i
+# each vector: x, z, radius, strength
+var ripple_origins : Array[Vector4] = [];
 
 var t = 0.0
 var max_t = 0.1
@@ -15,8 +17,19 @@ var max_t = 0.1
 var water_texture : Texture2DRD
 var next_texture : int = 0
 
+
+func add_ripple(position: Vector3, radius: float, strength: float) -> void:
+	var pixel_position : Vector2i = Vector2(texture_resolution) / texture_size * Vector2(position.x, position.z)
+	pixel_position -= texture_pixel_offset - Vector2i(texture_resolution * 0.5)
+	ripple_origins.append(Vector4(pixel_position.x, pixel_position.y, radius, strength))
+
 func _ready():
+	# In case we're running stuff on the rendering thread
+	# we need to do our initialisation on that thread.
 	RenderingServer.call_on_render_thread(_initialize_compute_code.bind(texture_resolution))
+
+	for i in range(len(ripple_texture_centers)):
+		ripple_texture_centers[i] = Vector2i.ZERO
 
 	if water_material:
 		water_material.set_shader_parameter("waves_texture_resolution", texture_resolution)
@@ -25,19 +38,31 @@ func _ready():
 
 
 func _exit_tree():
+	# Make sure we clean up!
 	if water_texture:
 		water_texture.texture_rd_rid = RID()
 
 	RenderingServer.call_on_render_thread(_free_compute_resources)
 
-
 func _process(delta):
 	next_texture = (next_texture + 1) % 3
-
 	if water_texture:
 		water_texture.texture_rd_rid = texture_rds[next_texture]
-
-	RenderingServer.call_on_render_thread(_render_process.bind(next_texture, Vector4.ZERO, texture_resolution, texture_size, damp))
+	var offset = Vector2(texture_offset.x, texture_offset.z);
+	var offset_scalar = Vector2(texture_resolution) / texture_size
+	texture_pixel_offset = offset_scalar * offset
+	
+	ripple_texture_centers[next_texture] = texture_pixel_offset;
+		
+	if water_material:		
+		water_material.set_shader_parameter("waves_texture_offset", Vector2(texture_pixel_offset) / offset_scalar)
+	
+	var ripple = Vector4.ZERO
+	if !ripple_origins.is_empty():
+		ripple = ripple_origins[0]
+		ripple_origins.clear()
+	
+	RenderingServer.call_on_render_thread(_render_process.bind(next_texture, ripple, texture_resolution, texture_size, damp))
 
 ###############################################################################
 # Everything after this point is designed to run on our rendering thread.
@@ -47,10 +72,6 @@ var rd : RenderingDevice
 var shader : RID
 var pipeline : RID
 
-# We use 3 textures:
-# - One to render into
-# - One that contains the last frame rendered
-# - One for the frame before that
 var texture_rds : Array = [ RID(), RID(), RID() ]
 var texture_sets : Array = [ RID(), RID(), RID() ]
 
@@ -95,17 +116,30 @@ func _initialize_compute_code(texture_resolution):
 
 
 func _render_process(with_next_texture, wave_point, tex_resolution, tex_size, damp):
-	# We don't have structures (yet) so we need to build our push constant
-	# "the hard way"...
 	var push_constant : PackedFloat32Array = PackedFloat32Array()
-	push_constant.push_back(wave_point.x)
-	push_constant.push_back(wave_point.y)
-	push_constant.push_back(wave_point.z)
-	push_constant.push_back(wave_point.w)
+	push_constant.push_back(wave_point.x) # x position
+	push_constant.push_back(wave_point.y) # z position
+	push_constant.push_back(wave_point.z) # radius
+	push_constant.push_back(wave_point.w) # strength
 
 	push_constant.push_back(tex_resolution.x)
 	push_constant.push_back(tex_resolution.y)
+	
+	# offsets
+	var next_offset : Vector2 = ripple_texture_centers[with_next_texture]
+	var current_offset : Vector2 = ripple_texture_centers[(with_next_texture - 1) % 3]
+	var previous_offset : Vector2 = ripple_texture_centers[(with_next_texture - 2) % 3]
+	
+	push_constant.push_back(current_offset.x)
+	push_constant.push_back(current_offset.y)
+	push_constant.push_back(previous_offset.x)
+	push_constant.push_back(previous_offset.y)
+	push_constant.push_back(next_offset.x)
+	push_constant.push_back(next_offset.y)
+	
 	push_constant.push_back(damp)
+	push_constant.push_back(0.0)
+	push_constant.push_back(0.0)
 	push_constant.push_back(0.0)
 
 	var x_groups = (tex_resolution.x - 1) / 8 + 1

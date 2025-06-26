@@ -32,9 +32,10 @@ func _ready():
 		ripple_texture_centers[i] = Vector2i.ZERO
 
 	if water_material:
+		water_texture = Texture2DRD.new()
 		water_material.set_shader_parameter("ripples_texture_resolution", texture_resolution)
 		water_material.set_shader_parameter("ripples_texture_size", texture_size)
-		water_texture = water_material.get_shader_parameter("ripples_texture")
+		water_material.set_shader_parameter("ripples_texture", water_texture)
 
 
 func _exit_tree():

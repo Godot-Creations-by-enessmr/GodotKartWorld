@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://sbprgks2pmd3"
+path="res://.godot/imported/InitialSpectrum.glsl-dbb517ff7dc92ed7e13ed995a8045867.res"
+
+[deps]
+
+source_file="res://water/fft_waves/shaders/InitialSpectrum.glsl"
+dest_files=["res://.godot/imported/InitialSpectrum.glsl-dbb517ff7dc92ed7e13ed995a8045867.res"]
+
+[params]
+

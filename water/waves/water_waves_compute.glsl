@@ -12,15 +12,31 @@ layout(r32f, set = 2, binding = 0) uniform restrict writeonly image2D output_ima
 // Our push PushConstant.
 layout(push_constant, std430) uniform Params {
 	vec4 add_wave_point;
-	vec2 texture_size;
+	vec2 texture_resolution;
+	vec2 current_offset;
+	vec2 previous_offset;
+	vec2 output_offset;
 	float damp;
-	float res2;
+	float padding[3];
 } params;
+
+float sample_previous_texture(ivec2 uv) {
+	if(uv.x < 0 || uv.y < 0 || uv.x >= params.texture_resolution.x || uv.y >= params.texture_resolution.y) {
+		return 0.0;
+	}
+	return imageLoad(previous_image, uv).r;
+}
+
+float sample_current_texture(ivec2 uv) {
+	if(uv.x < 0 || uv.y < 0 || uv.x >= params.texture_resolution.x || uv.y >= params.texture_resolution.y) {
+		return 0.0;
+	}
+	return imageLoad(current_image, uv).r;
+}
 
 // The code we want to execute in each invocation.
 void main() {
-	ivec2 tl = ivec2(0, 0);
-	ivec2 size = ivec2(params.texture_size.x - 1, params.texture_size.y - 1);
+	ivec2 size = ivec2(params.texture_resolution.x - 1, params.texture_resolution.y - 1);
 
 	ivec2 uv = ivec2(gl_GlobalInvocationID.xy);
 
@@ -29,12 +45,15 @@ void main() {
 		return;
 	}
 
-	float current_v = imageLoad(current_image, uv).r;
-	float up_v = imageLoad(current_image, clamp(uv - ivec2(0, 1), tl, size)).r;
-	float down_v = imageLoad(current_image, clamp(uv + ivec2(0, 1), tl, size)).r;
-	float left_v = imageLoad(current_image, clamp(uv - ivec2(1, 0), tl, size)).r;
-	float right_v = imageLoad(current_image, clamp(uv + ivec2(1, 0), tl, size)).r;
-	float previous_v = imageLoad(previous_image, uv).r;
+	ivec2 d_1 = ivec2(params.output_offset - params.current_offset);
+	ivec2 d_2 = ivec2(params.output_offset - params.previous_offset);
+
+	float current_v = sample_current_texture(uv + d_1);
+	float up_v = sample_current_texture(uv + d_1 - ivec2(0, 1));
+	float down_v = sample_current_texture(uv + d_1 + ivec2(0, 1));
+	float left_v = sample_current_texture(uv + d_1 - ivec2(1, 0));
+	float right_v = sample_current_texture(uv + d_1 + ivec2(1, 0));
+	float previous_v = sample_previous_texture(uv + d_2);
 
 	float new_v = 2.0 * current_v - previous_v + 0.25 * (up_v + down_v + left_v + right_v - 4.0 * current_v);
 	new_v = new_v - (params.damp * new_v * 0.001);
@@ -47,6 +66,8 @@ void main() {
 		new_v = 0.0;
 	}
 	vec4 result = vec4(new_v, new_v, new_v, 1.0);
+	// result = vec4(uv, new_v, 1.0);
+	// result = vec4(0.0);
 
 	imageStore(output_image, uv, result);
 }

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cb0abcesbrlr2"]
 
-[ext_resource type="PackedScene" uid="uid://ce1bxsqbiance" path="res://environment/levels/island/island.tscn" id="1_0xm2m"]
+[ext_resource type="PackedScene" uid="uid://ce1bxsqbiance" path="res://environment/levels/old_island/old_island.tscn" id="1_0xm2m"]
 [ext_resource type="PackedScene" uid="uid://dg25e8yln6wea" path="res://player/player.tscn" id="1_ig7tw"]
 
 [node name="Main" type="Node"]

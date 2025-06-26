@@ -2,7 +2,7 @@
 
 [ext_resource type="Shader" path="res://environment/grass/grass_shader.tres" id="1_e8n3r"]
 [ext_resource type="Texture2D" uid="uid://ldrhi4pf68op" path="res://shared/noise/cell_noise.png" id="2_35s1c"]
-[ext_resource type="Texture2D" uid="uid://ke31vyfc6upc" path="res://environment/levels/island/splatmap_topdown.png" id="2_c8se0"]
+[ext_resource type="Texture2D" uid="uid://ke31vyfc6upc" path="res://environment/levels/old_island/splatmap_topdown.png" id="2_c8se0"]
 [ext_resource type="Texture2D" path="res://addons/kenney_particle_pack/rotated/flame_05_rotated.png" id="5_bbwmt"]
 
 [resource]

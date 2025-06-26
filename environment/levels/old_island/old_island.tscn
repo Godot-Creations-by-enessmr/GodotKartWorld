@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://ce1bxsqbiance"]
+
+[ext_resource type="PackedScene" uid="uid://28weu640y5oo" path="res://environment/levels/old_island/environment.tscn" id="1_ycw2d"]
+[ext_resource type="PackedScene" uid="uid://bjsu0bu5gjesp" path="res://water/ocean.tscn" id="2_hlrtb"]
+[ext_resource type="Environment" uid="uid://0lam7vhmk4jq" path="res://environment/levels/old_island/environment_settings.tres" id="2_y18i2"]
+
+[node name="Island" type="Node"]
+
+[node name="OceanEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("2_y18i2")
+
+[node name="Ocean" parent="." instance=ExtResource("2_hlrtb")]
+
+[node name="environment" parent="." instance=ExtResource("1_ycw2d")]
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.780354, 0.439774, 0.444574, 0, -0.710935, 0.703258, 0.625338, -0.54879, -0.554781, 0, 20.3412, 0)
+shadow_enabled = true

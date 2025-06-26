@@ -2,23 +2,22 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://drywqx5pjayjf"
-path="res://.godot/imported/environment_splatmap.png-3a75fd0174a06eada87d140b0b67f9a3.ctex"
+uid="uid://ke31vyfc6upc"
+path="res://.godot/imported/splatmap_topdown.png-83f8182313525e4f3bb326a564294bbe.ctex"
 metadata={
 "vram_texture": false
 }
-generator_parameters={}
 
 [deps]
 
-source_file="res://environment/levels/island/environment_splatmap.png"
-dest_files=["res://.godot/imported/environment_splatmap.png-3a75fd0174a06eada87d140b0b67f9a3.ctex"]
+source_file="res://environment/levels/old_island/splatmap_topdown.png"
+dest_files=["res://.godot/imported/splatmap_topdown.png-83f8182313525e4f3bb326a564294bbe.ctex"]
 
 [params]
 
-compress/mode=4
+compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.7
+compress/lossy_quality=0.18
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0

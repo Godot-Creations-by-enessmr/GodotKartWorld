@@ -4,7 +4,7 @@ class_name Player extends Node3D
 @export var kart : Kart
 @export var camera : Node3D
 
-var ocean_node : Node
+var ocean_node : Ocean
 
 
 func _ready() -> void:

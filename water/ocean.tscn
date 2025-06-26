@@ -1,30 +1,27 @@
-[gd_scene load_steps=6 format=3 uid="uid://bx3rawtnbmban"]
+[gd_scene load_steps=7 format=3 uid="uid://bjsu0bu5gjesp"]
 
 [ext_resource type="Script" uid="uid://bjam4rsotep6l" path="res://water/ocean.gd" id="1_4xaps"]
-[ext_resource type="Material" uid="uid://bpibc1nfl30gu" path="res://water/water_material.tres" id="1_b1pfl"]
+[ext_resource type="Resource" uid="uid://d0nc3ubybbe6o" path="res://water/ocean_settings.tres" id="2_6vxhw"]
 [ext_resource type="Script" uid="uid://javb0t37axxl" path="res://water/ripples/water_ripples.gd" id="2_mbg4g"]
-[ext_resource type="Script" uid="uid://s463wsou0i20" path="res://water/waves/water_waves.gd" id="3_n0lgw"]
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_giu1f"]
-size = Vector2(1024, 1024)
-subdivide_width = 256
-subdivide_depth = 256
+[ext_resource type="Material" uid="uid://dy1iwmm5b777w" path="res://water/ocean_material.tres" id="5_2g7bk"]
+[ext_resource type="Script" uid="uid://sshwjxnsyesl" path="res://water/waves/water_waves.gd" id="5_m7ah3"]
+[ext_resource type="PackedScene" uid="uid://b554xveqosfto" path="res://water/fft_waves/components/QuadTree3D.tscn" id="7_mh4x3"]
 
 [node name="Ocean" type="Node3D" groups=["ocean"]]
 script = ExtResource("1_4xaps")
-
-[node name="OceanMesh" type="MeshInstance3D" parent="."]
-mesh = SubResource("PlaneMesh_giu1f")
-surface_material_override/0 = ExtResource("1_b1pfl")
+ocean = ExtResource("2_6vxhw")
 
 [node name="WaterRipples" type="Node" parent="."]
 script = ExtResource("2_mbg4g")
 texture_resolution = Vector2i(1024, 1024)
 texture_offset = Vector3(0, 0, 64)
-water_material = ExtResource("1_b1pfl")
+water_material = ExtResource("5_2g7bk")
 damp = 5.0
 
 [node name="WaterWaves" type="Node" parent="."]
-script = ExtResource("3_n0lgw")
-texture_resolution = Vector2i(2048, 2048)
-water_material = ExtResource("1_b1pfl")
+script = ExtResource("5_m7ah3")
+
+[node name="QuadTree3D" parent="." instance=ExtResource("7_mh4x3")]
+lod_level = 0
+mesh_vertex_resolution = 4096
+material = ExtResource("5_2g7bk")

@@ -8,6 +8,12 @@ class_name WaterBuoyancy extends Node3D
 @export var align_to_normal: bool = false
 @onready var parent : Node3D = $"../"
 
+var ocean_node : Ocean
+
+func _ready() -> void:
+	if !ocean_node:
+		ocean_node = get_tree().get_first_node_in_group("ocean")
+
 var water_level: float = 0.0
 var water_normal: Vector3 = Vector3.UP
 var water_force: Vector3 = Vector3.ZERO
@@ -22,7 +28,11 @@ func get_surface_normal() -> Vector3:
 	return water_normal
 
 func _physics_process(delta: float) -> void:
-	var depth := water_level - parent.global_position.y
+	var pos : Vector3 = parent.global_position
+	if ocean_node:
+		water_level = ocean_node.get_wave_height(pos, 2, 2)
+	
+	var depth := water_level - pos.y
 	if depth <= 0.0:
 		water_force = Vector3.ZERO
 		return

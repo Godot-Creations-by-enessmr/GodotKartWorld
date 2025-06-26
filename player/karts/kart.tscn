@@ -17,8 +17,9 @@ size = Vector3(1.5, 0.25, 0.5)
 
 [node name="Kart" type="CharacterBody3D"]
 script = ExtResource("1_cyw3l")
-max_steering_angle = 5
+max_steering_angle = 8
 wheel_base = 2.0
+drift_steering_multiplier = 1.6
 
 [node name="Visual" type="Node3D" parent="."]
 

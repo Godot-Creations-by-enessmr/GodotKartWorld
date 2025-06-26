@@ -1,9 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://28weu640y5oo"]
+[gd_scene load_steps=4 format=3 uid="uid://28weu640y5oo"]
 
-[ext_resource type="PackedScene" uid="uid://blp2pms20j38t" path="res://environment/levels/island/environment.glb" id="1_vdona"]
+[ext_resource type="PackedScene" uid="uid://blp2pms20j38t" path="res://environment/levels/old_island/environment.glb" id="1_vdona"]
 [ext_resource type="Material" uid="uid://cua8eok2wwbl8" path="res://environment/terrain/terrain_mat.tres" id="2_mo3sl"]
-[ext_resource type="Material" uid="uid://bpibc1nfl30gu" path="res://water/water_material.tres" id="2_xxbeq"]
-[ext_resource type="Material" uid="uid://cn2gduakar32o" path="res://environment/levels/island/sand_mat.tres" id="4_rqet8"]
+[ext_resource type="Material" uid="uid://cn2gduakar32o" path="res://environment/levels/old_island/sand_mat.tres" id="4_rqet8"]
 
 [node name="environment" instance=ExtResource("1_vdona")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
@@ -22,7 +21,7 @@ surface_material_override/0 = ExtResource("4_rqet8")
 collision_mask = 0
 
 [node name="Water" parent="." index="2"]
-material_override = ExtResource("2_xxbeq")
+visible = false
 
 [node name="GrassCollider" parent="." index="3"]
 collision_layer = 8

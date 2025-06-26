@@ -3,18 +3,18 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://c8fin2mi7lwv8"
-path="res://.godot/imported/environment.blend-0ec1a5082ac285dd15c3b01ec1801999.scn"
+uid="uid://c0xlfm3p380we"
+path="res://.godot/imported/island.blend-eca541a7df4029ac0664b798c876993a.scn"
 
 [deps]
 
-source_file="res://environment/levels/island/environment.blend"
-dest_files=["res://.godot/imported/environment.blend-0ec1a5082ac285dd15c3b01ec1801999.scn"]
+source_file="res://environment/levels/island/island.blend"
+dest_files=["res://.godot/imported/island.blend-eca541a7df4029ac0664b798c876993a.scn"]
 
 [params]
 
-nodes/root_type="Node3D"
-nodes/root_name="Scene Root"
+nodes/root_type=""
+nodes/root_name=""
 nodes/apply_root_scale=true
 nodes/root_scale=1.0
 nodes/import_as_skeleton_bones=false
