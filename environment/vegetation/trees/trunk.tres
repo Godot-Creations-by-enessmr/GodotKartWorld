@@ -1,7 +1,7 @@
 [gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://ms208mbgvjhj"]
 
 [ext_resource type="Shader" uid="uid://b7e2vav8xq30q" path="res://environment/vegetation/trees/simple_vegetation.tres" id="1_og3ke"]
-[ext_resource type="Texture2D" uid="uid://ldrhi4pf68op" path="res://environment/shared/noise/cell_noise.png" id="2_gv47a"]
+[ext_resource type="Texture2D" uid="uid://ldrhi4pf68op" path="res://shared/noise/cell_noise.png" id="2_gv47a"]
 
 [resource]
 render_priority = 0

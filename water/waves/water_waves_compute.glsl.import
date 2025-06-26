@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://cqhc25dm3o0tk"
+path="res://.godot/imported/water_waves_compute.glsl-a0e0822f81fbe311dbed6eeb33e475fe.res"
+
+[deps]
+
+source_file="res://water/waves/water_waves_compute.glsl"
+dest_files=["res://.godot/imported/water_waves_compute.glsl-a0e0822f81fbe311dbed6eeb33e475fe.res"]
+
+[params]
+

@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://blp2pms20j38t" path="res://environment/levels/island/environment.glb" id="1_vdona"]
 [ext_resource type="Material" uid="uid://cua8eok2wwbl8" path="res://environment/terrain/terrain_mat.tres" id="2_mo3sl"]
-[ext_resource type="Material" uid="uid://bpibc1nfl30gu" path="res://environment/water/water_material.tres" id="2_xxbeq"]
+[ext_resource type="Material" uid="uid://bpibc1nfl30gu" path="res://water/water_material.tres" id="2_xxbeq"]
 [ext_resource type="Material" uid="uid://cn2gduakar32o" path="res://environment/levels/island/sand_mat.tres" id="4_rqet8"]
 
 [node name="environment" instance=ExtResource("1_vdona")]

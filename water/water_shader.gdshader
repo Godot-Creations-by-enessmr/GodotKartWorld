@@ -1,5 +1,8 @@
 shader_type spatial;
 
+#include "res://water/water_textures.gdshaderinc"
+#include "res://shared/shaders/utils.gdshaderinc"
+
 uniform sampler2D DEPTH_TEXTURE : hint_depth_texture, repeat_disable, filter_nearest; 
 
 uniform float depth_fade_distance : hint_range(0.0, 10.0) = 1.0;
@@ -18,7 +21,7 @@ uniform sampler2D wave_texture;
 uniform float wave_scale = 4.0;
 uniform float height_scale = 0.15;
 varying float wave_height;
-varying vec3 uv_world_pos;
+varying vec3 globbal_world_pos;
 
 uniform sampler2D normal1;
 uniform vec2 wave_dir1 = vec2(1.0, 0.0);
@@ -26,14 +29,16 @@ uniform sampler2D normal2;
 uniform vec2 wave_dir2 = vec2(0.0, 1.0);
 uniform float wave_speed : hint_range(0.0, 0.2) = 0.015;
 
+
+
 vec3 screen(vec3 base, vec3 blend){
 	return 1.0 - (1.0 - base) * (1.0 - blend);
 }
 
 void vertex() {
 	// Vertext displacement for waves
-	uv_world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
-	wave_height = texture(wave_texture, uv_world_pos.xz / wave_scale + TIME * wave_speed).r;
+	globbal_world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+	wave_height = texture(wave_texture, globbal_world_pos.xz / wave_scale + TIME * wave_speed).r;
 	VERTEX.y += wave_height * height_scale;
 }
 
@@ -66,10 +71,13 @@ void fragment()
 	// Normal maps
 	vec2 normal_offset1 = (TIME * wave_dir1) * wave_speed;
 	vec2 normal_offset2 = (TIME * wave_dir2) * wave_speed;
-	vec3 normal_blend = mix(texture(normal1, uv_world_pos.xz / wave_scale + normal_offset1), texture(normal2, uv_world_pos.xz / wave_scale + normal_offset2), 0.5).rgb;
+	vec3 wave_normals = blend_normals(texture(normal1, globbal_world_pos.xz / wave_scale + normal_offset1).rgb, texture(normal2, globbal_world_pos.xz / wave_scale + normal_offset2).rgb);
+	
+	wave_normals = scale_normal_strength(wave_normals, 0.125);
 	
 	ALBEDO = color_out;
+	//ALBEDO = compute_ripples_normal(globbal_world_pos);
+	NORMAL_MAP = blend_normals(wave_normals, compute_ripples_normal(globbal_world_pos));
 	ALPHA = alpha_blend;
 	ROUGHNESS = roughness;
-	NORMAL_MAP = normal_blend;
 }

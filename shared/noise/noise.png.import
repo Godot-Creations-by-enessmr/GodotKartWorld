@@ -2,26 +2,25 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ldrhi4pf68op"
-path.s3tc="res://.godot/imported/cell_noise.png-de9df15864a7337a68d31e65a8702ad6.s3tc.ctex"
+uid="uid://bwrowk4b7t2r"
+path="res://.godot/imported/noise.png-9fead9a2eea381656aa6badfedf71562.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
-source_file="res://environment/shared/noise/cell_noise.png"
-dest_files=["res://.godot/imported/cell_noise.png-de9df15864a7337a68d31e65a8702ad6.s3tc.ctex"]
+source_file="res://shared/noise/noise.png"
+dest_files=["res://.godot/imported/noise.png-9fead9a2eea381656aa6badfedf71562.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.7
+compress/lossy_quality=0.95
 compress/hdr_compression=1
-compress/normal_map=0
-compress/channel_pack=0
+compress/normal_map=2
+compress/channel_pack=1
 mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0

@@ -1,6 +1,6 @@
-[gd_resource type="ShaderMaterial" load_steps=10 format=3 uid="uid://bpibc1nfl30gu"]
+[gd_resource type="ShaderMaterial" load_steps=12 format=3 uid="uid://bpibc1nfl30gu"]
 
-[ext_resource type="Shader" uid="uid://cdm212grmbdlu" path="res://environment/water/water_shader.gdshader" id="1_8g8my"]
+[ext_resource type="Shader" uid="uid://cdm212grmbdlu" path="res://water/water_shader.gdshader" id="1_jkhpy"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_yrkwm"]
 
@@ -22,24 +22,35 @@ seamless = true
 as_normal_map = true
 noise = SubResource("FastNoiseLite_nu437")
 
+[sub_resource type="Texture2DRD" id="Texture2DRD_jkhpy"]
+
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_1i2qh"]
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_wjy1s"]
 noise = SubResource("FastNoiseLite_1i2qh")
 
+[sub_resource type="Texture2DRD" id="Texture2DRD_ra1gl"]
+
 [resource]
 render_priority = 0
-shader = ExtResource("1_8g8my")
+shader = ExtResource("1_jkhpy")
+shader_parameter/ripples_texture = SubResource("Texture2DRD_jkhpy")
+shader_parameter/ripples_texture_resolution = Vector2(512, 512)
+shader_parameter/ripples_texture_size = Vector2(64, 64)
+shader_parameter/ripples_texture_offset = Vector2(0, 75.505)
+shader_parameter/waves_texture = SubResource("Texture2DRD_ra1gl")
+shader_parameter/waves_texture_resulution = Vector2(512, 512)
+shader_parameter/waves_texture_size = Vector2(512, 512)
 shader_parameter/depth_fade_distance = 0.4
 shader_parameter/absorbance = 2.127
-shader_parameter/shallow_color = Color(0.305882, 0.541176, 0.760784, 1)
-shader_parameter/deep_color = Color(0.247059, 0.447059, 0.45098, 1)
+shader_parameter/shallow_color = Color(0.2132, 0.36408, 0.41, 1)
+shader_parameter/deep_color = Color(0.2745, 0.429525, 0.45, 1)
 shader_parameter/foam_amount = 0.2
 shader_parameter/foam_color = Color(1, 1, 1, 1)
 shader_parameter/foam_noise = SubResource("NoiseTexture2D_nr25n")
 shader_parameter/roughness = 0.05
 shader_parameter/wave_texture = SubResource("NoiseTexture2D_wjy1s")
-shader_parameter/wave_scale = 4.0
+shader_parameter/wave_scale = 10.0
 shader_parameter/height_scale = 0.0
 shader_parameter/normal1 = SubResource("NoiseTexture2D_yljl8")
 shader_parameter/wave_dir1 = Vector2(1, 0)

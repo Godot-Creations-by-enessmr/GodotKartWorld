@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://btvbhyy5ht8ti" path="res://player/karts/kart.tscn" id="3_g1dw6"]
 [ext_resource type="Script" uid="uid://ufnfriojeahl" path="res://player/player_input_manager.gd" id="4_yw30f"]
 
-[node name="Player" type="Node3D" node_paths=PackedStringArray("kart", "camera")]
+[node name="Player" type="Node3D" node_paths=PackedStringArray("kart", "camera") groups=["player"]]
 script = ExtResource("1_oul6g")
 kart = NodePath("Kart")
 camera = NodePath("CameraPivot")
