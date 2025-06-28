@@ -149,6 +149,8 @@ void vertex() {
 	// Use the world vertex XZ coordinates as UV for simplicity
 	vec3 displacement = get_displacement(domain_warped_uv);
 	VERTEX += displacement;
+	VERTEX.y += sample_water_waves_height(VERTEX);
+	VERTEX.y += sample_water_ripples(VERTEX);
 	world_vertex = VERTEX;
 	
 	// Surface Normals & Jacobian

@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=6 format=3 uid="uid://dy1iwmm5b777w"]
+[gd_resource type="ShaderMaterial" load_steps=8 format=3 uid="uid://dy1iwmm5b777w"]
 
 [ext_resource type="Shader" uid="uid://drdcyfjk4au1p" path="res://water/water_surface.gdshader" id="1_458q2"]
 
@@ -24,6 +24,10 @@ height = 2048
 seamless = true
 noise = SubResource("FastNoiseLite_gub2d")
 
+[sub_resource type="Texture2DRD" id="Texture2DRD_458q2"]
+
+[sub_resource type="Texture2DRD" id="Texture2DRD_6msd7"]
+
 [resource]
 render_priority = 0
 shader = ExtResource("1_458q2")
@@ -41,11 +45,14 @@ shader_parameter/planetary_curve_strength = 1e-06
 shader_parameter/amplitude_scale_min = 0.25
 shader_parameter/amplitude_scale_max = 1.0
 shader_parameter/amplitude_scale_fade_distance = 12000.0
+shader_parameter/ripples_texture = SubResource("Texture2DRD_458q2")
 shader_parameter/ripples_texture_resolution = Vector2(512, 512)
 shader_parameter/ripples_texture_size = Vector2(32, 32)
 shader_parameter/ripples_texture_offset = Vector2(0, 0)
+shader_parameter/waves_texture = SubResource("Texture2DRD_6msd7")
 shader_parameter/waves_texture_resulution = Vector2(512, 512)
 shader_parameter/waves_texture_size = Vector2(512, 512)
+shader_parameter/waves_texture_offset = Vector2(0, 0)
 shader_parameter/specular_strength = 1.0
 shader_parameter/specular_power = 1500.0
 shader_parameter/view_fade_start = 0.95

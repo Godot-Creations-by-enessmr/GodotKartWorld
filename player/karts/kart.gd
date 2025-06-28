@@ -160,9 +160,7 @@ func _apply_water_force(delta : float) -> void:
 			
 	velocity.y += (d - global_position.y) * delta * a
 	
-
-		
-
+	
 func _physics_process(delta: float) -> void:
 	_apply_steering(delta)	
 	_apply_water_force(delta)	

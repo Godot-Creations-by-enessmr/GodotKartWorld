@@ -30,11 +30,12 @@ func _ready():
 
 	for i in range(len(ripple_texture_centers)):
 		ripple_texture_centers[i] = Vector2i.ZERO
-
+		
 	if water_material:
+		water_texture = Texture2DRD.new()
 		water_material.set_shader_parameter("waves_texture_resolution", texture_resolution)
 		water_material.set_shader_parameter("waves_texture_size", texture_size)
-		water_texture = water_material.get_shader_parameter("waves_texture")
+		water_material.set_shader_parameter("waves_texture", water_texture)
 
 
 func _exit_tree():
@@ -59,8 +60,8 @@ func _process(delta):
 	
 	var ripple = Vector4.ZERO
 	if !ripple_origins.is_empty():
-		ripple = ripple_origins[0]
-		ripple_origins.clear()
+		ripple = ripple_origins.pop_back()
+		#ripple_origins.clear()
 	
 	RenderingServer.call_on_render_thread(_render_process.bind(next_texture, ripple, texture_resolution, texture_size, damp))
 

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemType" load_steps=3 format=3 uid="uid://bteev30f14le1"]
+
+[ext_resource type="Script" uid="uid://cim828ug0dftd" path="res://player/items/item_type.gd" id="1_4auww"]
+[ext_resource type="PackedScene" uid="uid://c1pwvkaumqe8i" path="res://player/items/bomb/bomb.tscn" id="1_njhcu"]
+
+[resource]
+script = ExtResource("1_4auww")
+name = "bomb"
+scene = ExtResource("1_njhcu")
+metadata/_custom_type_script = "uid://cim828ug0dftd"

@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://c1pwvkaumqe8i"]
+
+[ext_resource type="Script" uid="uid://blep5itepl502" path="res://player/items/bomb/bomb.gd" id="1_pb7k5"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ksril"]
+radius = 0.4
+
+[sub_resource type="SphereMesh" id="SphereMesh_ksril"]
+radius = 0.4
+height = 0.8
+
+[node name="Bomb" type="RigidBody3D"]
+collision_layer = 2
+collision_mask = 3
+script = ExtResource("1_pb7k5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_ksril")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_ksril")

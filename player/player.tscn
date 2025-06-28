@@ -1,14 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://dg25e8yln6wea"]
+[gd_scene load_steps=6 format=3 uid="uid://dg25e8yln6wea"]
 
 [ext_resource type="Script" uid="uid://dnmboat3sqbt1" path="res://player/player.gd" id="1_oul6g"]
 [ext_resource type="Script" uid="uid://b4qki7c3s65xy" path="res://player/camera_controller.gd" id="2_rkbax"]
 [ext_resource type="PackedScene" uid="uid://btvbhyy5ht8ti" path="res://player/karts/kart.tscn" id="3_g1dw6"]
-[ext_resource type="Script" uid="uid://ufnfriojeahl" path="res://player/player_input_manager.gd" id="4_yw30f"]
+[ext_resource type="Script" uid="uid://cj0ag7syks88s" path="res://player/inventory.gd" id="5_g6k8r"]
+[ext_resource type="Texture2D" uid="uid://cfx0taah1txfi" path="res://player/UI/inventory_slot.png" id="5_qjkh3"]
 
-[node name="Player" type="Node3D" node_paths=PackedStringArray("kart", "camera") groups=["player"]]
+[node name="Player" type="Node3D" groups=["player"]]
 script = ExtResource("1_oul6g")
-kart = NodePath("Kart")
-camera = NodePath("CameraPivot")
 
 [node name="CameraPivot" type="Node3D" parent="." node_paths=PackedStringArray("kart", "camera")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.563, 0)
@@ -26,6 +25,51 @@ current = true
 fov = 90.0
 
 [node name="Kart" parent="." instance=ExtResource("3_g1dw6")]
+collision_mask = 7
 
-[node name="PlayerInputManager" type="Node" parent="."]
-script = ExtResource("4_yw30f")
+[node name="Inventory" type="Node" parent="."]
+script = ExtResource("5_g6k8r")
+
+[node name="Control" type="Control" parent="Inventory"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="InventorySlot" type="TextureRect" parent="Inventory/Control"]
+layout_mode = 2
+offset_left = 146.0
+offset_top = 32.0
+offset_right = 342.0
+offset_bottom = 228.0
+texture = ExtResource("5_qjkh3")
+expand_mode = 1
+
+[node name="Slot" type="Control" parent="Inventory/Control/InventorySlot"]
+layout_mode = 1
+anchor_left = 0.1
+anchor_top = 0.1
+anchor_right = 0.9
+anchor_bottom = 0.9
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="InventorySlot2" type="TextureRect" parent="Inventory/Control"]
+layout_mode = 2
+offset_left = 32.0
+offset_top = 32.0
+offset_right = 130.0
+offset_bottom = 130.0
+texture = ExtResource("5_qjkh3")
+expand_mode = 1
+
+[node name="Slot" type="Control" parent="Inventory/Control/InventorySlot2"]
+layout_mode = 1
+anchor_left = 0.1
+anchor_top = 0.1
+anchor_right = 0.9
+anchor_bottom = 0.9
+grow_horizontal = 2
+grow_vertical = 2

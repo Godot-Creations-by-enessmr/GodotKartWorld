@@ -16,10 +16,12 @@ script = ExtResource("2_mbg4g")
 texture_resolution = Vector2i(1024, 1024)
 texture_offset = Vector3(0, 0, 64)
 water_material = ExtResource("5_2g7bk")
-damp = 5.0
+damp = 2.0
 
 [node name="WaterWaves" type="Node" parent="."]
 script = ExtResource("5_m7ah3")
+water_material = ExtResource("5_2g7bk")
+damp = 2.0
 
 [node name="QuadTree3D" parent="." instance=ExtResource("7_mh4x3")]
 lod_level = 0
