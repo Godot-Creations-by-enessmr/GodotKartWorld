@@ -55,12 +55,20 @@ void main() {
 	float right_v = sample_current_texture(uv + d_1 + ivec2(1, 0));
 	float previous_v = sample_previous_texture(uv + d_2);
 
-	float new_v = 2.0 * current_v - previous_v + 0.25 * (up_v + down_v + left_v + right_v - 4.0 * current_v);
-	new_v = new_v - (params.damp * new_v * 0.001);
+	float c2 = 0.09;
+	float lap = up_v + down_v + left_v + right_v - 4.0*current_v;
+	float new_v = 2.0*current_v - previous_v + c2 * lap;
 
-	if (params.add_wave_point.z > 0.0 && uv.x == floor(params.add_wave_point.x) && uv.y == floor(params.add_wave_point.y)) {
-		new_v = params.add_wave_point.z;
+
+	vec2 center = params.add_wave_point.xy;
+	float radius = params.add_wave_point.w;
+	float dist   = length( (vec2(uv) - center) );
+	if (dist < radius) {
+	// A smooth fall-off from amplitude to zero
+	float falloff = 1.0 - (dist / radius);
+	new_v = max(new_v, params.add_wave_point.z * falloff);
 	}
+
 
 	if (new_v < 0.0) {
 		new_v = 0.0;

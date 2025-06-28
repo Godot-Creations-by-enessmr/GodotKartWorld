@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="Ocean3D" load_steps=3 format=3 uid="uid://d0nc3ubybbe6o"]
 
 [ext_resource type="Material" uid="uid://dy1iwmm5b777w" path="res://water/ocean_material.tres" id="1_3fpa1"]
-[ext_resource type="Script" uid="uid://cx3twtm5gessr" path="res://water/fft_waves/components/Ocean3D.gd" id="2_vce14"]
+[ext_resource type="Script" uid="uid://cx3twtm5gessr" path="res://water/fft_waves/components/fft_ocean.gd" id="2_vce14"]
 
 [resource]
 script = ExtResource("2_vce14")
@@ -9,7 +9,7 @@ simulation_enabled = true
 material = ExtResource("1_3fpa1")
 simulation_frameskip = 1
 heightmap_sync_frameskip = 2
-fft_resolution = 256
+fft_resolution = 32
 horizontal_dimension = 128
 time_scale = 1.0
 cascade_ranges = Array[Vector2]([Vector2(0, 0.03), Vector2(0.03, 0.15), Vector2(0.15, 1)])

@@ -8,15 +8,20 @@ extends Node
 
 var ripple_texture_centers : Array[Vector2i] = [Vector2i.ZERO, Vector2i.ZERO, Vector2i.ZERO]
 var texture_pixel_offset : Vector2i
-# each vector: x, z, radius, strength
 var ripple_origins : Array[Vector4] = [];
+
+#used for CPU side collisions
+@export var cpu_readback_interval : int = 2
+var water_image : Image 
+
+
 
 var t = 0.0
 var max_t = 0.1
 
 var water_texture : Texture2DRD
 var next_texture : int = 0
-
+var frame_number : int = 0
 
 func add_ripple(position: Vector3, radius: float, strength: float) -> void:
 	var pixel_position : Vector2i = Vector2(texture_resolution) / texture_size * Vector2(position.x, position.z)
@@ -32,6 +37,7 @@ func _ready():
 		ripple_texture_centers[i] = Vector2i.ZERO
 		
 	if water_material:
+		water_image = Image.create(texture_resolution.x, texture_resolution.y, false, Image.FORMAT_RF)
 		water_texture = Texture2DRD.new()
 		water_material.set_shader_parameter("waves_texture_resolution", texture_resolution)
 		water_material.set_shader_parameter("waves_texture_size", texture_size)
@@ -64,6 +70,7 @@ func _process(delta):
 		#ripple_origins.clear()
 	
 	RenderingServer.call_on_render_thread(_render_process.bind(next_texture, ripple, texture_resolution, texture_size, damp))
+	
 
 ###############################################################################
 # Everything after this point is designed to run on our rendering thread.
@@ -103,7 +110,9 @@ func _initialize_compute_code(texture_resolution):
 	tf.depth = 1
 	tf.array_layers = 1
 	tf.mipmaps = 1
-	tf.usage_bits = RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT + RenderingDevice.TEXTURE_USAGE_COLOR_ATTACHMENT_BIT + RenderingDevice.TEXTURE_USAGE_STORAGE_BIT + RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT + RenderingDevice.TEXTURE_USAGE_CAN_COPY_TO_BIT
+	tf.usage_bits = RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT + RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT \
+		+ RenderingDevice.TEXTURE_USAGE_COLOR_ATTACHMENT_BIT + RenderingDevice.TEXTURE_USAGE_STORAGE_BIT \
+		+ RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT + RenderingDevice.TEXTURE_USAGE_CAN_COPY_TO_BIT
 
 	for i in range(3):
 		# Create our texture.
@@ -159,6 +168,13 @@ func _render_process(with_next_texture, wave_point, tex_resolution, tex_size, da
 	rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.size() * 4)
 	rd.compute_list_dispatch(compute_list, x_groups, y_groups, 1)
 	rd.compute_list_end()
+	
+	frame_number += 1
+	if frame_number % cpu_readback_interval == 0:
+		var lambda = func (array : PackedByteArray) -> void:
+			water_image.set_data(texture_resolution.x, texture_resolution.y, false, Image.FORMAT_RF, array)
+				
+		rd.texture_get_data_async(texture_rds[with_next_texture], 0, lambda)
 
 func _free_compute_resources():
 	for i in range(3):
@@ -167,3 +183,14 @@ func _free_compute_resources():
 
 	if shader:
 		rd.free_rid(shader)
+
+
+func get_height(position : Vector3) -> float:
+	var pos: Vector2 = Vector2(position.x, position.z) - Vector2(texture_offset.x, texture_offset.z)
+	pos += 0.5 * texture_size
+	if pos.x < 0.0 || pos.y < 0.0 || pos.x >= texture_size.x || pos.y >= texture_size.y:
+		return 0.0;
+	pos /= texture_size
+	pos *= Vector2(texture_resolution)
+	return water_image.get_pixelv(pos).r
+	

@@ -27,7 +27,7 @@ func _process(delta: float) -> void:
 		#ocean_node.add_wave(kart.global_position, strength, 0);
 
 func _input(event: InputEvent) -> void:
-	if event.is_action("use_item"):
+	if event.is_action_pressed("use_item"):
 		inventory.use_item(self)
 
 func add_item(item : ItemType) -> void:

@@ -8,8 +8,6 @@ func _ready() -> void:
 func _explode() -> void:
 	queue_free()
 	
-	
 	var ocean_node : Ocean = get_tree().get_first_node_in_group("ocean")
 	if ocean_node: 
-		print("boom")
-		ocean_node.add_wave(global_position, 32, 32)
+		ocean_node.add_wave(global_position, 2.5, 24)

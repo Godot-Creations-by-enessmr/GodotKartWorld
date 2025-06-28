@@ -20,10 +20,12 @@ damp = 2.0
 
 [node name="WaterWaves" type="Node" parent="."]
 script = ExtResource("5_m7ah3")
+texture_resolution = Vector2i(2048, 2048)
+texture_size = Vector2(256, 256)
 water_material = ExtResource("5_2g7bk")
-damp = 2.0
 
 [node name="QuadTree3D" parent="." instance=ExtResource("7_mh4x3")]
 lod_level = 0
-mesh_vertex_resolution = 4096
+mesh_vertex_resolution = 1024
+ranges = Array[float]([128.0, 512.0, 2048.0])
 material = ExtResource("5_2g7bk")
