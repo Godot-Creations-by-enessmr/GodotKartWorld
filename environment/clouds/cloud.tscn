@@ -1,26 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://ck6egnxrcvrhq"]
+[gd_scene load_steps=3 format=3 uid="uid://da5oqnb43tfg6"]
 
-[ext_resource type="Texture2D" uid="uid://bkwxaeo7670om" path="res://environment/clouds/cloud.png" id="1_vneqg"]
+[ext_resource type="Material" uid="uid://cbrllkvbe30u3" path="res://environment/clouds/clouds_material.tres" id="1_oyymu"]
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_8hf1d"]
-emission_shape = 3
-emission_box_extents = Vector3(5, 3, 5)
-gravity = Vector3(0, 0, 0)
+[sub_resource type="PlaneMesh" id="PlaneMesh_ss1e7"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ojgj0"]
-transparency = 1
-shading_mode = 0
-albedo_texture = ExtResource("1_vneqg")
-billboard_mode = 1
-
-[sub_resource type="QuadMesh" id="QuadMesh_tyfnd"]
-material = SubResource("StandardMaterial3D_ojgj0")
-size = Vector2(10, 10)
-
-[node name="Cloud" type="GPUParticles3D"]
-amount = 15
-lifetime = 60.0
-explosiveness = 0.98
-visibility_aabb = AABB(-9.92143, -9.59351, -9.51325, 19.4098, 19.464, 19.4566)
-process_material = SubResource("ParticleProcessMaterial_8hf1d")
-draw_pass_1 = SubResource("QuadMesh_tyfnd")
+[node name="Clouds" type="MeshInstance3D"]
+transform = Transform3D(100, 0, 0, 0, 100, 0, 0, 0, 100, 0, 0, 0)
+material_override = ExtResource("1_oyymu")
+mesh = SubResource("PlaneMesh_ss1e7")

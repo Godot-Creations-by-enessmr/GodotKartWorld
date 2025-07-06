@@ -68,7 +68,28 @@ use_item={
 3d_physics/layer_1="Karts"
 3d_physics/layer_2="Items"
 3d_physics/layer_3="ItemBoxes"
+3d_physics/layer_4="Terrain"
+3d_physics/layer_5="Circuit"
 
-[physics]
+[rendering]
 
-3d/physics_engine="Jolt Physics"
+lights_and_shadows/directional_shadow/16_bits=false
+
+[shader_globals]
+
+wind_noise_texture={
+"type": "sampler2D",
+"value": "res://shared/noise/3_channel_noise.png"
+}
+wind_direction={
+"type": "vec3",
+"value": Vector3(0.707, 0, 0.707)
+}
+wind_strength={
+"type": "float",
+"value": 1.0
+}
+player_position={
+"type": "vec3",
+"value": Vector3(4.8399, 4.47262, -5.20099)
+}

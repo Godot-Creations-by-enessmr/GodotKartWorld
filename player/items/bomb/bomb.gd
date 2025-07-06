@@ -10,4 +10,4 @@ func _explode() -> void:
 	
 	var ocean_node : Ocean = get_tree().get_first_node_in_group("ocean")
 	if ocean_node: 
-		ocean_node.add_wave(global_position, 2.5, 24)
+		ocean_node.add_wave(global_position, 0.5, 24)

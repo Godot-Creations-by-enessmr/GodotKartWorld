@@ -48,4 +48,15 @@ vec3 hsv2rgb(vec3 c)
     return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
 }
 
+vec3 noiseColorTransformer(vec3 f_color, vec3 f_noise) {
+	vec3 hsv_col = rgb2hsv(f_color);
+	hsv_col = vec3(hsv_col.x, hsv_col.y * (f_noise.y * 0.2 + 0.8), hsv_col.z * (f_noise.z * 0.4 + 0.6));
+	return hsv2rgb(hsv_col);
+}
+
+vec3 noiseNormalTransformer(vec3 f_normal, vec3 f_noise, float f_strength) {
+	vec3 noise_vec = normalize(f_noise * 2.0 - vec3(1.0));
+	return normalize(f_normal + noise_vec * f_strength);
+}
+
 #endif

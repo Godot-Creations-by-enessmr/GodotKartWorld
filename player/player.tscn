@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://dg25e8yln6wea"]
+[gd_scene load_steps=7 format=3 uid="uid://dg25e8yln6wea"]
 
 [ext_resource type="Script" uid="uid://dnmboat3sqbt1" path="res://player/player.gd" id="1_oul6g"]
 [ext_resource type="Script" uid="uid://b4qki7c3s65xy" path="res://player/camera_controller.gd" id="2_rkbax"]
 [ext_resource type="PackedScene" uid="uid://btvbhyy5ht8ti" path="res://player/karts/kart.tscn" id="3_g1dw6"]
+[ext_resource type="Environment" uid="uid://b2fa18uw5ynou" path="res://environment/levels/island/under_water_environment.tres" id="3_g6k8r"]
 [ext_resource type="Script" uid="uid://cj0ag7syks88s" path="res://player/inventory.gd" id="5_g6k8r"]
 [ext_resource type="Texture2D" uid="uid://cfx0taah1txfi" path="res://player/UI/inventory_slot.png" id="5_qjkh3"]
 
@@ -14,18 +15,22 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.563, 0)
 script = ExtResource("2_rkbax")
 kart = NodePath("../Kart")
 camera = NodePath("Pivot2/Camera3D")
+under_water_environment = ExtResource("3_g6k8r")
 camera_reset_delay = 0.5
 
-[node name="Pivot2" type="Node3D" parent="CameraPivot"]
+[node name="Pivot2" type="SpringArm3D" parent="CameraPivot"]
 transform = Transform3D(1, 0, 0, 0, 0.866026, 0.5, 0, -0.5, 0.866026, 0, 0, 0)
+collision_mask = 31
+spring_length = 5.0
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot/Pivot2"]
-transform = Transform3D(1, 0, 0, 0, 1, -2.98023e-08, 0, 2.98023e-08, 1, 0, -1.19209e-07, 5)
+transform = Transform3D(1, 0, 0, 0, 1, -2.98023e-08, 0, 2.98023e-08, 1, 0, 0, 0)
 current = true
 fov = 90.0
 
 [node name="Kart" parent="." instance=ExtResource("3_g1dw6")]
-collision_mask = 7
+collision_mask = 31
+floor_max_angle = 1.0472
 
 [node name="Inventory" type="Node" parent="."]
 script = ExtResource("5_g6k8r")

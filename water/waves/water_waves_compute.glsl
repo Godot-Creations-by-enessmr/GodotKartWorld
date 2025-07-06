@@ -76,6 +76,7 @@ void main() {
 	vec4 result = vec4(new_v, new_v, new_v, 1.0);
 	// result = vec4(uv, new_v, 1.0);
 	// result = vec4(0.0);
+	// result = vec4(10.0f);
 
 	imageStore(output_image, uv, result);
 }

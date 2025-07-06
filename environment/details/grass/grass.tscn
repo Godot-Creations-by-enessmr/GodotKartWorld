@@ -1,0 +1,80 @@
+[gd_scene load_steps=15 format=3 uid="uid://lrqamdnlbfuo"]
+
+[ext_resource type="Material" uid="uid://c7vpdk667tfp4" path="res://environment/details/grass/grass_material.tres" id="1_fs52j"]
+[ext_resource type="Script" path="res://addons/proton_scatter/src/scatter.gd" id="3_as2qb"]
+[ext_resource type="Script" path="res://addons/proton_scatter/src/stack/modifier_stack.gd" id="4_fwgrn"]
+[ext_resource type="Script" path="res://addons/proton_scatter/src/modifiers/create_inside_random.gd" id="5_1qg0c"]
+[ext_resource type="Script" path="res://addons/proton_scatter/src/modifiers/project_on_geometry.gd" id="6_5ny16"]
+[ext_resource type="Script" path="res://addons/proton_scatter/src/modifiers/randomize_transforms.gd" id="7_qvw51"]
+[ext_resource type="Script" path="res://addons/proton_scatter/src/scatter_item.gd" id="8_3ow81"]
+[ext_resource type="Script" path="res://addons/proton_scatter/src/scatter_shape.gd" id="9_byil5"]
+[ext_resource type="Script" path="res://addons/proton_scatter/src/shapes/box_shape.gd" id="10_38s8l"]
+
+[sub_resource type="Resource" id="Resource_eyues"]
+script = ExtResource("5_1qg0c")
+amount = 512
+enabled = true
+override_global_seed = false
+custom_seed = 0
+restrict_height = false
+reference_frame = 1
+
+[sub_resource type="Resource" id="Resource_rylhx"]
+script = ExtResource("6_5ny16")
+ray_direction = Vector3(0, -1, 0)
+ray_length = 10.0
+ray_offset = 1.0
+remove_points_on_miss = true
+align_with_collision_normal = false
+max_slope = 90.0
+collision_mask = 1
+exclude_mask = 0
+enabled = true
+override_global_seed = false
+custom_seed = 0
+restrict_height = false
+reference_frame = 0
+
+[sub_resource type="Resource" id="Resource_43nj7"]
+script = ExtResource("7_qvw51")
+position = Vector3(0, 0, 0)
+rotation = Vector3(0, 180, 0)
+scale = Vector3(0, 0.1, 0)
+enabled = true
+override_global_seed = false
+custom_seed = 0
+restrict_height = false
+reference_frame = 2
+
+[sub_resource type="Resource" id="Resource_3e6ut"]
+script = ExtResource("4_fwgrn")
+stack = Array[Resource("res://addons/proton_scatter/src/modifiers/base_modifier.gd")]([SubResource("Resource_eyues"), SubResource("Resource_rylhx"), SubResource("Resource_43nj7")])
+
+[sub_resource type="Resource" id="Resource_r4f0v"]
+script = ExtResource("10_38s8l")
+size = Vector3(10, 5, 10)
+
+[node name="Grass" type="Node3D"]
+
+[node name="Grass" type="Node3D" parent="."]
+process_mode = 3
+script = ExtResource("3_as2qb")
+modifier_stack = SubResource("Resource_3e6ut")
+Performance/use_chunks = true
+Performance/chunk_dimensions = Vector3(15, 15, 15)
+
+[node name="ScatterItem" type="Node3D" parent="Grass"]
+script = ExtResource("8_3ow81")
+override_material = ExtResource("1_fs52j")
+visibility_range_begin = 0.5
+visibility_range_end = 50.0
+visibility_range_fade_mode = 1
+path = "res://environment/grass/grass_model.glb"
+
+[node name="ScatterShape" type="Node3D" parent="Grass"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+script = ExtResource("9_byil5")
+shape = SubResource("Resource_r4f0v")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.564435, 0.711784, -0.418064, 0.52428, 0.700299, 0.48447, 0.637608, 0.0542689, -0.768447, 0, 1.25702, 8.82702)

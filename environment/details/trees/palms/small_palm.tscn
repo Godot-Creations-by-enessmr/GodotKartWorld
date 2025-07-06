@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://cvatswb5my3ro"]
+
+[ext_resource type="ArrayMesh" uid="uid://x6nqe67fqic1" path="res://environment/details/trees/palms/small_palm.obj" id="1_la8q3"]
+[ext_resource type="Material" uid="uid://cgkunawrnni6b" path="res://environment/details/trees/palms/palm_material.tres" id="1_ne4g8"]
+
+[node name="SmallPalm" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = ExtResource("1_ne4g8")
+mesh = ExtResource("1_la8q3")

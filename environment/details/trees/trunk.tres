@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://ms208mbgvjhj"]
+
+[ext_resource type="Shader" uid="uid://b7e2vav8xq30q" path="res://environment/details/trees/simple_vegetation.tres" id="1_og3ke"]
+[ext_resource type="Texture2D" uid="uid://ldrhi4pf68op" path="res://shared/textures/cell_noise.png" id="2_gv47a"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_og3ke")
+shader_parameter/WindStrength = 0.5
+shader_parameter/ColorParameter = Color(0.380392, 0.203922, 0.133333, 1)
+shader_parameter/UVSpeed = 0.0
+shader_parameter/UVAmplitude = 0.01
+shader_parameter/Noise = ExtResource("2_gv47a")

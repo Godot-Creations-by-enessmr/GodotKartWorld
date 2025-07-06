@@ -185,12 +185,30 @@ func _free_compute_resources():
 		rd.free_rid(shader)
 
 
-func get_height(position : Vector3) -> float:
-	var pos: Vector2 = Vector2(position.x, position.z) - Vector2(texture_offset.x, texture_offset.z)
+func get_height(position: Vector3) -> float:
+	var pos = Vector2(position.x, position.z) - Vector2(texture_offset.x, texture_offset.z)
 	pos += 0.5 * texture_size
-	if pos.x < 0.0 || pos.y < 0.0 || pos.x >= texture_size.x || pos.y >= texture_size.y:
-		return 0.0;
-	pos /= texture_size
-	pos *= Vector2(texture_resolution)
-	return water_image.get_pixelv(pos).r
+	if pos.x < 0.0 or pos.y < 0.0 or pos.x >= texture_size.x or pos.y >= texture_size.y:
+		return 0.0
+
+	var uv = pos / texture_size * Vector2(texture_resolution)
+	var px = floor(uv)
+	var frac = uv - px
+
+	var x = int(px.x)
+	var y = int(px.y)
+
+	if x < 0 or y < 0 or x >= texture_resolution.x - 1 or y >= texture_resolution.y - 1:
+		return 0.0
+
+	var v00 = water_image.get_pixel(x,     y    ).r
+	var v10 = water_image.get_pixel(x + 1, y    ).r
+	var v01 = water_image.get_pixel(x,     y + 1).r
+	var v11 = water_image.get_pixel(x + 1, y + 1).r
+
+	# Bilinear interpolation
+	var v0 = lerp(v00, v10, frac.x)
+	var v1 = lerp(v01, v11, frac.x)
+	return lerp(v0, v1, frac.y)
+
 	

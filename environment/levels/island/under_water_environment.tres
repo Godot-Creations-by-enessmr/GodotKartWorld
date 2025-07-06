@@ -1,0 +1,25 @@
+[gd_resource type="Environment" load_steps=3 format=3 uid="uid://b2fa18uw5ynou"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_whqvj"]
+
+[sub_resource type="Sky" id="Sky_oc215"]
+sky_material = SubResource("ProceduralSkyMaterial_whqvj")
+
+[resource]
+background_mode = 2
+sky = SubResource("Sky_oc215")
+tonemap_mode = 3
+ssr_enabled = true
+ssr_max_steps = 16
+ssao_enabled = true
+ssao_radius = 0.5
+ssil_enabled = true
+sdfgi_min_cell_size = 2.0
+sdfgi_cascade0_distance = 128.0
+sdfgi_max_distance = 2048.0
+sdfgi_y_scale = 0
+glow_enabled = true
+fog_enabled = true
+fog_light_color = Color(0.406716, 0.588897, 0.593237, 1)
+fog_density = 0.1
+volumetric_fog_length = 256.0

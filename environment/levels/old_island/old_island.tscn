@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://28weu640y5oo" path="res://environment/levels/old_island/environment.tscn" id="1_ycw2d"]
 [ext_resource type="PackedScene" uid="uid://bjsu0bu5gjesp" path="res://water/ocean.tscn" id="2_hlrtb"]
-[ext_resource type="Environment" uid="uid://0lam7vhmk4jq" path="res://environment/levels/old_island/environment_settings.tres" id="2_y18i2"]
+[ext_resource type="Environment" uid="uid://0lam7vhmk4jq" path="res://environment/levels/island/environment_settings.tres" id="2_y18i2"]
 
 [node name="Island" type="Node"]
 

@@ -1,6 +1,8 @@
-[gd_resource type="ShaderMaterial" load_steps=8 format=3 uid="uid://dy1iwmm5b777w"]
+[gd_resource type="ShaderMaterial" load_steps=10 format=3 uid="uid://dy1iwmm5b777w"]
 
 [ext_resource type="Shader" uid="uid://drdcyfjk4au1p" path="res://water/water_surface.gdshader" id="1_458q2"]
+[ext_resource type="Texture2D" uid="uid://kscrfvdeu4t4" path="res://water/caustics_texture.jpg" id="2_6msd7"]
+[ext_resource type="Texture2D" uid="uid://cvte6ae7hxhbe" path="res://water/SeaWaves_N.jpg" id="3_o6nop"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_nywmb"]
 noise_type = 3
@@ -57,14 +59,14 @@ shader_parameter/specular_strength = 1.0
 shader_parameter/specular_power = 1500.0
 shader_parameter/view_fade_start = 0.95
 shader_parameter/deep_color = Color(0.004, 0.016, 0.047, 1)
-shader_parameter/shallow_color = Color(0, 0.729412, 0.988235, 1)
+shader_parameter/shallow_color = Color(0, 0.96, 0.96, 1)
 shader_parameter/fresnel_offset = 0.02
 shader_parameter/fresnel_strength = 0.0
 shader_parameter/fresnel_power = 5.0
-shader_parameter/fresnel_exposure = 0.01
+shader_parameter/fresnel_exposure = 0.03
 shader_parameter/fresnel_sky_color = Color(1.6, 4.8, 6.4, 1)
-shader_parameter/pbr_specular_strength = 0.5
-shader_parameter/pbr_specular_offset = 0.05
+shader_parameter/pbr_specular_strength = 0.1
+shader_parameter/pbr_specular_offset = 0.1
 shader_parameter/pbr_metallic_strength = 0.0
 shader_parameter/refraction_factor_min = 0.0
 shader_parameter/refraction_factor_max = 0.025
@@ -75,7 +77,7 @@ shader_parameter/refraction_depth_factor = 1e-05
 shader_parameter/sss_backlight_strength = 0.0125
 shader_parameter/sss_backlight_fov = 10.0
 shader_parameter/sss_backlight_depth = 15.0
-shader_parameter/sss_upwelling = 0.05
+shader_parameter/sss_upwelling = 0.075
 shader_parameter/sss_color = Color(0, 0.729412, 0.988235, 1)
 shader_parameter/foam_jacobian_limit = 0.5
 shader_parameter/foam_coverage = 0.1
@@ -83,3 +85,14 @@ shader_parameter/foam_mix_strength = 1.0
 shader_parameter/foam_diffuse_strength = 1.0
 shader_parameter/foam_diffuse_color = Color(0.917647, 0.968627, 1, 1)
 shader_parameter/foam_texture = SubResource("NoiseTexture2D_h2j7u")
+shader_parameter/caustics_texture = ExtResource("2_6msd7")
+shader_parameter/caustics_strength = 0.5
+shader_parameter/caustics_scale = 0.1
+shader_parameter/caustics_speed = 0.1
+shader_parameter/wave_scale = 0.01
+shader_parameter/wave_strength = 0.1
+shader_parameter/normal1 = ExtResource("3_o6nop")
+shader_parameter/wave_dir1 = Vector2(1, 0)
+shader_parameter/normal2 = ExtResource("3_o6nop")
+shader_parameter/wave_dir2 = Vector2(0, 1)
+shader_parameter/wave_speed = 0.015

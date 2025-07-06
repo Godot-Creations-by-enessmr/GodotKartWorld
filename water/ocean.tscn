@@ -26,6 +26,7 @@ water_material = ExtResource("5_2g7bk")
 
 [node name="QuadTree3D" parent="." instance=ExtResource("7_mh4x3")]
 lod_level = 0
-mesh_vertex_resolution = 1024
+quad_size = 4096.0
+mesh_vertex_resolution = 4096
 ranges = Array[float]([128.0, 512.0, 2048.0])
 material = ExtResource("5_2g7bk")

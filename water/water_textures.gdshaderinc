@@ -20,7 +20,7 @@ group_uniforms;
 
 float sample_water_ripples(vec3 global_pos) {
 	vec2 coord = global_pos.xz - ripples_texture_offset + 0.5 * ripples_texture_size;
-	if (coord.x < 0.0 || coord.y < 0.0 || coord.x >= ripples_texture_size.x || coord.y >= ripples_texture_size.y) 
+	if (coord.x < 0.0 || coord.y < 0.0 || coord.x >= ripples_texture_size.x || coord.y >= ripples_texture_size.y)
 		return 0.0;
 	vec2 uv = coord / ripples_texture_size;
 	return texture(ripples_texture, uv).r;
@@ -39,7 +39,7 @@ vec3 compute_ripples_normal(vec3 global_pos) {
 
 float sample_water_waves_height(vec3 global_pos) {
 	vec2 coord = global_pos.xz - waves_texture_offset + 0.5 * waves_texture_size;
-	if (coord.x < 0.0 || coord.y < 0.0 || coord.x >= waves_texture_size.x || coord.y >= waves_texture_size.y) 
+	if (coord.x < 0.0 || coord.y < 0.0 || coord.x >= waves_texture_size.x || coord.y >= waves_texture_size.y)
 		return 0.0;
 	vec2 uv = coord / waves_texture_size;
 	return texture(waves_texture, uv).r;

@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://dm7eos0gq1t26"]
+
+[ext_resource type="PackedScene" uid="uid://sca8x6gbunpg" path="res://environment/details/trees/pines/models/large_pine.glb" id="1_sv05b"]
+[ext_resource type="Material" uid="uid://dijoyuqs4jj3f" path="res://environment/details/trees/leaves.tres" id="2_2hx3x"]
+[ext_resource type="Material" uid="uid://ms208mbgvjhj" path="res://environment/details/trees/trunk.tres" id="3_kttw7"]
+
+[node name="large_pine" instance=ExtResource("1_sv05b")]
+
+[node name="large_pine2" parent="." index="0"]
+surface_material_override/0 = ExtResource("2_2hx3x")
+surface_material_override/1 = ExtResource("3_kttw7")

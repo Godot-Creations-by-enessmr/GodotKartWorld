@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://ckpdq72am535g"]
 
-[ext_resource type="Environment" uid="uid://0lam7vhmk4jq" path="res://environment/levels/old_island/environment_settings.tres" id="1_effn5"]
+[ext_resource type="Environment" uid="uid://0lam7vhmk4jq" path="res://environment/levels/island/environment_settings.tres" id="1_effn5"]
 [ext_resource type="PackedScene" path="res://game/game_manager.tscn" id="1_sl782"]
 [ext_resource type="CameraAttributesPractical" uid="uid://cohydrwdcdt8n" path="res://environment/levels/old_island/camera_attributes.tres" id="2_76jwb"]
 [ext_resource type="PackedScene" uid="uid://dg25e8yln6wea" path="res://player/player.tscn" id="2_icvg0"]
