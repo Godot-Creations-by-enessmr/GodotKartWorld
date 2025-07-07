@@ -160,7 +160,10 @@ func _apply_water_force(delta : float) -> void:
 			
 	velocity.y += (d - global_position.y) * delta * a
 	
-	
+
+# This represents the player's inertia.
+var push_force = 1.0
+
 func _physics_process(delta: float) -> void:
 	_apply_steering(delta)	
 	_apply_water_force(delta)	
@@ -174,6 +177,11 @@ func _physics_process(delta: float) -> void:
 		
 	reset_buffer()
 	move_and_slide()
+	
+	for i in get_slide_collision_count():
+		var c = get_slide_collision(i)
+		if c.get_collider() is RigidBody3D:
+			c.get_collider().apply_central_impulse(-c.get_normal() * push_force)
 	
 	
 func _input(event: InputEvent) -> void:

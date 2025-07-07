@@ -48,6 +48,6 @@ void fragment() {
 
 	vec3 col = mix(grass_color, color.rgb, min(1.0, COLOR.r * 1.5));
 	ALBEDO = noiseColorTransformer(col, sampled_noise) * texture(albedo_texture, UV).rgb;
-	SPECULAR = 0.1;
-	ROUGHNESS = 0.8;
+	SPECULAR = 0.8;
+	ROUGHNESS = 0.9;
 }

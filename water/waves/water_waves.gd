@@ -4,13 +4,17 @@ extends Node
 @export var texture_size : Vector2 = Vector2(64, 64)
 @export var texture_offset : Vector3 = Vector3.ZERO
 @export var water_material : ShaderMaterial
-@export_range(1.0, 10.0, 0.1) var damp : float = 1.0
+@export var damp : float = 1.0
+@export var c2 : float = 0.09
+
+@export var texture_target : String = "waves_texture"
 
 var ripple_texture_centers : Array[Vector2i] = [Vector2i.ZERO, Vector2i.ZERO, Vector2i.ZERO]
 var texture_pixel_offset : Vector2i
 var ripple_origins : Array[Vector4] = [];
 
 #used for CPU side collisions
+@export var use_cpu_readback : bool = true
 @export var cpu_readback_interval : int = 2
 var water_image : Image 
 
@@ -36,12 +40,15 @@ func _ready():
 	for i in range(len(ripple_texture_centers)):
 		ripple_texture_centers[i] = Vector2i.ZERO
 		
+	water_texture = Texture2DRD.new()
+	
+	if use_cpu_readback:
+		water_image = Image.create(texture_resolution.x, texture_resolution.y, false, Image.FORMAT_RF)	
+		
 	if water_material:
-		water_image = Image.create(texture_resolution.x, texture_resolution.y, false, Image.FORMAT_RF)
-		water_texture = Texture2DRD.new()
-		water_material.set_shader_parameter("waves_texture_resolution", texture_resolution)
-		water_material.set_shader_parameter("waves_texture_size", texture_size)
-		water_material.set_shader_parameter("waves_texture", water_texture)
+		water_material.set_shader_parameter(texture_target, water_texture)
+		water_material.set_shader_parameter(texture_target + "_resolution", texture_resolution)
+		water_material.set_shader_parameter(texture_target + "_size", texture_size)
 
 
 func _exit_tree():
@@ -62,7 +69,7 @@ func _process(delta):
 	ripple_texture_centers[next_texture] = texture_pixel_offset;
 		
 	if water_material:		
-		water_material.set_shader_parameter("waves_texture_offset", Vector2(texture_pixel_offset) / offset_scalar)
+		water_material.set_shader_parameter(texture_target + "_offset", Vector2(texture_pixel_offset) / offset_scalar)
 	
 	var ripple = Vector4.ZERO
 	if !ripple_origins.is_empty():
@@ -148,7 +155,7 @@ func _render_process(with_next_texture, wave_point, tex_resolution, tex_size, da
 	push_constant.push_back(next_offset.y)
 	
 	push_constant.push_back(damp)
-	push_constant.push_back(0.0)
+	push_constant.push_back(c2)
 	push_constant.push_back(0.0)
 	push_constant.push_back(0.0)
 
@@ -169,12 +176,14 @@ func _render_process(with_next_texture, wave_point, tex_resolution, tex_size, da
 	rd.compute_list_dispatch(compute_list, x_groups, y_groups, 1)
 	rd.compute_list_end()
 	
-	frame_number += 1
-	if frame_number % cpu_readback_interval == 0:
-		var lambda = func (array : PackedByteArray) -> void:
-			water_image.set_data(texture_resolution.x, texture_resolution.y, false, Image.FORMAT_RF, array)
-				
-		rd.texture_get_data_async(texture_rds[with_next_texture], 0, lambda)
+
+	if use_cpu_readback:
+		frame_number += 1
+		if frame_number % cpu_readback_interval == 0:
+			var lambda = func (array : PackedByteArray) -> void:
+				water_image.set_data(texture_resolution.x, texture_resolution.y, false, Image.FORMAT_RF, array)
+					
+			rd.texture_get_data_async(texture_rds[with_next_texture], 0, lambda)
 
 func _free_compute_resources():
 	for i in range(3):

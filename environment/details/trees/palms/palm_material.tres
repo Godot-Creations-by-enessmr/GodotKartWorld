@@ -1,12 +1,14 @@
-[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://cgkunawrnni6b"]
+[gd_resource type="ShaderMaterial" load_steps=5 format=3 uid="uid://cgkunawrnni6b"]
 
 [ext_resource type="Shader" uid="uid://dpqcfbslrinxa" path="res://environment/details/trees/palms/palm.gdshader" id="1_kycuk"]
 [ext_resource type="Texture2D" uid="uid://bf1bdptyuirad" path="res://environment/details/trees/palms/palm_bark.png" id="2_0ilt0"]
 [ext_resource type="Texture2D" uid="uid://cdegcd1n5tp62" path="res://environment/details/trees/palms/palm_leaf.png" id="2_llyt8"]
+[ext_resource type="Texture2D" uid="uid://co0ald1m0lr4d" path="res://environment/details/trees/palms/palm_bark_normal.png" id="3_vjfyy"]
 
 [resource]
 render_priority = 0
 shader = ExtResource("1_kycuk")
 shader_parameter/leaves_texture = ExtResource("2_llyt8")
 shader_parameter/bark_texture = ExtResource("2_0ilt0")
+shader_parameter/bark_texture_normal = ExtResource("3_vjfyy")
 shader_parameter/wind_affect = 0.5

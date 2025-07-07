@@ -215,7 +215,7 @@ void fragment() {
 	float refraction_blend_factor = clamp(pow(linear_depth, refraction_distance_power), 0.0, refraction_distance_max) / refraction_distance_max;
 	vec3 water_color = mix(background_color * shallow_color.rgb * refraction_background_brightness, deep_color.rgb, refraction_blend_factor * (1.0 - fresnel));
 
-
+	// Caustics
 	if (depth_position.y < world_vertex.y) {
 	    float c = mix(texture(caustics_texture, depth_position.xz * 0.1 + TIME * vec2(0.01, 0.02)).r, texture(caustics_texture, depth_position.xz * 0.059 + TIME * vec2(-0.012, -0.04)).r, 0.5);
 	    water_color += c * caustics_strength / pow(1.0 + world_vertex.y - depth_position.y, 2.0);

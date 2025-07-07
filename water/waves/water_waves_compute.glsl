@@ -17,7 +17,8 @@ layout(push_constant, std430) uniform Params {
 	vec2 previous_offset;
 	vec2 output_offset;
 	float damp;
-	float padding[3];
+	float c2;
+	float padding[2];
 } params;
 
 float sample_previous_texture(ivec2 uv) {
@@ -55,10 +56,11 @@ void main() {
 	float right_v = sample_current_texture(uv + d_1 + ivec2(1, 0));
 	float previous_v = sample_previous_texture(uv + d_2);
 
-	float c2 = 0.09;
+	// float c2 = 0.09;
+	float c2 = params.c2;
 	float lap = up_v + down_v + left_v + right_v - 4.0*current_v;
 	float new_v = 2.0*current_v - previous_v + c2 * lap;
-
+	new_v = new_v - (params.damp * new_v * 0.001);
 
 	vec2 center = params.add_wave_point.xy;
 	float radius = params.add_wave_point.w;

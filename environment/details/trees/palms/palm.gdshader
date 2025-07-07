@@ -18,7 +18,8 @@ varying float id;
 
 uniform sampler2D noise;
 uniform sampler2D leaves_texture : repeat_disable;
-uniform sampler2D bark_texture : repeat_disable;
+uniform sampler2D bark_texture ;
+uniform sampler2D bark_texture_normal ;
 
 uniform float wind_affect = 0.5;
 
@@ -54,7 +55,8 @@ void fragment() {
 		if(leaf.w < 0.5) discard;
 		color = leaf.rgb;
 	} else {
-		color = texture(bark_texture, UV * 1.0).rgb;
+		color = texture(bark_texture, UV * 4.0).rgb;
+		NORMAL_MAP = texture(bark_texture_normal, UV * 4.0).rgb;
 	}
 	
 	ALBEDO = color;

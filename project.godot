@@ -70,6 +70,7 @@ use_item={
 3d_physics/layer_3="ItemBoxes"
 3d_physics/layer_4="Terrain"
 3d_physics/layer_5="Circuit"
+3d_physics/layer_6="BoostPanels"
 
 [rendering]
 
@@ -79,7 +80,7 @@ lights_and_shadows/directional_shadow/16_bits=false
 
 wind_noise_texture={
 "type": "sampler2D",
-"value": "res://shared/noise/3_channel_noise.png"
+"value": "res://shared/textures/3_channel_noise.png"
 }
 wind_direction={
 "type": "vec3",
