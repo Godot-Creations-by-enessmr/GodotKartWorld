@@ -28,12 +28,12 @@ var gravity_acceleration : Vector3 = Vector3(0, -9.81, 0)
 var current_model_up : Vector3 = Vector3.UP
 #var velocity : Vector3
 
-@onready var water_buoyancy : WaterBuoyancy = $WaterBuoyancy
+@onready var water_buoyancy_sensor : WaterBuoyancySensor = $WaterBuoyancySensor
 @onready var visual_parent : Node3D = $Visual
 @onready var debug_label : Label = $DebugLabel
 
 func is_on_ground() -> bool:
-	return is_on_floor() or water_buoyancy.is_on_water()
+	return is_on_floor() or water_buoyancy_sensor.is_in_water()
 
 func get_horizontal_velocity() -> Vector3:
 	return Vector3(velocity.x, 0, velocity.z)
@@ -90,9 +90,9 @@ func _align_mesh_with_normal(delta : float, normal: Vector3) -> void:
 func _process(delta: float) -> void:
 	var new_up := Vector3.UP
 	var t := 0.5
-	if water_buoyancy.is_on_water():
+	if water_buoyancy_sensor.is_in_water():
 		t = 0.25
-		new_up = water_buoyancy.get_surface_normal()
+		new_up = Vector3.UP
 	elif is_on_ground():
 		t = 0.025
 		new_up = get_floor_normal()
@@ -151,14 +151,14 @@ func _apply_air_force(delta : float) -> void:
 	
 
 func _apply_water_force(delta : float) -> void:
-	if !water_buoyancy.is_on_water():
+	if !water_buoyancy_sensor.is_in_water():
 		return
-	var d := water_buoyancy.get_water_height()
+	var water_height := water_buoyancy_sensor.get_water_height()
 	var a : float = 10
 	if velocity.y > 0:
 		a = 2.5
 			
-	velocity.y += (d - global_position.y) * delta * a
+	velocity.y += (water_height - global_position.y) * delta * a
 	
 
 # This represents the player's inertia.

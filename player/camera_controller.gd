@@ -24,7 +24,7 @@ func _input(event) -> void:
 	if event is InputEventMouseMotion and input_active:
 		rotation.y += -event.relative.x * 0.025 * look_sensitivity;
 		rotation.x += -event.relative.y * 0.025 * look_sensitivity;
-		rotation.x = clamp(rotation.x, -0.4 * PI, 0.1 * PI)
+		rotation.x = clamp(rotation.x, -0.4 * PI, 0.4 * PI)
 		_camera_reset_cooldown = camera_reset_delay
 		
 		

@@ -21,7 +21,7 @@ func _process(delta: float) -> void:
 	
 	if ocean_node:
 		ocean_node.set_player_position(kart.global_position)
-		if kart.water_buoyancy.is_on_water():
+		if kart.water_buoyancy_sensor.is_on_water():
 			#var v = kart.velocity;
 			var strength = clamp(0.2 * Vector2(kart.velocity.x, kart.velocity.z).length(), 0, 1);
 			strength += clamp(2 * abs(kart.velocity.y), 0, 1);

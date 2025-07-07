@@ -1,6 +1,6 @@
 shader_type spatial;
 
-render_mode world_vertex_coords;
+//render_mode world_vertex_coords;
 
 #include "utils.gdshaderinc"
 #include "triplanar_sampling.gdshaderinc"
@@ -15,10 +15,16 @@ uniform sampler2D noise;
 uniform float noiseScale = 0.25;
 uniform float normalScale = 0.15;
 
+uniform bool use_global_position = true;
+
 varying vec3 global_position;
 
 void vertex() {
 	global_position = VERTEX;
+	if(use_global_position) {
+		vec4 pos_h = (MODEL_MATRIX * vec4(global_position, 1.0));
+		global_position = pos_h.xyz / pos_h.w;
+	}	
 }
 
 void fragment() {

@@ -13,3 +13,4 @@ shader_parameter/albedo = Color(0.806161, 0.806161, 0.806161, 1)
 shader_parameter/noise = ExtResource("2_rasud")
 shader_parameter/noiseScale = 0.25
 shader_parameter/normalScale = 0.15
+shader_parameter/use_global_position = true

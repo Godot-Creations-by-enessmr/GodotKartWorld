@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://whwiqs4rjsoj" path="res://player/karts/kart.gd" id="1_cyw3l"]
 [ext_resource type="PackedScene" uid="uid://cmohn132ayjga" path="res://player/karts/wheel.tscn" id="2_k70jy"]
-[ext_resource type="Script" uid="uid://cq4einn6nftcp" path="res://water/water_buoyancy.gd" id="3_krwk8"]
+[ext_resource type="Script" uid="uid://cq4einn6nftcp" path="res://water/water_buoyancy_sensor.gd" id="3_krwk8"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_kqu6x"]
 size = Vector3(1.125, 0.75, 2.25)
@@ -54,10 +54,9 @@ transform = Transform3D(-1, 0, -5.96046e-08, 0, 1, 0, 5.96046e-08, 0, -1, 0.575,
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.385839, -0.0107909)
 shape = SubResource("SphereShape3D_krwk8")
 
-[node name="WaterBuoyancy" type="Node3D" parent="."]
+[node name="WaterBuoyancySensor" type="Marker3D" parent="."]
 script = ExtResource("3_krwk8")
-max_depth = 10.0
-fluid_density = 998.0
+height = 0.5
 
 [node name="DebugLabel" type="Label" parent="."]
 anchors_preset = 2

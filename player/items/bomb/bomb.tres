@@ -1,10 +1,12 @@
-[gd_resource type="Resource" script_class="ItemType" load_steps=3 format=3 uid="uid://bteev30f14le1"]
+[gd_resource type="Resource" script_class="ItemType" load_steps=4 format=3 uid="uid://bteev30f14le1"]
 
 [ext_resource type="Script" uid="uid://cim828ug0dftd" path="res://player/items/item_type.gd" id="1_4auww"]
 [ext_resource type="PackedScene" uid="uid://c1pwvkaumqe8i" path="res://player/items/bomb/bomb.tscn" id="1_njhcu"]
+[ext_resource type="Texture2D" uid="uid://chj2hftg8xbyq" path="res://player/items/bomb/ui_icon.png" id="3_tiskl"]
 
 [resource]
 script = ExtResource("1_4auww")
 name = "bomb"
+sprite = ExtResource("3_tiskl")
 scene = ExtResource("1_njhcu")
 metadata/_custom_type_script = "uid://cim828ug0dftd"

@@ -1,8 +1,11 @@
-extends RigidBody3D
+extends BuoyantBody3D
+
+@export var explosion_delay := 5.0
 
 
 func _ready() -> void:
-	await get_tree().create_timer(2).timeout
+	super._ready()
+	await get_tree().create_timer(explosion_delay).timeout
 	_explode()
 
 func _explode() -> void:

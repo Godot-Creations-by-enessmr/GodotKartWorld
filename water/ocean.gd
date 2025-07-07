@@ -22,7 +22,7 @@ func _process(delta:float) -> void:
 		ocean.initialize_simulation()
 	ocean.simulate(delta)
 
-func get_wave_height(global_pos:Vector3, max_cascade:int = 1, steps:int = 2) -> float:
+func get_wave_height(global_pos:Vector3, max_cascade:int = 3, steps:int = 4) -> float:
 	return ocean.get_wave_height(get_viewport().get_camera_3d(), global_pos, max_cascade, steps) + water_waves.get_height(global_pos)
 
 func set_player_position(position : Vector3) -> void:

@@ -1,21 +1,44 @@
-[gd_scene load_steps=4 format=3 uid="uid://c1pwvkaumqe8i"]
+[gd_scene load_steps=9 format=3 uid="uid://c1pwvkaumqe8i"]
 
 [ext_resource type="Script" uid="uid://blep5itepl502" path="res://player/items/bomb/bomb.gd" id="1_pb7k5"]
+[ext_resource type="ArrayMesh" uid="uid://btg2tgxrhsaml" path="res://player/items/bomb/bomb.obj" id="2_tflo0"]
+[ext_resource type="Shader" uid="uid://bablkasr0bf4m" path="res://shared/shaders/stylized_shader.gdshader" id="3_2mj86"]
+[ext_resource type="Texture2D" uid="uid://brdf36qchf2hi" path="res://shared/textures/palette.png" id="4_3bvsj"]
+[ext_resource type="Texture2D" uid="uid://ldrhi4pf68op" path="res://shared/textures/cell_noise.png" id="5_7jo66"]
+[ext_resource type="Script" uid="uid://cq4einn6nftcp" path="res://water/water_buoyancy_sensor.gd" id="6_2mj86"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ksril"]
 radius = 0.4
 
-[sub_resource type="SphereMesh" id="SphereMesh_ksril"]
-radius = 0.4
-height = 0.8
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k86ug"]
+render_priority = 0
+shader = ExtResource("3_2mj86")
+shader_parameter/specular = 0.658
+shader_parameter/roughness = 0.718
+shader_parameter/metalic = 1.0
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/albedo_texture = ExtResource("4_3bvsj")
+shader_parameter/noise = ExtResource("5_7jo66")
+shader_parameter/noiseScale = 0.25
+shader_parameter/normalScale = 0.405
+shader_parameter/use_global_position = false
 
 [node name="Bomb" type="RigidBody3D"]
 collision_layer = 2
-collision_mask = 3
+collision_mask = 27
+mass = 0.5
 script = ExtResource("1_pb7k5")
+buoyancy_multiplier = 10000.0
+buoyancy_power = 3.0
+metadata/_custom_type_script = "uid://buuv5cuiuaxlg"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_ksril")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("SphereMesh_ksril")
+transform = Transform3D(0.47, 0, 0, 0, 0.47, 0, 0, 0, 0.47, 0, 0, 0)
+mesh = ExtResource("2_tflo0")
+surface_material_override/0 = SubResource("ShaderMaterial_k86ug")
+
+[node name="BuoyantBody3D" type="Marker3D" parent="."]
+script = ExtResource("6_2mj86")

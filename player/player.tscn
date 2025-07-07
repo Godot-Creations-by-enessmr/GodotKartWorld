@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dg25e8yln6wea"]
+[gd_scene load_steps=8 format=3 uid="uid://dg25e8yln6wea"]
 
 [ext_resource type="Script" uid="uid://dnmboat3sqbt1" path="res://player/player.gd" id="1_oul6g"]
 [ext_resource type="Script" uid="uid://b4qki7c3s65xy" path="res://player/camera_controller.gd" id="2_rkbax"]
@@ -6,6 +6,7 @@
 [ext_resource type="Environment" uid="uid://b2fa18uw5ynou" path="res://environment/levels/island/under_water_environment.tres" id="3_g6k8r"]
 [ext_resource type="Script" uid="uid://cj0ag7syks88s" path="res://player/inventory.gd" id="5_g6k8r"]
 [ext_resource type="Texture2D" uid="uid://cfx0taah1txfi" path="res://player/UI/inventory_slot.png" id="5_qjkh3"]
+[ext_resource type="Texture2D" uid="uid://chj2hftg8xbyq" path="res://player/items/bomb/ui_icon.png" id="7_boad6"]
 
 [node name="Player" type="Node3D" groups=["player"]]
 script = ExtResource("1_oul6g")
@@ -32,8 +33,9 @@ fov = 90.0
 collision_mask = 31
 floor_max_angle = 1.0472
 
-[node name="Inventory" type="Node" parent="."]
+[node name="Inventory" type="Node" parent="." node_paths=PackedStringArray("item_slots")]
 script = ExtResource("5_g6k8r")
+item_slots = [NodePath("Control/InventorySlot/Slot/ItemIcon"), NodePath("Control/InventorySlot2/Slot/ItemIcon2")]
 
 [node name="Control" type="Control" parent="Inventory"]
 layout_mode = 3
@@ -61,6 +63,16 @@ anchor_bottom = 0.9
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="ItemIcon" type="TextureRect" parent="Inventory/Control/InventorySlot/Slot"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_boad6")
+expand_mode = 1
+
 [node name="InventorySlot2" type="TextureRect" parent="Inventory/Control"]
 layout_mode = 2
 offset_left = 32.0
@@ -78,3 +90,13 @@ anchor_right = 0.9
 anchor_bottom = 0.9
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="ItemIcon2" type="TextureRect" parent="Inventory/Control/InventorySlot2/Slot"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_boad6")
+expand_mode = 1

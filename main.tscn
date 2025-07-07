@@ -26,6 +26,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.69774, 7.83541, -25.8476)
 [node name="ItemBox4" parent="ItemBoxes" instance=ExtResource("3_h2yge")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.91767, 8.08285, -22.2532)
 
+[node name="ItemBox5" parent="ItemBoxes" instance=ExtResource("3_h2yge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.76797, 3.05381, 5.14229)
+
 [node name="TrafficCone" parent="." instance=ExtResource("4_1bvp3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.7575, 3.51959, 1.85263)
 

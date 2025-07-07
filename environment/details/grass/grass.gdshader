@@ -15,23 +15,28 @@ uniform float normalScale = 1.0;
 uniform vec3 color : source_color;
 
 varying vec3 global_position;
-varying float grass_displacement;
 
 global uniform vec3 player_position;
-
+uniform float push_radius = 2.0;
+uniform float push_strength = 1.0;
 
 void vertex() {
-	global_position = VERTEX;
-	//grass_displacement = 1.0 - sampleGrassDisplacement(VERTEX).rgb;
-	grass_displacement = 1.0 - clamp(1.0 - 0.2 * distance(global_position, player_position), 0.0, 1.0);
-	
-	float height_multiplier = 0.5 * grass_displacement;
-	VERTEX += get_wind_displacement(VERTEX, 0.3) * COLOR.r * COLOR.r * COLOR.r * height_multiplier;
+    global_position = VERTEX;
 
-	vec4 local = inverse(MODEL_MATRIX) * vec4(VERTEX, 1.0);
-	local.y *= height_multiplier;
-	VERTEX = (MODEL_MATRIX * local).xyz;
-	global_position = VERTEX;
+    float influence = clamp(1.0 - distance(global_position.xz, player_position.xz) / push_radius, 0.0, 1.0);
+
+    vec3 direction = normalize(player_position - global_position);
+    direction.y = 1.0;
+    vec3 displacement = direction * push_strength * influence;
+
+    VERTEX += get_wind_displacement(VERTEX, 1.0) * pow(COLOR.r, 3.0);
+    VERTEX += displacement;
+
+    vec4 local = inverse(MODEL_MATRIX) * vec4(VERTEX, 1.0);
+    local.y *= 0.5 * mix(1.0, 0.1, influence);
+    VERTEX = (MODEL_MATRIX * local).xyz;
+
+    global_position = VERTEX;
 }
 
 void fragment() {
