@@ -30,6 +30,7 @@ var current_model_up : Vector3 = Vector3.UP
 
 @onready var water_buoyancy_sensor : WaterBuoyancySensor = $WaterBuoyancySensor
 @onready var visual_parent : Node3D = $Visual
+@onready var steering_wheel : Node3D = $Visual/Body/Node3D/SteeringWheel
 @onready var debug_label : Label = $DebugLabel
 
 func is_on_ground() -> bool:
@@ -68,11 +69,12 @@ func _apply_steering(delta : float) -> void:
 	steering = lerp(steering, deg_to_rad(max_steering_angle * wish_steering), pow(0.2, 5 * delta))
 	rotate_y(-delta * angular_velocity)
 	for wheel in wheels:
-		if wheel.steering_enabled:
-			wheel.rotation.y = steering
+		wheel.set_steering(steering)
+		wheel.speed = horizonal_speed
+	steering_wheel.rotation.y = steering * 3.0
 			
 
-func _align_mesh_with_normal(delta : float, normal: Vector3) -> void:
+func _align_mesh_with_normal(_delta : float, normal: Vector3) -> void:
 	var up := normal.normalized()
 	var forward := -global_transform.basis.z
 	forward = (forward - up * forward.dot(up)).normalized()
@@ -103,7 +105,7 @@ func _process(delta: float) -> void:
 		var side := forward.cross(up);		
 		var vertical_velocity := velocity.dot(up)
 		var lean_angle : float = clamp(vertical_velocity * lean_strength, -0.2, 0.2)  # In radians		
-		new_up = up.rotated(side, lean_angle)
+		new_up = up.rotated(side.normalized(), lean_angle)
 		
 	current_model_up = current_model_up.lerp(new_up, 1 - pow(t, 2 * delta))
 	_align_mesh_with_normal(delta, current_model_up)
@@ -154,9 +156,9 @@ func _apply_water_force(delta : float) -> void:
 	if !water_buoyancy_sensor.is_in_water():
 		return
 	var water_height := water_buoyancy_sensor.get_water_height()
-	var a : float = 10
+	var a : float = 20
 	if velocity.y > 0:
-		a = 2.5
+		a = 2.0
 			
 	velocity.y += (water_height - global_position.y) * delta * a
 	

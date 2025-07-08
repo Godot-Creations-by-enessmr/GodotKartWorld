@@ -31,7 +31,7 @@ func _ready() -> void:
 	pass # Replace with function body.
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	var time : float = Time.get_ticks_msec() * 0.001;
 	# vertical bobbing + rotation
 	visual_item_box.position.y = 0.5 * sin(2 * PI * 0.5 * time);

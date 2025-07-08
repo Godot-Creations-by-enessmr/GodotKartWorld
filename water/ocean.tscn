@@ -27,8 +27,9 @@ water_material = ExtResource("5_2g7bk")
 damp = 0.025
 
 [node name="QuadTree3D" parent="." instance=ExtResource("7_mh4x3")]
-lod_level = 0
-quad_size = 4096.0
-mesh_vertex_resolution = 4096
-ranges = Array[float]([128.0, 512.0, 2048.0])
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.52588e-05, 0)
+lod_level = 4
+quad_size = 2048.0
+mesh_vertex_resolution = 96
+ranges = Array[float]([128.0, 256.0, 512.0, 1024.0, 2056.0, 4096.0, 8192.0])
 material = ExtResource("5_2g7bk")

@@ -1,0 +1,185 @@
+[gd_scene load_steps=22 format=3 uid="uid://cy36aygvs66pn"]
+
+[ext_resource type="PackedScene" uid="uid://kod0awm1ha4o" path="res://addons/gdquest_gobot/model/gobot.glb" id="1_qg1mb"]
+[ext_resource type="Script" uid="uid://cykun03qk6yor" path="res://addons/gdquest_gobot/gobot_skin.gd" id="1_rwke8"]
+[ext_resource type="Texture2D" uid="uid://cfdf62ci74tew" path="res://addons/gdquest_gobot/textures/closed_eyes.png" id="3_atmtp"]
+[ext_resource type="Texture2D" uid="uid://dq675fmt1rg8c" path="res://addons/gdquest_gobot/textures/open_eye.png" id="3_aysq5"]
+[ext_resource type="Script" uid="uid://ccph1ovcfvysm" path="res://addons/gdquest_gobot/skeleton_ik_3d.gd" id="5_n25xx"]
+[ext_resource type="Texture2D" uid="uid://bt5o0sr6peltq" path="res://addons/gdquest_gobot/model/gobot_gobot_diffuse.png" id="6_mhg17"]
+[ext_resource type="Texture2D" uid="uid://d28w5bql3g21l" path="res://addons/gdquest_gobot/model/gobot_gobot_normal.png" id="7_x5eul"]
+[ext_resource type="Texture2D" uid="uid://cgkj45d67dalm" path="res://addons/gdquest_gobot/model/gobot_gobot_roughness.png" id="8_e376u"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t4001"]
+render_priority = 1
+transparency = 1
+albedo_color = Color(0.972549, 0.27451, 0, 0)
+emission_enabled = true
+emission = Color(0.972549, 0.27451, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3368a"]
+albedo_texture = ExtResource("6_mhg17")
+metallic = 1.0
+metallic_specular = 0.55
+roughness_texture = ExtResource("8_e376u")
+normal_enabled = true
+normal_texture = ExtResource("7_x5eul")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f5nav"]
+resource_local_to_scene = true
+albedo_texture = ExtResource("3_aysq5")
+roughness = 0.6
+uv1_offset = Vector3(0.1, 0, 0)
+texture_repeat = false
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ge76d"]
+animation = &"Sit"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_x50t6"]
+animation = &"Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_mhg17"]
+animation = &"VictorySign"
+use_custom_timeline = true
+timeline_length = 0.5
+stretch_time_scale = false
+start_offset = 0.0
+loop_mode = 0
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_g4wg5"]
+animation = &"custom_lib/hurt"
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_x50t6"]
+filter_enabled = true
+filters = ["Armature/Skeleton3D:Foot.L", "Armature/Skeleton3D:Foot.R", "Armature/Skeleton3D:Hips", "Armature/Skeleton3D:LowerLeg.L", "Armature/Skeleton3D:LowerLeg.R", "Armature/Skeleton3D:UpperLeg.L", "Armature/Skeleton3D:UpperLeg.R"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_oi1x1"]
+animation = &"Flip"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_5to6b"]
+fadein_time = 0.2
+fadeout_time = 0.2
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_g3q2d"]
+mix_mode = 1
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_x5eul"]
+fadeout_time = 0.1
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_8xvna"]
+nodes/Animation/node = SubResource("AnimationNodeAnimation_g4wg5")
+nodes/Animation/position = Vector2(213.333, 373.333)
+"nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_ge76d")
+"nodes/Animation 2/position" = Vector2(1093.33, 240)
+"nodes/Animation 3/node" = SubResource("AnimationNodeAnimation_x50t6")
+"nodes/Animation 3/position" = Vector2(-106.667, 26.6667)
+"nodes/Animation 4/node" = SubResource("AnimationNodeAnimation_mhg17")
+"nodes/Animation 4/position" = Vector2(613.333, 480)
+nodes/Blend2/node = SubResource("AnimationNodeBlend2_x50t6")
+nodes/Blend2/position = Vector2(1360, 133.333)
+nodes/Flip/node = SubResource("AnimationNodeAnimation_oi1x1")
+nodes/Flip/position = Vector2(20, 240)
+nodes/FlipShot/node = SubResource("AnimationNodeOneShot_5to6b")
+nodes/FlipShot/position = Vector2(220, 60)
+nodes/HurtShot/node = SubResource("AnimationNodeOneShot_g3q2d")
+nodes/HurtShot/position = Vector2(640, 53.3333)
+nodes/OneShot/node = SubResource("AnimationNodeOneShot_x5eul")
+nodes/OneShot/position = Vector2(933.333, 160)
+nodes/output/position = Vector2(1653.33, 0)
+node_connections = [&"Blend2", 0, &"OneShot", &"Blend2", 1, &"Animation 2", &"FlipShot", 0, &"Animation 3", &"FlipShot", 1, &"Flip", &"HurtShot", 0, &"FlipShot", &"HurtShot", 1, &"Animation", &"OneShot", 0, &"HurtShot", &"OneShot", 1, &"Animation 4", &"output", 0, &"Blend2"]
+
+[node name="GobotSkin" type="Node3D" node_paths=PackedStringArray("gobot_model", "IKTargetLeftArm", "IKTargetRightArm")]
+script = ExtResource("1_rwke8")
+gobot_model = NodePath("gobot/Armature/Skeleton3D/Gobot")
+blink = false
+_left_eye_mat_override = "surface_material_override/1"
+_right_eye_mat_override = "surface_material_override/2"
+_open_eye = ExtResource("3_aysq5")
+_close_eye = ExtResource("3_atmtp")
+IKTargetLeftArm = NodePath("gobot/Armature/Skeleton3D/IKLeftArm/Node3D")
+IKTargetRightArm = NodePath("gobot/Armature/Skeleton3D/IKLeftIKRightArm/Node3D")
+
+[node name="gobot" parent="." instance=ExtResource("1_qg1mb")]
+
+[node name="Skeleton3D" parent="gobot/Armature" index="0"]
+bones/0/position = Vector3(0.137431, 0.225964, 0.141049)
+bones/0/rotation = Quaternion(-0.0532793, 0.0140997, -0.283032, 0.957526)
+bones/1/position = Vector3(-0.137431, 0.225965, 0.141049)
+bones/1/rotation = Quaternion(-0.0532796, -0.0141004, 0.283031, 0.957526)
+bones/2/position = Vector3(5.8632e-23, 0.364405, 8.35903e-10)
+bones/2/rotation = Quaternion(0.0697518, 0.0113996, -0.000797136, 0.997499)
+bones/3/rotation = Quaternion(1, -2.81253e-16, -7.54979e-08, -3.7253e-09)
+bones/4/rotation = Quaternion(-0.701607, -0.225479, -0.132917, 0.662751)
+bones/5/rotation = Quaternion(0.0135908, -0.207349, 0.292186, 0.933514)
+bones/6/rotation = Quaternion(-0.701607, 0.225479, 0.132917, 0.662752)
+bones/7/rotation = Quaternion(0.0135908, 0.207349, -0.292186, 0.933514)
+bones/8/rotation = Quaternion(-0.603255, -0.289842, -0.699741, 0.249876)
+bones/9/rotation = Quaternion(3.00404e-07, 4.75504e-07, -0.395029, 0.918669)
+bones/10/rotation = Quaternion(-0.289732, -0.637458, -0.217438, 0.680017)
+bones/11/rotation = Quaternion(0.487906, -0.01744, 0.00854537, 0.87268)
+bones/12/rotation = Quaternion(-0.371224, -0.00197695, 0.00585369, 0.928523)
+bones/13/rotation = Quaternion(-0.502333, 1.50313e-05, -2.85221e-05, 0.864674)
+bones/14/rotation = Quaternion(-0.371224, -0.00197696, 0.00585365, 0.928523)
+bones/15/rotation = Quaternion(-0.502333, 1.50016e-05, -2.84726e-05, 0.864674)
+bones/16/rotation = Quaternion(-0.708437, 0.245636, 0.593018, 0.293444)
+bones/17/rotation = Quaternion(3.1079e-07, -5.55705e-07, 0.395029, 0.918669)
+bones/18/rotation = Quaternion(-0.289732, 0.637458, 0.217439, 0.680017)
+bones/19/rotation = Quaternion(0.487906, 0.01744, -0.00854545, 0.87268)
+bones/20/rotation = Quaternion(-0.371224, 0.00197697, -0.00585365, 0.928523)
+bones/21/rotation = Quaternion(-0.502333, -1.49831e-05, 2.84856e-05, 0.864674)
+bones/22/rotation = Quaternion(-0.371224, 0.00197701, -0.00585369, 0.928523)
+bones/23/rotation = Quaternion(-0.502333, -1.50198e-05, 2.85027e-05, 0.864674)
+bones/24/position = Vector3(1.5192e-10, 0.189977, -8.26549e-09)
+bones/24/rotation = Quaternion(-0.0697565, 4.6157e-08, 3.35179e-09, 0.997564)
+
+[node name="IKLeftArm" type="SkeletonIK3D" parent="gobot/Armature/Skeleton3D" index="0"]
+root_bone = &"UpperArm.L"
+tip_bone = &"Thumb_2.L"
+target_node = NodePath("Node3D")
+script = ExtResource("5_n25xx")
+
+[node name="Node3D" type="Marker3D" parent="gobot/Armature/Skeleton3D/IKLeftArm"]
+transform = Transform3D(0.996716, -0.0787191, 0.0190093, -0.0657615, -0.923759, -0.377287, 0.0472596, 0.374798, -0.925901, 0.0637868, 0.505609, 0.342251)
+
+[node name="IKLeftIKRightArm" type="SkeletonIK3D" parent="gobot/Armature/Skeleton3D" index="1"]
+root_bone = &"UpperArm.R"
+tip_bone = &"Thumb_2.R"
+target_node = NodePath("Node3D")
+script = ExtResource("5_n25xx")
+
+[node name="Node3D" type="Marker3D" parent="gobot/Armature/Skeleton3D/IKLeftIKRightArm"]
+transform = Transform3D(0.988758, -0.146704, -0.0289164, -0.136666, -0.808191, -0.572843, 0.0606686, 0.570355, -0.819155, -0.0953813, 0.401295, 0.232336)
+
+[node name="Gobot" parent="gobot/Armature/Skeleton3D" index="2"]
+material_overlay = SubResource("StandardMaterial3D_t4001")
+surface_material_override/0 = SubResource("StandardMaterial3D_3368a")
+surface_material_override/1 = SubResource("StandardMaterial3D_f5nav")
+
+[node name="BlinkTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.2
+one_shot = true
+autostart = true
+
+[node name="ClosedEyesTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.2
+one_shot = true
+autostart = true
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+unique_name_in_owner = true
+root_node = NodePath("%AnimationTree/../gobot")
+tree_root = SubResource("AnimationNodeBlendTree_8xvna")
+anim_player = NodePath("../gobot/AnimationPlayer")
+parameters/Blend2/blend_amount = 1.0
+parameters/FlipShot/active = false
+parameters/FlipShot/internal_active = false
+parameters/FlipShot/request = 0
+parameters/HurtShot/active = false
+parameters/HurtShot/internal_active = false
+parameters/HurtShot/request = 0
+parameters/OneShot/active = false
+parameters/OneShot/internal_active = false
+parameters/OneShot/request = 0
+
+[editable path="gobot"]

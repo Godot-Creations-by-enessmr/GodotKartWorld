@@ -14,6 +14,7 @@ uniform vec4 dirt_color : source_color;
 varying vec3 global_position;
 
 uniform float detail_noise_scale = 0.002;
+uniform float detail_noise_normal_strength = 0.5;
 uniform sampler2D detail_noise;
 uniform sampler2D terrain_material_map;
 
@@ -55,6 +56,6 @@ void fragment() {
 	vec3 sampled_noise = sampleTriplanar(detail_noise, global_position, global_normal, detail_noise_scale).rgb;
 	ALBEDO = noiseColorTransformer(color, sampled_noise);
 
-	global_normal = noiseNormalTransformer(global_normal, sampled_noise, 1.0);
+	global_normal = noiseNormalTransformer(global_normal, sampled_noise, detail_noise_normal_strength);
 	NORMAL = normalize((VIEW_MATRIX * vec4(global_normal, 0.0)).xyz);
 }

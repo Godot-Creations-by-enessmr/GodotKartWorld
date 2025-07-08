@@ -1,0 +1,19 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://bcjnb8646ls0k"]
+
+[ext_resource type="Shader" uid="uid://bablkasr0bf4m" path="res://shared/shaders/stylized_shader.gdshader" id="1_2isj8"]
+[ext_resource type="Texture2D" uid="uid://bfyiabn75u07y" path="res://environment/levels/island/race_track/track_albedo.png" id="2_2isj8"]
+[ext_resource type="Texture2D" uid="uid://c7lgbunrifo6d" path="res://shared/textures/cell_noise2.png" id="3_4dq0d"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_2isj8")
+shader_parameter/specular = 0.8
+shader_parameter/roughness = 0.9
+shader_parameter/metalic = 0.0
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/uv_tiling = Vector2(27.685, 1)
+shader_parameter/albedo_texture = ExtResource("2_2isj8")
+shader_parameter/noise = ExtResource("3_4dq0d")
+shader_parameter/noiseScale = 0.04
+shader_parameter/normalScale = 0.01
+shader_parameter/use_global_position = true

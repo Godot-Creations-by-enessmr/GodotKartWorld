@@ -9,6 +9,7 @@ uniform float specular : hint_range(0, 1) = 0.5f;
 uniform float roughness : hint_range(0, 1) = 0.5f;
 uniform float metalic : hint_range(0, 1) = 0.0f;
 uniform vec4 albedo : source_color = vec4(1.0);
+uniform vec2 uv_tiling = vec2(1.0);
 uniform sampler2D albedo_texture;
 
 uniform sampler2D noise;
@@ -36,6 +37,6 @@ void fragment() {
 	vec3 sampled_noise = sampleTriplanar(noise, global_position, global_normal, noiseScale).rgb;
 
 	global_normal = noiseNormalTransformer(global_normal, sampled_noise, normalScale);
-	ALBEDO = noiseColorTransformer(albedo.rgb * texture(albedo_texture, UV).rgb, sampled_noise);
+	ALBEDO = noiseColorTransformer(albedo.rgb * texture(albedo_texture, UV * uv_tiling).rgb, sampled_noise);
 	NORMAL = normalize((VIEW_MATRIX * vec4(global_normal, 0.0)).xyz);
 }

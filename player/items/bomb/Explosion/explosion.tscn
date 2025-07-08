@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://b75e11l5h4msj"]
+[gd_scene load_steps=22 format=3 uid="uid://chs3jrpw5elvr"]
 
 [ext_resource type="Material" uid="uid://drn30rpggb5rd" path="res://player/items/bomb/Explosion/explosion_dissolve_material.tres" id="1_8oe34"]
 [ext_resource type="Material" uid="uid://dlh002ivfchkx" path="res://player/items/bomb/Explosion/explosion_trail_material.tres" id="2_8biay"]

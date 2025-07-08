@@ -2,6 +2,7 @@ class_name Wheel extends Node3D
 
 @export var steering_enabled : bool
 @export var traction_enabled : bool
+@export var left_side : bool
 
 @export var max_force : float = 250.0
 @export var stiffness : float = 1.0
@@ -9,9 +10,12 @@ class_name Wheel extends Node3D
 
 @onready var raycast : RayCast3D = $RayCast3D
 @onready var wheel_visual : Node3D = $WheelVisual
+@onready var wheel_mesh : MeshInstance3D = $WheelVisual/WheelMesh
 var compression : float
 var previous_compression: float = 0.0
 var compression_velocity: float = 0.0
+var speed : float = 0.0
+@onready var radial_speed_factor : float = (2 * 0.21 * PI) / 2 * PI
 
 
 func is_grounded() -> bool:
@@ -20,7 +24,12 @@ func is_grounded() -> bool:
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	raycast.target_position = Vector3(0, -spring_rest_length, 0)
-	
+
+
+func _process(delta: float) -> void:
+	var r = speed * delta * radial_speed_factor
+	r = -r if left_side else r
+	wheel_mesh.rotation.x += r
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
@@ -31,7 +40,11 @@ func _physics_process(delta: float) -> void:
 	previous_compression = compression
 	compression = spring_rest_length - raw_distance
 	compression_velocity = (compression - previous_compression) / delta
-	
+
+func set_steering(steering : float) -> void:
+	if steering_enabled:
+		wheel_visual.rotation.y = steering
+
 
 func get_local_spring_force() -> Vector3:
 	var spring_force = stiffness * compression

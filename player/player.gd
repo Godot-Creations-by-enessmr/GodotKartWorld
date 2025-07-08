@@ -11,7 +11,7 @@ func _ready() -> void:
 	if !ocean_node:
 		ocean_node = get_tree().get_first_node_in_group("ocean")
 
-func _follow_camera(delta: float) -> void:
+func _follow_camera(_delta: float) -> void:
 	camera.global_position = kart.global_position
 
 func _process(delta: float) -> void:

@@ -56,12 +56,12 @@ group_uniforms;
 // Get the total wave displacement of a vertex from all cascades.
 vec3 get_displacement(vec2 uv) {
 	vec3 displacement = vec3(0.0);
-	
+
 	for (int i = 0; i < CASCADE_COUNT; i++) {
 		displacement += texture(cascade_displacements[i],
 				uv * uv_scale * (1.0 / cascade_uv_scales[i]) + wind_uv_offset * cascade_uv_scales[i]).rgb;
 	}
-	
+
 	return displacement;
 }
 
@@ -72,19 +72,19 @@ vec3 get_displacement(vec2 uv) {
 vec4 get_normals_jacobian(vec2 uv, vec3 displacement) {
 	// Surface Normals
 	float offset = 1.0;
-	
+
 	vec3 right = (vec3(offset, get_displacement(uv + vec2(offset, 0.0)).y, 0.0)) - displacement;
 	vec3 left = (vec3(-offset, get_displacement(uv + vec2(-offset, 0.0)).y, 0.0)) - displacement;
 	vec3 bottom = (vec3(0.0, get_displacement(uv + vec2(0.0, offset)).y, offset)) - displacement;
 	vec3 top = (vec3(0.0, get_displacement(uv + vec2(0.0, -offset)).y, -offset)) - displacement;
-	
+
 	vec3 top_right = cross(right, top);
 	vec3 top_left = cross(top, left);
 	vec3 bottom_left = cross(left, bottom);
 	vec3 bottom_right = cross(bottom, right);
-	
+
 	vec3 normal = normalize(top_right + top_left + bottom_left + bottom_right) * normal_factor;
-	
+
 	// Jacobian Determinant
 	// Used for foam/whitecap rendering
 	float jxx = right.x / offset;
@@ -92,7 +92,7 @@ vec4 get_normals_jacobian(vec2 uv, vec3 displacement) {
 	float jyx = bottom.x / offset;
 	float jyy = bottom.y / offset;
 	float jacobian_determinant = (jxx * jyy) - (jxy * jyx);
-	
+
 	return vec4(normal, jacobian_determinant);
 }
 
@@ -104,8 +104,8 @@ vec2 domain_warp(vec2 uv, float linear_dist) {
 	vec2 domain_warp = vec2(
 			texture(domain_warp_texture, uv * domain_warp_uv_scale).r,
 			texture(domain_warp_texture, -uv * domain_warp_uv_scale).r);
-	
+
 	domain_warp *= domain_warp_strength * (linear_dist / view_distance_max);
-	
+
 	return uv + domain_warp;
 }

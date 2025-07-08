@@ -10,8 +10,7 @@ class_name Ocean extends Node3D
 var player_position : Vector3
 
 func _ready() -> void:
-	var camera := get_viewport().get_camera_3d()
-	
+	#var camera := get_viewport().get_camera_3d()	
 	if ocean and not ocean.initialized:
 		ocean.initialize_simulation()
 
@@ -25,13 +24,13 @@ func _process(delta:float) -> void:
 func get_wave_height(global_pos:Vector3, max_cascade:int = 3, steps:int = 4) -> float:
 	return ocean.get_wave_height(get_viewport().get_camera_3d(), global_pos, max_cascade, steps) + water_waves.get_height(global_pos)
 
-func set_player_position(position : Vector3) -> void:
-	player_position = position
-	water_ripples.texture_offset = position
-	water_waves.texture_offset = position
+func set_player_position(pos : Vector3) -> void:
+	player_position = pos
+	water_ripples.texture_offset = pos
+	water_waves.texture_offset = pos
 	
-func add_ripple(position: Vector3, radius: float, strength: float) -> void:
-	water_ripples.add_ripple(position, radius, strength);
+func add_ripple(pos: Vector3, radius: float, strength: float) -> void:
+	water_ripples.add_ripple(pos, radius, strength);
 	
-func add_wave(position: Vector3, radius: float, strength: float) -> void:
-	water_waves.add_ripple(position, radius, strength);
+func add_wave(pos: Vector3, radius: float, strength: float) -> void:
+	water_waves.add_ripple(pos, radius, strength);

@@ -35,7 +35,7 @@ func add_ripple(position: Vector3, radius: float, strength: float) -> void:
 func _ready():
 	# In case we're running stuff on the rendering thread
 	# we need to do our initialisation on that thread.
-	RenderingServer.call_on_render_thread(_initialize_compute_code.bind(texture_resolution))
+	RenderingServer.call_on_render_thread(_initialize_compute_code)
 
 	for i in range(len(ripple_texture_centers)):
 		ripple_texture_centers[i] = Vector2i.ZERO
@@ -99,7 +99,7 @@ func _create_uniform_set(texture_rd : RID) -> RID:
 	return rd.uniform_set_create([uniform], shader, 0)
 
 
-func _initialize_compute_code(texture_resolution):
+func _initialize_compute_code():
 	rd = RenderingServer.get_rendering_device()
 
 	# Create our shader.
@@ -132,7 +132,7 @@ func _initialize_compute_code(texture_resolution):
 		texture_sets[i] = _create_uniform_set(texture_rds[i])
 
 
-func _render_process(with_next_texture, wave_point, tex_resolution, tex_size, damp):
+func _render_process(with_next_texture, wave_point, tex_resolution, _tex_size, damp):
 	var push_constant : PackedFloat32Array = PackedFloat32Array()
 	push_constant.push_back(wave_point.x) # x position
 	push_constant.push_back(wave_point.y) # z position

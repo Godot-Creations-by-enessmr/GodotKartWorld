@@ -108,18 +108,18 @@ func generate_chunk(chunk_size : Vector3, chunk_corner : Vector3) -> MultiMeshIn
 				var terrain_mask = sample_image_billinear(terrain_image, uv)
 				
 				if terrain_mask.get_luminance() < 0.01 && normal.dot(Vector3.UP) > 0.85:
-					var transform : Transform3D
-					transform.origin = collision_point - chunk_corner
+					var t : Transform3D
+					t.origin = collision_point - chunk_corner
 					
 					var basis_x : Vector3 = normal.cross(Vector3(1,0,0)).normalized()
 					if basis_x.length() < 0.0001:
 						basis_x = normal.cross(Vector3(0,1,0)).normalized()
 					var basis_z := basis_x.cross(normal).normalized()
-					transform.basis.x = basis_x
-					transform.basis.y = normal
-					transform.basis.z = basis_z
-					transform.basis = transform.basis.rotated(normal, randf() * 6.28318530718)
-					transforms.append(transform)
+					t.basis.x = basis_x
+					t.basis.y = normal
+					t.basis.z = basis_z
+					t.basis = t.basis.rotated(normal, randf() * 6.28318530718)
+					transforms.append(t)
 					
 	
 	var details_count = transforms.size()	

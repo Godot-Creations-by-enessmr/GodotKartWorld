@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://b760i3r1ojtrt"
+path="res://.godot/imported/race_track.obj-57654ad2876fed17b8ca7dd5e4d3d6dd.mesh"
+
+[deps]
+
+files=["res://.godot/imported/race_track.obj-57654ad2876fed17b8ca7dd5e4d3d6dd.mesh"]
+
+source_file="res://environment/levels/island/race_track/race_track.obj"
+dest_files=["res://.godot/imported/race_track.obj-57654ad2876fed17b8ca7dd5e4d3d6dd.mesh", "res://.godot/imported/race_track.obj-57654ad2876fed17b8ca7dd5e4d3d6dd.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

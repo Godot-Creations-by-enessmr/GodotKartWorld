@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://dgrxcp84esui1"
+path="res://.godot/imported/kart_body.obj-0d09bf09b0effa1497abbcfba95d76af.mesh"
+
+[deps]
+
+files=["res://.godot/imported/kart_body.obj-0d09bf09b0effa1497abbcfba95d76af.mesh"]
+
+source_file="res://player/karts/basic/kart_body.obj"
+dest_files=["res://.godot/imported/kart_body.obj-0d09bf09b0effa1497abbcfba95d76af.mesh", "res://.godot/imported/kart_body.obj-0d09bf09b0effa1497abbcfba95d76af.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

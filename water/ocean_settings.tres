@@ -5,16 +5,16 @@
 
 [resource]
 script = ExtResource("2_vce14")
-simulation_enabled = true
+simulation_enabled = null
 material = ExtResource("1_3fpa1")
 simulation_frameskip = 1
 heightmap_sync_frameskip = 2
 fft_resolution = 64
 horizontal_dimension = 64
 time_scale = 1.0
-cascade_ranges = Array[Vector2]([Vector2(0, 0.03), Vector2(0.03, 0.15), Vector2(0.15, 1)])
+cascade_ranges = null
 cascade_scales = Array[float]([3.23607, 1.61803, 0.5])
-planetary_curve_strength = 1e-06
+planetary_curve_strength = null
 amplitude_scale_min = 0.25
 amplitude_scale_max = 1.0
 amplitude_scale_fade_distance = 12000.0

@@ -30,6 +30,6 @@ func get_water_height() -> float:
 func get_water_depth() -> float:
 	return global_position.y - water_height 
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if ocean_node:
 		water_height = ocean_node.get_wave_height(global_position, 3, 5)

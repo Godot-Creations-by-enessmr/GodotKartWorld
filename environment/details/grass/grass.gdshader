@@ -29,21 +29,21 @@ void vertex() {
     direction.y = 1.0;
     vec3 displacement = direction * push_strength * influence;
 
-    VERTEX += get_wind_displacement(VERTEX, 1.0) * pow(COLOR.r, 3.0);
-    VERTEX += displacement;
+    VERTEX += get_wind_displacement(VERTEX, 1.0) * pow(COLOR.r, 3.0) * (1.0 - influence);
+    VERTEX += displacement * 1.0;
 
     vec4 local = inverse(MODEL_MATRIX) * vec4(VERTEX, 1.0);
-    local.y *= 0.5 * mix(1.0, 0.1, influence);
+    local.y *= 0.5 * mix(1.0, -0.5, influence);
     VERTEX = (MODEL_MATRIX * local).xyz;
 
     global_position = VERTEX;
 }
 
 void fragment() {
-	//if(dither(SCREEN_UV * VIEWPORT_SIZE,
-		//smoothstep(64, 80, distance(global_position, CAMERA_POSITION_WORLD))
-		//))
-		//discard;
+	if(dither(SCREEN_UV * VIEWPORT_SIZE,
+		smoothstep(72, 96, distance(global_position, CAMERA_POSITION_WORLD))
+		))
+		discard;
 
 	NORMAL = FRONT_FACING ? NORMAL : -NORMAL;
 

@@ -20,13 +20,9 @@ func _physics_process(delta:float) -> void:
 	submerged_probes = 0
 	submerged = false
 	
-	var height :float = 0.0
-	
 	for sensor in _buoyancy_sensors:
 		var depth := sensor.get_water_depth();
 		var buoyancy = pow(abs(depth), buoyancy_power)
-		
-		height += depth
 		
 		if depth < 0.0:
 			submerged = true
@@ -35,7 +31,7 @@ func _physics_process(delta:float) -> void:
 			
 			apply_force(force, sensor.global_position - global_position)
 
-func _integrate_forces(state:PhysicsDirectBodyState3D) -> void:
+func _integrate_forces(_state:PhysicsDirectBodyState3D) -> void:
 	if submerged:
 		linear_velocity *= 1.0 - submerged_drag_linear
 		angular_velocity *= 1.0 - submerged_drag_angular

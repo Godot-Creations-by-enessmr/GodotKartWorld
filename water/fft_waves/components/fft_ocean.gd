@@ -207,6 +207,20 @@ var _fft_settings_uniform := RDUniform.new()
 var _sub_pong_uniform := RDUniform.new()
 var _sub_pong_tex:RID
 
+var _foam_texture_size : Vector2
+var _foam_texture_resolution : Vector2i
+var _ping_foam_texture_offset : Vector2i
+var _pong_foam_texture_offset : Vector2i
+var _foam_shader:RID
+var _foam_pipeline:RID
+var _foam_settings_buffer:RID
+var _foam_settings_uniform := RDUniform.new()
+var _ping_uniform_foam: RDUniform = RDUniform.new()
+var _pong_uniform_foam: RDUniform = RDUniform.new()
+var _ping_image_foam: Image = Image.new()
+var _ping_tex_foam: RID
+var _pong_tex_foam : RID
+
 var _waves_readback_ready:Array[bool] = []
 var _waves_image_cascade:Array[Image] = []
 var _waves_texture_cascade:Array[Texture2DRD] = []
@@ -780,6 +794,10 @@ func _simulate(delta:float, sync_heightmap:bool) -> void:
 			
 			p <<= 1
 			is_sub_ping_phase = not is_sub_ping_phase
+			
+		### Compute wave mask texture
+		###########################################################################
+		
 		
 		## Retrieve the displacement map from the Spectrum texture, and store it
 		## CPU side for use by buoyancy and wave interaction systems.

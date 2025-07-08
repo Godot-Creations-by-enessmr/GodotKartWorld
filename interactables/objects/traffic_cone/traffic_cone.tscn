@@ -12,6 +12,7 @@ shader_parameter/specular = 0.297
 shader_parameter/roughness = 0.324
 shader_parameter/metalic = 0.0
 shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/uv_tiling = Vector2(1, 1)
 shader_parameter/albedo_texture = ExtResource("2_nxkcs")
 shader_parameter/noise = ExtResource("3_r8q6c")
 shader_parameter/noiseScale = 0.25

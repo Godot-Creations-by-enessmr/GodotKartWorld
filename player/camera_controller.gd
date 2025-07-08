@@ -19,6 +19,8 @@ func _ready() -> void:
 		ocean_node = get_tree().get_first_node_in_group("ocean")
 
 	set_mouse(true);
+	#set_mouse(false);
+			#get_viewport().debug_draw = Viewport.DEBUG_DRAW_WIREFRAME
 
 func _input(event) -> void:
 	if event is InputEventMouseMotion and input_active:
