@@ -37,7 +37,7 @@ void fragment() {
 
     ALBEDO = vec3(0);
 	vec3 hsv_color = rgb2hsv(box_color);
-	vec3 rgb_color = hsv2rgb(hsv_color + vec3(0.25 * (1.0 - pattern), 0, 0)); // + vec3(0.25 * (1.0 - pattern), 0, 0)
+	vec3 rgb_color = hsv2rgb(hsv_color + vec3(0.3 * (1.0 - pattern), 0, .2)); // + vec3(0.25 * (1.0 - pattern), 0, 0)
 
     EMISSION = rgb_color * pattern * emmision_multiplier;
 }

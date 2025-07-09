@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://dvg24enq7jua4"]
 
-[ext_resource type="Material" uid="uid://21g0wv232g1j" path="res://interactables/item_box/shader_box_material.tres" id="1_aewcb"]
+[ext_resource type="Material" uid="uid://21g0wv232g1j" path="res://interactables/item_box/item_box_material.tres" id="1_aewcb"]
 [ext_resource type="Script" uid="uid://brvrjl1r4irle" path="res://interactables/item_box/item_box.gd" id="1_tvt1y"]
 [ext_resource type="Resource" uid="uid://bwougoewwwthu" path="res://player/items/item_pool.tres" id="2_qqact"]
 [ext_resource type="ArrayMesh" uid="uid://upo6xdfb26vm" path="res://interactables/item_box/item_box.obj" id="2_tvt1y"]

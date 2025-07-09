@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://btvbhyy5ht8ti"]
+[gd_scene load_steps=31 format=3 uid="uid://btvbhyy5ht8ti"]
 
 [ext_resource type="Script" uid="uid://whwiqs4rjsoj" path="res://player/karts/kart.gd" id="1_cyw3l"]
 [ext_resource type="Material" uid="uid://cwqmra1oal3pf" path="res://player/karts/basic/kart_material.tres" id="2_cdvtu"]
@@ -9,19 +9,109 @@
 [ext_resource type="Texture2D" uid="uid://dsabwp4t3rt1o" path="res://icon.svg" id="5_4xgl7"]
 [ext_resource type="Script" uid="uid://immg84rmp61v" path="res://player/karts/steering_wheel.gd" id="5_ebjfs"]
 [ext_resource type="PackedScene" uid="uid://cy36aygvs66pn" path="res://addons/gdquest_gobot/gobot_skin.tscn" id="6_ffnty"]
+[ext_resource type="Material" uid="uid://bgq6881a55o8t" path="res://player/karts/effects/drifting/drifting_sparks_material.tres" id="9_ekr4a"]
+[ext_resource type="Script" uid="uid://b1nnvk6megehi" path="res://player/karts/effects/particles_manager.gd" id="9_rli1m"]
+[ext_resource type="Material" uid="uid://doeih2oe1o8j4" path="res://player/karts/effects/drifting/drifing_sliding_material.tres" id="11_4e78f"]
+[ext_resource type="Shader" uid="uid://diwistbq5v1tl" path="res://player/karts/effects/boost_particle.gdshader" id="11_8r62d"]
+[ext_resource type="Texture2D" uid="uid://c4nert4qlemk2" path="res://shared/textures/cloud.png" id="11_i3c53"]
+
+[sub_resource type="Curve" id="Curve_ekr4a"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.651111, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_ekr4a"]
+curve = SubResource("Curve_ekr4a")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_usafr"]
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 0, -1)
+spread = 13.0
+initial_velocity_min = 0.5
+initial_velocity_max = 1.5
+gravity = Vector3(0, 2, 0)
+scale_min = 0.2
+scale_max = 0.3
+scale_curve = SubResource("CurveTexture_ekr4a")
+
+[sub_resource type="QuadMesh" id="QuadMesh_i3c53"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_rli1m"]
+angle_min = 1.07288e-05
+angle_max = 360.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.2
+scale_max = 0.5
+scale_curve = SubResource("CurveTexture_ekr4a")
+
+[sub_resource type="Curve" id="Curve_8r62d"]
+_limits = [0.0, 75.7081, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 75.7081), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_rli1m"]
+curve = SubResource("Curve_8r62d")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_4e78f"]
+particle_flag_align_y = true
+angle_min = 1.07288e-05
+angle_max = 360.0
+angle_curve = SubResource("CurveTexture_rli1m")
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 2.0
+initial_velocity_max = 5.0
+scale_min = 0.2
+scale_max = 0.4
+turbulence_enabled = true
+turbulence_influence_min = 0.01
+turbulence_influence_max = 0.05
+
+[sub_resource type="QuadMesh" id="QuadMesh_usafr"]
+size = Vector2(0.1, 0.1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_f5n8r"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4e78f"]
+render_priority = 0
+shader = ExtResource("11_8r62d")
+shader_parameter/alpha_texture = ExtResource("11_i3c53")
+shader_parameter/lifetime = 0.6
+shader_parameter/emission_strength = 4.655
+shader_parameter/start_color = Color(0.616667, 0, 1, 1)
+shader_parameter/end_color = Color(1, 0.6, 0, 1)
+
+[sub_resource type="Curve" id="Curve_4e78f"]
+_data = [Vector2(0, 0), 0.0, 3.71711, 0, 0, Vector2(0.3625, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -4.68466, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_usafr"]
+curve = SubResource("Curve_4e78f")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_f5n8r"]
+angle_min = -720.0
+angle_max = 720.0
+direction = Vector3(0, 0, -1)
+spread = 2.0
+initial_velocity_min = 0.5
+initial_velocity_max = 1.0
+gravity = Vector3(0, 0, 0)
+scale_max = 1.2
+scale_curve = SubResource("CurveTexture_usafr")
+
+[sub_resource type="QuadMesh" id="QuadMesh_qosft"]
+size = Vector2(0.1, 0.1)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_krwk8"]
 
 [node name="Kart" type="CharacterBody3D"]
 script = ExtResource("1_cyw3l")
-max_steering_angle = 8
 wheel_base = 2.0
 drift_steering_multiplier = 1.6
 
 [node name="Visual" type="Node3D" parent="."]
 
 [node name="Body" type="MeshInstance3D" parent="Visual"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.108133, 0)
+transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 3.42821e-08, 0.108133, 0.443383)
 material_override = ExtResource("2_cdvtu")
 mesh = ExtResource("3_k5big")
 skeleton = NodePath("../..")
@@ -49,28 +139,107 @@ size = Vector3(0.4, 0.01, 0.4)
 texture_albedo = ExtResource("5_4xgl7")
 
 [node name="Character" type="Node3D" parent="Visual"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0928267, -0.00900964)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 3.50697e-08, -0.0928267, 0.452393)
 
 [node name="GobotSkin" parent="Visual/Character" instance=ExtResource("6_ffnty")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0.19278, 0.253395)
 
 [node name="VehicleWheel3D" parent="Visual" instance=ExtResource("2_k70jy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.575, 0.121573, -0.6)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.575, 0.121573, 1.04338)
 steering_enabled = true
 traction_enabled = true
 left_side = true
 
 [node name="VehicleWheel3D2" parent="Visual" instance=ExtResource("2_k70jy")]
-transform = Transform3D(-1, 0, -5.96046e-08, 0, 1, 0, 5.96046e-08, 0, -1, 0.575, 0.121573, -0.6)
+transform = Transform3D(1, 0, 1.47027e-07, 0, 1, 0, -1.47027e-07, 0, 1, -0.575, 0.121573, 1.04338)
 steering_enabled = true
 traction_enabled = true
 
 [node name="VehicleWheel3D3" parent="Visual" instance=ExtResource("2_k70jy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.575, 0.121573, 0.6)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.575, 0.121573, -0.156617)
 left_side = true
 
 [node name="VehicleWheel3D4" parent="Visual" instance=ExtResource("2_k70jy")]
-transform = Transform3D(-1, 0, -5.96046e-08, 0, 1, 0, 5.96046e-08, 0, -1, 0.575, 0.121573, 0.6)
+transform = Transform3D(1, 0, 1.47027e-07, 0, 1, 0, -1.47027e-07, 0, 1, -0.575, 0.121573, -0.156617)
+
+[node name="ParticlesManager" type="Node3D" parent="Visual"]
+script = ExtResource("9_rli1m")
+drift_stage_1_color = Color(0.164706, 0.407843, 0.968627, 1)
+drift_stage_2_color = Color(0.97, 0.527195, 0.1649, 1)
+sparks_material = ExtResource("9_ekr4a")
+
+[node name="SlidingParticles" type="Node3D" parent="Visual/ParticlesManager"]
+
+[node name="Particles" type="GPUParticles3D" parent="Visual/ParticlesManager/SlidingParticles"]
+transform = Transform3D(1, 0, -2.13163e-14, 0, 1, 0, 2.13163e-14, 0, 1, -0.575, -0.0236623, -0.311601)
+material_override = ExtResource("11_4e78f")
+amount = 4
+lifetime = 0.3
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_usafr")
+draw_pass_1 = SubResource("QuadMesh_i3c53")
+
+[node name="Particles2" type="GPUParticles3D" parent="Visual/ParticlesManager/SlidingParticles"]
+transform = Transform3D(1, 0, -2.13163e-14, 0, 1, 0, 2.13163e-14, 0, 1, 0.575, -0.024, -0.312)
+material_override = ExtResource("11_4e78f")
+amount = 4
+lifetime = 0.3
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_usafr")
+draw_pass_1 = SubResource("QuadMesh_i3c53")
+
+[node name="DriftSparks" type="Node3D" parent="Visual/ParticlesManager"]
+visible = false
+
+[node name="Particles" type="GPUParticles3D" parent="Visual/ParticlesManager/DriftSparks"]
+transform = Transform3D(1, 0, -2.13163e-14, 0, 1, 0, 2.13163e-14, 0, 1, -0.575, -0.0236623, -0.410105)
+material_override = ExtResource("9_ekr4a")
+amount = 4
+lifetime = 0.15
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_rli1m")
+draw_pass_1 = SubResource("QuadMesh_i3c53")
+
+[node name="Sparks" type="GPUParticles3D" parent="Visual/ParticlesManager/DriftSparks/Particles"]
+material_override = ExtResource("9_ekr4a")
+amount = 5
+lifetime = 0.5
+process_material = SubResource("ParticleProcessMaterial_4e78f")
+draw_pass_1 = SubResource("QuadMesh_usafr")
+
+[node name="Particles2" type="GPUParticles3D" parent="Visual/ParticlesManager/DriftSparks"]
+transform = Transform3D(1, 0, -2.13163e-14, 0, 1, 0, 2.13163e-14, 0, 1, 0.575, -0.0235636, -0.409877)
+material_override = ExtResource("9_ekr4a")
+amount = 4
+lifetime = 0.15
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_rli1m")
+draw_pass_1 = SubResource("QuadMesh_f5n8r")
+
+[node name="Sparks" type="GPUParticles3D" parent="Visual/ParticlesManager/DriftSparks/Particles2"]
+material_override = ExtResource("9_ekr4a")
+amount = 5
+lifetime = 0.5
+process_material = SubResource("ParticleProcessMaterial_4e78f")
+draw_pass_1 = SubResource("QuadMesh_usafr")
+
+[node name="Boost" type="Node3D" parent="Visual/ParticlesManager"]
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="Visual/ParticlesManager/Boost"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.399376, 0.770018, -0.709039)
+material_override = SubResource("ShaderMaterial_4e78f")
+lifetime = 0.2
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_f5n8r")
+draw_pass_1 = SubResource("QuadMesh_qosft")
+
+[node name="GPUParticles3D2" type="GPUParticles3D" parent="Visual/ParticlesManager/Boost"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.399, 0.77, -0.709)
+material_override = SubResource("ShaderMaterial_4e78f")
+lifetime = 0.2
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_f5n8r")
+draw_pass_1 = SubResource("QuadMesh_qosft")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.385839, -0.0107909)

@@ -6,20 +6,26 @@ var wish_jump : bool
 var wish_break : bool
 var wish_drift : bool
 var wish_drift_direction : float
+var drift_timer : float 
+var drift_stage : int 
 
-@export_custom(PROPERTY_HINT_NONE, "suffix:m/s") var top_speed := 15
-@export_custom(PROPERTY_HINT_NONE, "suffix:m/s") var top_reverse_speed := 5
-@export_custom(PROPERTY_HINT_NONE, "suffix:m/s/s") var acceleration := 10
+var boost_timer : float
+
+@export_custom(PROPERTY_HINT_NONE, "suffix:m/s") var boost_speed := 30.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:m/s") var boost_acceleration := 50.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:m/s") var top_speed := 20.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:m/s") var top_reverse_speed := 8.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:m/s/s") var acceleration := 20.0
 @export var roll_resistance := 0.4
 @export var break_resistance := 0.1
 
 @export_group("Steering")
-@export_custom(PROPERTY_HINT_NONE, "suffix:degrees") var max_steering_angle := 10
-@export_custom(PROPERTY_HINT_NONE, "suffix:degrees/s") var handbrake_steering_velocity := 45
-@export_custom(PROPERTY_HINT_NONE, "suffix:degrees/s") var air_steering_velocity := 50
+@export_custom(PROPERTY_HINT_NONE, "suffix:degrees") var max_steering_angle_slow := 16.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:degrees") var max_steering_angle_fast := 8.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:degrees/s") var handbrake_steering_velocity := 45.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:degrees/s") var air_steering_velocity := 50.0
 @export_custom(PROPERTY_HINT_NONE, "suffix:m") var wheel_base := 1.5
 @export var drift_steering_multiplier := 1.5
-
 
 var wheels : Array[Wheel]
 var steering : float = 0
@@ -32,6 +38,7 @@ var current_model_up : Vector3 = Vector3.UP
 @onready var visual_parent : Node3D = $Visual
 @onready var steering_wheel : Node3D = $Visual/Body/Node3D/SteeringWheel
 @onready var debug_label : Label = $DebugLabel
+@onready var particles_manager : ParticlesManager = $Visual/ParticlesManager
 
 func is_on_ground() -> bool:
 	return is_on_floor() or water_buoyancy_sensor.is_in_water()
@@ -44,16 +51,12 @@ func reset_buffer() -> void:
 	wish_steering = 0
 	wish_acceleration = 0 
 
-func _ready() -> void:
-	for child in visual_parent.get_children():
-		if child is Wheel:
-			wheels.append(child)
-	
-
 func _apply_steering(delta : float) -> void:
 	var v := get_horizontal_velocity()
 	var horizonal_speed : float = v.length() * sign(v.dot(-global_transform.basis.z))
 	var angular_velocity : float = deg_to_rad(air_steering_velocity * wish_steering)
+	
+	var max_steering_angle = lerp(max_steering_angle_slow, max_steering_angle_fast, clamp(horizonal_speed / top_speed, 0.0, 1.0))
 
 	if is_on_ground():
 		if wish_break && abs(horizonal_speed) < 1:
@@ -66,12 +69,12 @@ func _apply_steering(delta : float) -> void:
 				steering_angle = max_steering_angle * wish_steering
 			angular_velocity = (horizonal_speed * tan(deg_to_rad(steering_angle))) / wheel_base
 	
-	steering = lerp(steering, deg_to_rad(max_steering_angle * wish_steering), pow(0.2, 5 * delta))
+	steering = lerp(steering, deg_to_rad(max_steering_angle * wish_steering), pow(0.5, 5 * delta))
 	rotate_y(-delta * angular_velocity)
 	for wheel in wheels:
-		wheel.set_steering(steering)
+		wheel.set_steering(-steering)
 		wheel.speed = horizonal_speed
-	steering_wheel.rotation.y = steering * 3.0
+	steering_wheel.rotation.y = -steering * 3.0
 			
 
 func _align_mesh_with_normal(_delta : float, normal: Vector3) -> void:
@@ -84,10 +87,22 @@ func _align_mesh_with_normal(_delta : float, normal: Vector3) -> void:
 	var new_basis := Basis()
 	new_basis.x = right
 	new_basis.y = up
-	new_basis.z = -forward
+	new_basis.z = forward
 	
 	visual_parent.global_basis = new_basis
+	
+func _set_drifing_stage(stage: int) -> void:
+	drift_stage = stage
+	particles_manager.set_drifing_stage(stage)
 
+
+func _ready() -> void:
+	for child in visual_parent.get_children():
+		if child is Wheel:
+			wheels.append(child)
+			
+	_set_drifing_stage(0)
+	
 
 func _process(delta: float) -> void:
 	var new_up := Vector3.UP
@@ -119,23 +134,55 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("move_jump") && wish_steering != 0 && wish_acceleration > 0:
 		wish_drift = true
 		wish_drift_direction = sign(wish_steering)
+		_set_drifing_stage(0)
+		drift_timer = 0.0
+		
 	if Input.is_action_just_released("move_jump") or wish_acceleration <= 0:
 		wish_drift = false
+		if drift_stage == 2:
+			set_boost(0.5)
+		if drift_stage == 3:
+			set_boost(1.0)
+		
+		_set_drifing_stage(0)
+		
+	if wish_drift && is_on_ground():
+		if drift_stage < 1:
+			_set_drifing_stage(1)
+		if drift_timer > 0.8 and drift_stage < 2:
+			_set_drifing_stage(2)
+		drift_timer += delta
+		if drift_timer > 3.0 && drift_stage < 3:
+			_set_drifing_stage(3)
+	
+	if boost_timer > 0:
+		boost_timer -= delta
+		if boost_timer <= 0:
+			particles_manager.set_boost(false)
 	
 	debug_label.text = "Position: " + str(global_position) + "\nVelocity: " + str(velocity) 
-		
+
+func set_boost(time : float):
+	boost_timer = max(boost_timer, time)
+	particles_manager.set_boost(true)
+	
 
 func _apply_car_engine_force(delta : float) -> void:
 	var forward : Vector3 = -global_transform.basis.z;	
 	var horizontal_velocity := get_horizontal_velocity()
 	
-	horizontal_velocity = forward * forward.dot(horizontal_velocity)
+	#drag
+	horizontal_velocity = horizontal_velocity.lerp(Vector3.ZERO, 1 - pow(0.5, roll_resistance * delta))
+	
 	var speed = horizontal_velocity.length()
+	horizontal_velocity = forward * forward.dot(horizontal_velocity)
 	
 	if wish_break:
-		horizontal_velocity = horizontal_velocity.lerp(Vector3.ZERO, 1 - pow(break_resistance, delta))
-	elif wish_acceleration == 0:
-		horizontal_velocity = horizontal_velocity.lerp(Vector3.ZERO, 1 - pow(roll_resistance, delta))
+		horizontal_velocity = horizontal_velocity.lerp(Vector3.ZERO, 1 - pow(0.5, break_resistance * delta))
+	elif boost_timer > 0 && speed < boost_speed:
+		horizontal_velocity += forward * delta * boost_acceleration
+	#elif wish_acceleration == 0:
+		
 	elif wish_acceleration > 0 && speed < top_speed:
 		horizontal_velocity += wish_acceleration * forward * delta * acceleration
 	elif wish_acceleration < 0 && speed < top_reverse_speed:

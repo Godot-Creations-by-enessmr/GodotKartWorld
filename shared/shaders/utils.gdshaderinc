@@ -14,17 +14,21 @@ vec3 blend_normals(vec3 n1, vec3 n2) {
     return normalize(t) * 0.5 + 0.5; // pack back to [0,1]
 }
 
+vec3 apply_normal_map(
+	mat3 TBN,
+    vec3  base_n,
+    vec3  nmap_rgb,
+    float strength
+) {
+    vec3 map_n = unpack_normal(nmap_rgb);
+    vec3 world_n = normalize(TBN * map_n);
+    return normalize(mix(base_n, world_n, strength));
+}
+
 vec3 scale_normal_strength(vec3 normal, float strength) {
-    // Unpack from [0,1] to [-1,1]
     vec3 unpacked = normal * 2.0 - 1.0;
-
-    // Scale the X and Y components (perturbation)
     unpacked.xy *= strength;
-
-    // Re-normalize to ensure it's still a unit vector
     unpacked = normalize(unpacked);
-
-    // Re-pack to [0,1]
     return unpacked * 0.5 + 0.5;
 }
 

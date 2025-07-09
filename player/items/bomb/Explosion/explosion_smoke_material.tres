@@ -1,14 +1,14 @@
 [gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://cpbmmxmk4ont7"]
 
-[ext_resource type="Shader" path="res://Gadgets/Effects/Explosion/dissolve.gdshader" id="1_ynjvr"]
-[ext_resource type="Texture2D" uid="uid://cefg4j6j72e1h" path="res://Gadgets/Effects/Explosion/explosion_noise.tres" id="2_f18rq"]
+[ext_resource type="Shader" uid="uid://ckr4450jt7m3v" path="res://player/items/bomb/Explosion/dissolve.gdshader" id="1_n1v5k"]
+[ext_resource type="Texture2D" uid="uid://bwrowk4b7t2r" path="res://shared/textures/noise.png" id="2_peu6o"]
 
 [resource]
 render_priority = 0
-shader = ExtResource("1_ynjvr")
+shader = ExtResource("1_n1v5k")
+shader_parameter/noise = ExtResource("2_peu6o")
 shader_parameter/emission_strength = 10.0
-shader_parameter/noise_scale = 0.5
+shader_parameter/noise_scale = 1.0
 shader_parameter/smoke_glow_offset = 0.0
-shader_parameter/glow_color = Color(0.968627, 0.392157, 0.164706, 1)
-shader_parameter/primary_color = Color(0.09, 0.09, 0.09, 1)
-shader_parameter/noise = ExtResource("2_f18rq")
+shader_parameter/glow_color = Color(1, 0.541176, 0, 1)
+shader_parameter/primary_color = Color(0.1812, 0.1812, 0.1812, 1)

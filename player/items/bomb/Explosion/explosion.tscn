@@ -1,6 +1,7 @@
-[gd_scene load_steps=22 format=3 uid="uid://chs3jrpw5elvr"]
+[gd_scene load_steps=23 format=3 uid="uid://chs3jrpw5elvr"]
 
 [ext_resource type="Material" uid="uid://drn30rpggb5rd" path="res://player/items/bomb/Explosion/explosion_dissolve_material.tres" id="1_8oe34"]
+[ext_resource type="Script" uid="uid://c37q25qedgsch" path="res://shared/particle_manager3d.gd" id="1_56t3u"]
 [ext_resource type="Material" uid="uid://dlh002ivfchkx" path="res://player/items/bomb/Explosion/explosion_trail_material.tres" id="2_8biay"]
 [ext_resource type="Material" uid="uid://cpbmmxmk4ont7" path="res://player/items/bomb/Explosion/explosion_smoke_material.tres" id="2_ayqe3"]
 [ext_resource type="ArrayMesh" uid="uid://qh1jvhindr6l" path="res://player/items/bomb/Explosion/cloud.obj" id="2_kv7dp"]
@@ -18,8 +19,8 @@ angle_max = 360.0
 direction = Vector3(0, 1, 0)
 spread = 180.0
 gravity = Vector3(0, 0, 0)
-scale_min = 15.0
-scale_max = 15.0
+scale_min = 20.0
+scale_max = 20.0
 scale_curve = SubResource("CurveTexture_4lwyi")
 
 [sub_resource type="SphereMesh" id="SphereMesh_p640h"]
@@ -108,6 +109,7 @@ height = 5.0
 radial_segments = 4
 
 [node name="Explosion" type="Node3D"]
+script = ExtResource("1_56t3u")
 
 [node name="Ball" type="GPUParticles3D" parent="."]
 material_override = ExtResource("1_8oe34")
@@ -135,6 +137,7 @@ lifetime = 1.2
 one_shot = true
 speed_scale = 1.5
 explosiveness = 0.95
+visibility_aabb = AABB(-34.2406, -28.158, -10.2986, 70.7983, 42.1209, 41.5778)
 trail_enabled = true
 process_material = SubResource("ParticleProcessMaterial_p18qe")
 draw_pass_1 = SubResource("RibbonTrailMesh_1ccnx")

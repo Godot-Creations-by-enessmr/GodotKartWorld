@@ -5,6 +5,7 @@ render_mode world_vertex_coords, depth_draw_always, cull_disabled;
 #include "fft_waves/shaders/ocean_common.gdshaderinc"
 #include "res://water/water_textures.gdshaderinc"
 #include "res://shared/shaders/utils.gdshaderinc"
+#include "res://shared/shaders/screen_space_reflections.gdshaderinc"
 
 // Sun specular highlight
 uniform float specular_strength = 1.0;
@@ -152,6 +153,8 @@ vec3 HDR(vec3 color, float e) {
 }
 
 
+varying mat4 model_mat;
+
 void vertex() {
 	float linear_dist = length(VERTEX - CAMERA_POSITION_WORLD);
 
@@ -186,6 +189,8 @@ void vertex() {
 	// subtract from vertex Y.
 	float curvation = planetary_curve_strength * (pow(abs(domain_warped_uv.x - CAMERA_POSITION_WORLD.x), 2.0) + pow(abs(domain_warped_uv.y - CAMERA_POSITION_WORLD.z), 2.0));
 	VERTEX.y -= curvation;
+
+	model_mat = transpose(inverse(MODELVIEW_MATRIX));
 }
 
 
@@ -252,6 +257,23 @@ void fragment() {
 	NORMAL_MAP = blend_normals(wave_normals, compute_ripples_normal(world_vertex));
 
 	wave_height = world_vertex.y;
+
+	//SSR
+	float far_clip = 256.0;
+	int steps = 16;
+	float ssr_screen_fade = 0.05;
+
+	mat3 TBN = mat3(
+		-(model_mat * vec4(TANGENT, 0.0)).xyz,
+		(model_mat * vec4(BINORMAL, 0.0)).xyz,
+		(model_mat * vec4(NORMAL, 0.0)).xyz
+	);
+
+	vec3 ssr_normal = apply_normal_map(TBN, NORMAL, NORMAL_MAP, 0.1);
+
+	vec4 SSR = get_screen_space_reflection(far_clip, steps, ssr_screen_fade, VIEW, ssr_normal, VERTEX, PROJECTION_MATRIX, INV_PROJECTION_MATRIX, depth_texture, screen_texture);
+	ALBEDO = mix(ALBEDO, SSR.rgb , SSR.w * 0.1);
+
 }
 
 

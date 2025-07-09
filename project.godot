@@ -71,6 +71,7 @@ use_item={
 3d_physics/layer_4="Terrain"
 3d_physics/layer_5="Circuit"
 3d_physics/layer_6="BoostPanels"
+3d_physics/layer_7="Interactables"
 
 [rendering]
 
@@ -88,7 +89,7 @@ wind_direction={
 }
 wind_strength={
 "type": "float",
-"value": 1.0
+"value": 2.0
 }
 player_position={
 "type": "vec3",

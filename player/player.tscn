@@ -30,8 +30,10 @@ current = true
 fov = 90.0
 
 [node name="Kart" parent="." instance=ExtResource("3_g1dw6")]
-collision_mask = 31
+collision_mask = 63
 floor_max_angle = 1.0472
+roll_resistance = 0.6
+max_steering_angle_fast = 6.0
 
 [node name="Inventory" type="Node" parent="." node_paths=PackedStringArray("item_slots")]
 script = ExtResource("5_g6k8r")

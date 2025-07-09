@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://cbas6bncvu0pt"]
+[gd_scene load_steps=6 format=3 uid="uid://cbas6bncvu0pt"]
 
 [ext_resource type="ArrayMesh" uid="uid://cn0yw4y3evi4m" path="res://interactables/boost_panel/boost_panel.obj" id="1_eaw7b"]
+[ext_resource type="Script" uid="uid://bxe3r3cwr60xi" path="res://interactables/boost_panel/boost_panel.gd" id="1_qi35x"]
 [ext_resource type="Material" uid="uid://bfn6r30w6h3ug" path="res://interactables/boost_panel/boost_panel_material.tres" id="2_lk380"]
 [ext_resource type="Material" uid="uid://cn60wlbqx0vpw" path="res://interactables/boost_panel/boost_panel_frame_material.tres" id="3_qi35x"]
 
@@ -8,6 +9,7 @@
 size = Vector3(19.5, 2.5, 3.5)
 
 [node name="BoostPanel" type="Node3D"]
+script = ExtResource("1_qi35x")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = ExtResource("1_eaw7b")
@@ -20,3 +22,5 @@ collision_layer = 32
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
 shape = SubResource("BoxShape3D_eaw7b")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

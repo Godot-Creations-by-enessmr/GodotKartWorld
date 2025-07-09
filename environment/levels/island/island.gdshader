@@ -38,23 +38,22 @@ void fragment() {
 		SPECULAR = 0.8;
 		ROUGHNESS = 0.9;
 
-		if(terrain.x > 0.1) {
+		if(terrain.x > 0.5) {
 			color = dirt_color.rgb;
-		} else if(terrain.y > 0.1) {
+		} else if(terrain.y > 0.5) {
 			color = sand_color.rgb;
-			SPECULAR = 0.4;
-			ROUGHNESS = 0.3;
+			SPECULAR = 0.7;
+			ROUGHNESS = 0.7;
 		} else {
 			color = grass_color.rgb;
 		}
-
-
 	}
 
 	//vec4 sampleTriplanar(sampler2D f_sampler, vec3 f_global_position, vec3 f_global_normal, float f_scale) {
 
 	vec3 sampled_noise = sampleTriplanar(detail_noise, global_position, global_normal, detail_noise_scale).rgb;
 	ALBEDO = noiseColorTransformer(color, sampled_noise);
+	//ALBEDO = terrain.rgb;
 
 	global_normal = noiseNormalTransformer(global_normal, sampled_noise, detail_noise_normal_strength);
 	NORMAL = normalize((VIEW_MATRIX * vec4(global_normal, 0.0)).xyz);

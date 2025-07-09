@@ -10,30 +10,35 @@ render_mode cull_disabled, world_vertex_coords;
 
 uniform sampler2D noise;
 uniform sampler2D albedo_texture;
+uniform sampler2D island_texture;
 uniform float scale = 1.0;
 uniform float normalScale = 1.0;
 uniform vec3 color : source_color;
-
-varying vec3 global_position;
 
 global uniform vec3 player_position;
 uniform float push_radius = 2.0;
 uniform float push_strength = 1.0;
 
+varying vec3 global_position;
+varying float height;
+
 void vertex() {
     global_position = VERTEX;
+	
+	vec4 island_height_texture = texture(island_texture, global_position.xz / 680.0 + .5);
+	height = 1.0 - clamp(island_height_texture.r + island_height_texture.g, 0, 1);
 
     float influence = clamp(1.0 - distance(global_position.xz, player_position.xz) / push_radius, 0.0, 1.0);
 
     vec3 direction = normalize(player_position - global_position);
     direction.y = 1.0;
     vec3 displacement = direction * push_strength * influence;
-
-    VERTEX += get_wind_displacement(VERTEX, 1.0) * pow(COLOR.r, 3.0) * (1.0 - influence);
+	
+    VERTEX += get_wind_displacement(VERTEX, 1.0) * (1.0 - influence) * pow(COLOR.r, 3.0);
     VERTEX += displacement * 1.0;
 
     vec4 local = inverse(MODEL_MATRIX) * vec4(VERTEX, 1.0);
-    local.y *= 0.5 * mix(1.0, -0.5, influence);
+    local.y *= 0.5 * mix(1.0, -0.5, influence) * height;
     VERTEX = (MODEL_MATRIX * local).xyz;
 
     global_position = VERTEX;

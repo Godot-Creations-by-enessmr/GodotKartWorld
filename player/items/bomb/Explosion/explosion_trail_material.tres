@@ -1,11 +1,11 @@
 [gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://dlh002ivfchkx"]
 
-[ext_resource type="Shader" path="res://Gadgets/Effects/Explosion/explosion_trail.gdshader" id="1_irddd"]
-[ext_resource type="Texture2D" uid="uid://cefg4j6j72e1h" path="res://Gadgets/Effects/Explosion/explosion_noise.tres" id="2_eqcpf"]
+[ext_resource type="Shader" uid="uid://cc52wujbl7npu" path="res://player/items/bomb/Explosion/explosion_trail.gdshader" id="1_mntt1"]
+[ext_resource type="Texture2D" uid="uid://bwrowk4b7t2r" path="res://shared/textures/noise.png" id="2_pxtyj"]
 
 [resource]
 render_priority = 0
-shader = ExtResource("1_irddd")
-shader_parameter/emission_strength = 5.0
-shader_parameter/color = Color(0.968627, 0.392157, 0.164706, 1)
-shader_parameter/noise = ExtResource("2_eqcpf")
+shader = ExtResource("1_mntt1")
+shader_parameter/noise = ExtResource("2_pxtyj")
+shader_parameter/emission_strength = 10.0
+shader_parameter/color = Color(1, 0.55, 0, 1)

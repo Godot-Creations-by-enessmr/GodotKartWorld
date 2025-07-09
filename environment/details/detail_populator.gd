@@ -1,5 +1,6 @@
 @tool
 extends Node3D
+@export var collider : CollisionObject3D 
 @export var terrain_mesh_instance : MeshInstance3D 
 @export var terrain_texture : Texture2D 
 var terrain_image : Image
@@ -43,7 +44,7 @@ func _populate() -> void:
 	
 	var grid_corner = bounds_center - bounds_size * 0.5
 		
-	var chunk_size := Vector3(bounds_size.x / bounds_subdivsion.x, bounds_size.y, bounds_size.z / bounds_subdivsion.z);	
+	var chunk_size := Vector3(bounds_size.x / bounds_subdivsion.x, bounds_size.y / bounds_subdivsion.y, bounds_size.z / bounds_subdivsion.z);	
 	for x in range(bounds_subdivsion.x): 
 		for z in range(bounds_subdivsion.z):
 			var corner = grid_corner + Vector3(chunk_size.x * x, chunk_size.y * 0, chunk_size.z * z)
@@ -89,11 +90,14 @@ func generate_chunk(chunk_size : Vector3, chunk_corner : Vector3) -> MultiMeshIn
 	
 	for x in range(ceil(chunk_size.x / detail_grid_size)): 
 		for z in range(ceil(chunk_size.z / detail_grid_size)):
-			var raycast_pos = Vector3(x + randfn(0, 0.33), 0, z + randfn(0, 0.33)) * detail_grid_size + chunk_corner
-			const MASK = 8 # i.e. bit 4
-			var query = PhysicsRayQueryParameters3D.create(raycast_pos + Vector3.UP * bounds_size.y, raycast_pos, MASK)
+			var raycast_pos = Vector3(x + randfn(0, 0.33), 0, z + randfn(0, 0.33)) * detail_grid_size + chunk_corner - Vector3(0, 40, 0)
+			var query = PhysicsRayQueryParameters3D.create(raycast_pos + Vector3.UP * bounds_size.y, raycast_pos + 2.0 * Vector3.DOWN * bounds_size.y)
 			var result = space_state.intersect_ray(query)
-			if result:	
+			if result:				
+				var other = result["collider"]
+				if other != collider:
+					continue
+					
 				var collision_point = result["position"]
 				var face_index = result["face_index"]
 				
@@ -107,7 +111,13 @@ func generate_chunk(chunk_size : Vector3, chunk_corner : Vector3) -> MultiMeshIn
 				var uv : Vector2 = face_data[6] * b.x + face_data[7] * b.y + face_data[8] * b.z
 				var terrain_mask = sample_image_billinear(terrain_image, uv)
 				
-				if terrain_mask.get_luminance() < 0.01 && normal.dot(Vector3.UP) > 0.85:
+				const luminance_min = 0.0
+				const luminance_max = 0.01
+				#var luminance = terrain_mask.r + terrain_mask.g + terrain_mask.b;
+				var luminance = terrain_mask.g;
+				if luminance < luminance_max and normal.dot(Vector3.UP) > 0.85: 
+					var height = 1.0 #remap(clamp(luminance, luminance_min, luminance_max), luminance_min, luminance_max, 1.0, 0.01)
+					
 					var t : Transform3D
 					t.origin = collision_point - chunk_corner
 					
@@ -115,10 +125,11 @@ func generate_chunk(chunk_size : Vector3, chunk_corner : Vector3) -> MultiMeshIn
 					if basis_x.length() < 0.0001:
 						basis_x = normal.cross(Vector3(0,1,0)).normalized()
 					var basis_z := basis_x.cross(normal).normalized()
-					t.basis.x = basis_x
-					t.basis.y = normal
-					t.basis.z = basis_z
+					t.basis.x = basis_x * height
+					t.basis.y = normal * height
+					t.basis.z = basis_z * height
 					t.basis = t.basis.rotated(normal, randf() * 6.28318530718)
+					#t.basis.y *= height
 					transforms.append(t)
 					
 	

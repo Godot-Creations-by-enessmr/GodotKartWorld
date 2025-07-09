@@ -1,8 +1,8 @@
 [gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://bpu37sbehq3g4"]
 
 [ext_resource type="Shader" uid="uid://b50d3hybock16" path="res://environment/levels/island/island.gdshader" id="1_vp11t"]
-[ext_resource type="Texture2D" uid="uid://dakdxuekprnak" path="res://environment/levels/island/material_map.png" id="2_22muy"]
 [ext_resource type="Texture2D" uid="uid://c7lgbunrifo6d" path="res://shared/textures/cell_noise2.png" id="2_qedes"]
+[ext_resource type="Texture2D" uid="uid://d22nt247hapxx" path="res://environment/levels/island/island_material_map.png" id="3_22muy"]
 
 [resource]
 render_priority = 0
@@ -14,4 +14,4 @@ shader_parameter/dirt_color = Color(0.6, 0.448, 0.36, 1)
 shader_parameter/detail_noise_scale = 0.002
 shader_parameter/detail_noise_normal_strength = 0.075
 shader_parameter/detail_noise = ExtResource("2_qedes")
-shader_parameter/terrain_material_map = ExtResource("2_22muy")
+shader_parameter/terrain_material_map = ExtResource("3_22muy")

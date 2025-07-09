@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://qnq0ip6fia2o"]
+
+[ext_resource type="Shader" uid="uid://d3io0uptwy6r6" path="res://interactables/item_box/item_box_glass.gdshader" id="1_m81jb"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_m81jb")
+shader_parameter/color = Color(1, 1, 1, 0)
+shader_parameter/specular = 1.0
+shader_parameter/roughness = 0.385
+shader_parameter/metallic = 0.0
+shader_parameter/strength = -1.0
+shader_parameter/emission = 2.0

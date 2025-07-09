@@ -1,6 +1,6 @@
 # Blender 4.4.3
 # www.blender.org
-mtllib racetrack.mtl
+mtllib race_track.mtl
 o RaceTrack
 v 86.852989 16.507290 -108.443756
 v 82.829750 15.339619 -93.393097

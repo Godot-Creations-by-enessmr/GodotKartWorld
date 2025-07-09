@@ -56,7 +56,7 @@ void fragment() {
 	vec3 ground_color = trunk_color.rgb;
 	//if(camera_distance < 256.0) {
 		mask_color = COLOR.r > 0.5 ? texture(leaves_mask, UV + vec2(hash) * 0.015f).rgb : vec3(1.0,1.0,1.0);
-		
+
 		noise_sample = texture(noise, UV).rgb;
 	//}
 
