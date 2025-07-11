@@ -25,7 +25,7 @@ void vertex() {
 	if(use_global_position) {
 		vec4 pos_h = (MODEL_MATRIX * vec4(global_position, 1.0));
 		global_position = pos_h.xyz / pos_h.w;
-	}	
+	}
 }
 
 void fragment() {

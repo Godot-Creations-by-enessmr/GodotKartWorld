@@ -3,14 +3,16 @@ class_name ParticlesManager extends Node3D
 @export var drift_stage_1_color : Color 
 @export var drift_stage_2_color : Color 
 @export var sparks_material : StandardMaterial3D
-@onready var drift_sparks_parent =  $DriftSparks
+@onready var drift_sparks_parent =  $"../Visual/Particles/DriftSparks"
 var drift_spark_particles : Array[GPUParticles3D]
 
-@onready var drifting_sliding_particles_parent =  $SlidingParticles
+@onready var drifting_sliding_particles_parent =  $"../Visual/Particles/SlidingParticles"
 var drifting_sliding_particles : Array[GPUParticles3D]
 
-@onready var boost_particles_parent =  $Boost
+@onready var boost_particles_parent =  $"../Visual/Particles/Boost"
 var boost_particles : Array[GPUParticles3D]
+
+@onready var trick_particle_sparks : GPUParticles3D = $"Trick/Sparks"
 
 
 func _ready() -> void:
@@ -57,4 +59,6 @@ func set_sliding_particles(enabled: bool) -> void:
 func set_boost(enabled: bool) -> void:
 	for particle in boost_particles:
 		particle.emitting = enabled
-	
+
+func play_trick_particles() -> void:
+	trick_particle_sparks.emitting = true

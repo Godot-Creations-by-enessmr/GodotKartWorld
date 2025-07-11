@@ -15,6 +15,10 @@ uniform vec2 waves_texture_resulution = vec2(512, 512);
 uniform vec2 waves_texture_size = vec2(512, 512);
 uniform vec2 waves_texture_offset = vec2(0, 0);
 
+//island
+uniform sampler2D island_texture : hint_default_white, repeat_disable;
+uniform vec2 island_texture_size = vec2(960, 960);
+
 group_uniforms;
 
 
@@ -43,6 +47,11 @@ float sample_water_waves_height(vec3 global_pos) {
 		return 0.0;
 	vec2 uv = coord / waves_texture_size;
 	return texture(waves_texture, uv).r;
+}
+
+float get_island_height_multiplier(vec3 global_pos) {
+	vec2 uv = global_pos.xz / island_texture_size;
+	return texture(island_texture, uv + 0.5).r;
 }
 
 #endif

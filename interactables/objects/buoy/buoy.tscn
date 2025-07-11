@@ -1,23 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://d2rcslwgwftan"]
+[gd_scene load_steps=6 format=3 uid="uid://d2rcslwgwftan"]
 
-[ext_resource type="Shader" uid="uid://bablkasr0bf4m" path="res://shared/shaders/stylized_shader.gdshader" id="1_d3mel"]
 [ext_resource type="Script" uid="uid://buuv5cuiuaxlg" path="res://water/buoyant_body3d.gd" id="1_miksy"]
+[ext_resource type="Material" uid="uid://dylmbfcmmn0vr" path="res://interactables/objects/buoy/buoy_material.tres" id="2_miksy"]
 [ext_resource type="ArrayMesh" uid="uid://bo5qky8crp2xp" path="res://interactables/objects/buoy/buoy.obj" id="3_h5kff"]
-[ext_resource type="Texture2D" uid="uid://c7lgbunrifo6d" path="res://shared/textures/cell_noise2.png" id="3_lv0ef"]
 [ext_resource type="Script" uid="uid://cq4einn6nftcp" path="res://water/water_buoyancy_sensor.gd" id="5_lv0ef"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_miksy"]
-render_priority = 0
-shader = ExtResource("1_d3mel")
-shader_parameter/specular = 0.786
-shader_parameter/roughness = 0.76
-shader_parameter/metalic = 1.0
-shader_parameter/albedo = Color(0.68, 0.243893, 0.1768, 1)
-shader_parameter/uv_tiling = Vector2(1, 1)
-shader_parameter/noise = ExtResource("3_lv0ef")
-shader_parameter/noiseScale = 0.1
-shader_parameter/normalScale = 0.075
-shader_parameter/use_global_position = false
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_lv0ef"]
 radius = 1.49847
@@ -32,7 +18,7 @@ buoyancy_multiplier = 1000.0
 buoyancy_power = 2.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-material_override = SubResource("ShaderMaterial_miksy")
+material_override = ExtResource("2_miksy")
 mesh = ExtResource("3_h5kff")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

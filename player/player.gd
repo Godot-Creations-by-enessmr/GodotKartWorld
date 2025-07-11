@@ -12,7 +12,7 @@ func _ready() -> void:
 		ocean_node = get_tree().get_first_node_in_group("ocean")
 
 func _follow_camera(_delta: float) -> void:
-	camera.global_position = kart.global_position
+	camera.global_position = kart.visual_parent.global_position + Vector3(0, 1, 0)
 
 func _process(delta: float) -> void:
 	_follow_camera(delta)
@@ -25,7 +25,7 @@ func _process(delta: float) -> void:
 			#var v = kart.velocity;
 			var strength = clamp(0.2 * Vector2(kart.velocity.x, kart.velocity.z).length(), 0, 1);
 			strength += clamp(2 * abs(kart.velocity.y), 0, 1);
-			ocean_node.add_ripple(kart.global_position, 1, strength * 0.25);
+			ocean_node.add_ripple(kart.global_position, 1, strength * 0.025);
 		#ocean_node.add_wave(kart.global_position, strength, 0);
 
 func _input(event: InputEvent) -> void:

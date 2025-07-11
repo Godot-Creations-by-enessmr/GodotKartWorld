@@ -11,6 +11,15 @@ var drift_stage : int
 
 var boost_timer : float
 
+var wheels : Array[Wheel]
+var steering : float = 0
+var gravity_acceleration : Vector3 = Vector3(0, -9.81, 0)
+var current_model_up : Vector3 = Vector3.UP
+
+
+var trick_timer := 0.0
+var has_tricked := false
+
 @export_custom(PROPERTY_HINT_NONE, "suffix:m/s") var boost_speed := 30.0
 @export_custom(PROPERTY_HINT_NONE, "suffix:m/s") var boost_acceleration := 50.0
 @export_custom(PROPERTY_HINT_NONE, "suffix:m/s") var top_speed := 20.0
@@ -27,18 +36,12 @@ var boost_timer : float
 @export_custom(PROPERTY_HINT_NONE, "suffix:m") var wheel_base := 1.5
 @export var drift_steering_multiplier := 1.5
 
-var wheels : Array[Wheel]
-var steering : float = 0
-
-var gravity_acceleration : Vector3 = Vector3(0, -9.81, 0)
-var current_model_up : Vector3 = Vector3.UP
-#var velocity : Vector3
-
 @onready var water_buoyancy_sensor : WaterBuoyancySensor = $WaterBuoyancySensor
 @onready var visual_parent : Node3D = $Visual
 @onready var steering_wheel : Node3D = $Visual/Body/Node3D/SteeringWheel
 @onready var debug_label : Label = $DebugLabel
-@onready var particles_manager : ParticlesManager = $Visual/ParticlesManager
+@onready var animation_player : AnimationPlayer = $Visual/AnimationPlayer
+@onready var particles_manager : ParticlesManager = $ParticlesManager
 
 func is_on_ground() -> bool:
 	return is_on_floor() or water_buoyancy_sensor.is_in_water()
@@ -54,27 +57,30 @@ func reset_buffer() -> void:
 func _apply_steering(delta : float) -> void:
 	var v := get_horizontal_velocity()
 	var horizonal_speed : float = v.length() * sign(v.dot(-global_transform.basis.z))
-	var angular_velocity : float = deg_to_rad(air_steering_velocity * wish_steering)
+	steering = lerp(steering, wish_steering, 1.0 - pow(0.5, 60.0 * delta))
+	
+	var angular_velocity : float = deg_to_rad(air_steering_velocity * steering)
 	
 	var max_steering_angle = lerp(max_steering_angle_slow, max_steering_angle_fast, clamp(horizonal_speed / top_speed, 0.0, 1.0))
 
 	if is_on_ground():
 		if wish_break && abs(horizonal_speed) < 1:
-			angular_velocity = deg_to_rad(handbrake_steering_velocity * wish_steering)
+			angular_velocity = deg_to_rad(handbrake_steering_velocity * steering)
 		else:
 			var steering_angle : float
 			if wish_drift:
-				steering_angle = drift_steering_multiplier * max_steering_angle * (wish_drift_direction * 0.25 + 0.75 * wish_steering)
+				steering_angle = drift_steering_multiplier * max_steering_angle * (wish_drift_direction * 0.6 + 0.4 * steering)
 			elif abs(horizonal_speed) > 1e-2:
-				steering_angle = max_steering_angle * wish_steering
+				steering_angle = max_steering_angle * steering
 			angular_velocity = (horizonal_speed * tan(deg_to_rad(steering_angle))) / wheel_base
 	
-	steering = lerp(steering, deg_to_rad(max_steering_angle * wish_steering), pow(0.5, 5 * delta))
+	
 	rotate_y(-delta * angular_velocity)
+	#exaggerate movements
 	for wheel in wheels:
-		wheel.set_steering(-steering)
+		wheel.set_steering(-steering * 2.0 * deg_to_rad(max_steering_angle))
 		wheel.speed = horizonal_speed
-	steering_wheel.rotation.y = -steering * 3.0
+	steering_wheel.rotation.y = -steering * 3.0 * deg_to_rad(max_steering_angle)
 			
 
 func _align_mesh_with_normal(_delta : float, normal: Vector3) -> void:
@@ -89,7 +95,8 @@ func _align_mesh_with_normal(_delta : float, normal: Vector3) -> void:
 	new_basis.y = up
 	new_basis.z = forward
 	
-	visual_parent.global_basis = new_basis
+	if !animation_player.is_playing():
+		visual_parent.global_basis = new_basis
 	
 func _set_drifing_stage(stage: int) -> void:
 	drift_stage = stage
@@ -146,6 +153,10 @@ func _process(delta: float) -> void:
 		
 		_set_drifing_stage(0)
 		
+	if has_tricked and is_on_ground():
+		set_boost(1.0)
+		has_tricked = false
+		
 	if wish_drift && is_on_ground():
 		if drift_stage < 1:
 			_set_drifing_stage(1)
@@ -159,6 +170,9 @@ func _process(delta: float) -> void:
 		boost_timer -= delta
 		if boost_timer <= 0:
 			particles_manager.set_boost(false)
+			
+	if trick_timer > 0 and is_on_ground():
+		trick_timer -= delta
 	
 	debug_label.text = "Position: " + str(global_position) + "\nVelocity: " + str(velocity) 
 
@@ -208,19 +222,22 @@ func _apply_water_force(delta : float) -> void:
 		a = 2.0
 			
 	velocity.y += (water_height - global_position.y) * delta * a
-	
-
-# This represents the player's inertia.
-var push_force = 1.0
 
 func _physics_process(delta: float) -> void:
 	_apply_steering(delta)	
 	_apply_water_force(delta)	
+		
+	if !is_on_ground() and wish_jump and trick_timer <= 0.01:
+		has_tricked = true
+		animation_player.current_animation = "trick"
+		particles_manager.play_trick_particles()
+		trick_timer = 0.25
 	
 	if is_on_ground():
 		_apply_car_engine_force(delta)
 		if wish_jump:
-			velocity += Vector3.UP * 2
+			trick_timer = 0.25
+			velocity.y += 2
 	else:
 		_apply_air_force(delta)
 		
@@ -230,6 +247,7 @@ func _physics_process(delta: float) -> void:
 	for i in get_slide_collision_count():
 		var c = get_slide_collision(i)
 		if c.get_collider() is RigidBody3D:
+			const push_force = 1.0
 			c.get_collider().apply_central_impulse(-c.get_normal() * push_force)
 	
 	

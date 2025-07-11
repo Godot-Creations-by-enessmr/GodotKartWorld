@@ -21,13 +21,13 @@ camera_reset_delay = 0.5
 
 [node name="Pivot2" type="SpringArm3D" parent="CameraPivot"]
 transform = Transform3D(1, 0, 0, 0, 0.866026, 0.5, 0, -0.5, 0.866026, 0, 0, 0)
-collision_mask = 31
-spring_length = 5.0
+collision_mask = 30
+spring_length = 4.0
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot/Pivot2"]
 transform = Transform3D(1, 0, 0, 0, 1, -2.98023e-08, 0, 2.98023e-08, 1, 0, 0, 0)
 current = true
-fov = 90.0
+fov = 85.0
 
 [node name="Kart" parent="." instance=ExtResource("3_g1dw6")]
 collision_mask = 63

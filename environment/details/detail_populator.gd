@@ -57,7 +57,8 @@ func sample_image_billinear(image : Image, uv : Vector2) -> Color:
 	if uv.x < 0.0 or uv.y < 0.0 or uv.x >= 1.0 or uv.y >= 1.0:
 		return Color.BLACK
 
-	var px : Vector2 = floor(uv * Vector2(image.get_size()))
+	uv *= Vector2(image.get_size())
+	var px : Vector2 = floor(uv)
 	var frac := uv - px
 
 	var x := int(px.x)
@@ -68,7 +69,6 @@ func sample_image_billinear(image : Image, uv : Vector2) -> Color:
 	var v01 := image.get_pixel(x,     y + 1)
 	var v11 := image.get_pixel(x + 1, y + 1)
 
-	# Bilinear interpolation
 	var v0 = lerp(v00, v10, frac.x)
 	var v1 = lerp(v01, v11, frac.x)
 	return lerp(v0, v1, frac.y)

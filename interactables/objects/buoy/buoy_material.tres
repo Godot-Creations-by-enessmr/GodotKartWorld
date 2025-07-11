@@ -1,0 +1,17 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://dylmbfcmmn0vr"]
+
+[ext_resource type="Shader" uid="uid://bablkasr0bf4m" path="res://shared/shaders/stylized_shader.gdshader" id="1_ijxey"]
+[ext_resource type="Texture2D" uid="uid://c7lgbunrifo6d" path="res://shared/textures/cell_noise2.png" id="2_88ypl"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_ijxey")
+shader_parameter/specular = 0.786
+shader_parameter/roughness = 0.76
+shader_parameter/metalic = 1.0
+shader_parameter/albedo = Color(0.68, 0.243893, 0.1768, 1)
+shader_parameter/uv_tiling = Vector2(1, 1)
+shader_parameter/noise = ExtResource("2_88ypl")
+shader_parameter/noiseScale = 0.1
+shader_parameter/normalScale = 0.075
+shader_parameter/use_global_position = false

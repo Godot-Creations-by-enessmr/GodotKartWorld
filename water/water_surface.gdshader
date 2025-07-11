@@ -1,11 +1,12 @@
 shader_type spatial;
 render_mode world_vertex_coords, depth_draw_always, cull_disabled;
 
-
 #include "fft_waves/shaders/ocean_common.gdshaderinc"
 #include "res://water/water_textures.gdshaderinc"
 #include "res://shared/shaders/utils.gdshaderinc"
 #include "res://shared/shaders/screen_space_reflections.gdshaderinc"
+
+
 
 // Sun specular highlight
 uniform float specular_strength = 1.0;
@@ -89,13 +90,6 @@ uniform float vertex_resolution = 256.0;
 
 group_uniforms Internal.WaveDeformModifiers;
 /******************************************************************************/
-// Adjust the wave displacement maps as they are applied to the surface.
-// This will be correctly accounted for by normals and whitecaps.
-// Settings will only affect buoyancy if set through Ocean3D
-
-// Simple planetary curve approximation.
-// Decrease height of surface exponentially as distance from camera increases.
-uniform float planetary_curve_strength = 0.000001;
 
 // Decreases the height of the wave deformation as distance from the camera
 // increases.
@@ -109,7 +103,7 @@ uniform sampler2D depth_texture : hint_depth_texture, filter_linear_mipmap;
 uniform sampler2D screen_texture : hint_screen_texture, filter_linear_mipmap;
 
 group_uniforms Caustics;
-// Caustics projection
+
 uniform sampler2D caustics_texture;
 uniform float caustics_strength = 0.5;
 uniform float caustics_scale = 0.002;
@@ -126,12 +120,12 @@ uniform sampler2D normal2;
 uniform vec2 wave_dir2 = vec2(0.0, 1.0);
 uniform float wave_speed : hint_range(0.0, 0.2) = 0.015;
 group_uniforms;
+
 // Instance Uniforms
 /******************************************************************************/
 instance uniform float patch_size = 512.0;
 instance uniform float min_lod_morph_distance;
 instance uniform float max_lod_morph_distance;
-
 
 // Varyings
 /******************************************************************************/
@@ -141,17 +135,14 @@ varying float wave_height;
 varying float foam_mix_factor;
 varying float foam_specular_factor;
 
-
 vec2 lod_morph(float morph_factor, vec2 grid_pos) {
 	vec2 fracPart = fract(grid_pos.xy * vertex_resolution * 0.5) * 2.0 / vertex_resolution;
 	return fracPart * patch_size * morph_factor;
 }
 
-
 vec3 HDR(vec3 color, float e) {
 	return 1.0 - exp(-color * e);
 }
-
 
 varying mat4 model_mat;
 
@@ -166,11 +157,13 @@ void vertex() {
 	vec2 domain_warped_uv = domain_warp(VERTEX.xz, linear_dist);
 
 	// Vertex Offset
-	// Use the world vertex XZ coordinates as UV for simplicity
+	float wave_height_multiplier = get_island_height_multiplier(VERTEX);
+	
 	vec3 displacement = get_displacement(domain_warped_uv);
-	VERTEX += displacement;
-	VERTEX.y += sample_water_waves_height(VERTEX);
-	VERTEX.y += sample_water_ripples(VERTEX) * 0.1;
+	displacement += sample_water_waves_height(VERTEX);
+	displacement += sample_water_ripples(VERTEX) * 0.1;
+	
+	VERTEX += displacement * wave_height_multiplier;
 	world_vertex = VERTEX;
 
 	// Surface Normals & Jacobian
@@ -184,15 +177,8 @@ void vertex() {
 	float amplitude_fade_range = clamp(linear_dist, 0.0, amplitude_scale_fade_distance) / amplitude_scale_fade_distance;
 	VERTEX.y *= mix(amplitude_scale_max, amplitude_scale_min, amplitude_fade_range);
 
-	// Planetary Curve
-	// Take distance squared from camera to vertex, multiply by strength factor,
-	// subtract from vertex Y.
-	float curvation = planetary_curve_strength * (pow(abs(domain_warped_uv.x - CAMERA_POSITION_WORLD.x), 2.0) + pow(abs(domain_warped_uv.y - CAMERA_POSITION_WORLD.z), 2.0));
-	VERTEX.y -= curvation;
-
 	model_mat = transpose(inverse(MODELVIEW_MATRIX));
 }
-
 
 void fragment() {
 	// Calculate fragments Fresnel factor
@@ -210,6 +196,7 @@ void fragment() {
 
 	// Get the distance between the camera and each ocean pixel.
 	float linear_dist = length(world_vertex - CAMERA_POSITION_WORLD);
+	float water_depth =  world_vertex.y - depth_position.y;
 
 	// Refraction, based on depth between ocean pixel and object behind.
 	// Fades out with distance so as to be smooth transition to lower LOD shaders
@@ -220,10 +207,12 @@ void fragment() {
 	float refraction_blend_factor = clamp(pow(linear_depth, refraction_distance_power), 0.0, refraction_distance_max) / refraction_distance_max;
 	vec3 water_color = mix(background_color * shallow_color.rgb * refraction_background_brightness, deep_color.rgb, refraction_blend_factor * (1.0 - fresnel));
 
+	water_color = mix(deep_color.rgb, water_color, 1.0 / pow(1.0 + max(water_depth, 0.0), 0.8));
+
 	// Caustics
-	if (depth_position.y < world_vertex.y) {
+	if (water_depth > 0.0) {
 	    float c = mix(texture(caustics_texture, depth_position.xz * 0.1 + TIME * vec2(0.01, 0.02)).r, texture(caustics_texture, depth_position.xz * 0.059 + TIME * vec2(-0.012, -0.04)).r, 0.5);
-	    water_color += c * caustics_strength / pow(1.0 + world_vertex.y - depth_position.y, 2.0);
+	    water_color += c * caustics_strength / pow(1.0 + water_depth, 2.0);
 	}
 
 	 //Fresnel Shading
@@ -231,12 +220,21 @@ void fragment() {
 	vec3 water = (1.0 - fresnel) * water_color * fresnel_sky_color.rgb;
 	water_color = HDR(sky + water, fresnel_exposure);
 
-	// Whitecap Rendering
-	foam_mix_factor = clamp((-jacobian_determinant + foam_jacobian_limit) * foam_coverage, 0.0, 1.0);
-	foam_mix_factor = (foam_mix_factor * foam_mix_factor) * foam_mix_strength;
-	foam_mix_factor = 0.0;
-	ALBEDO = mix(water_color, texture(foam_texture, world_vertex.xz * uv_scale).rgb, foam_mix_factor);
+	// Foam rendering: Depth
+	foam_mix_factor = clamp(1.0 / pow(1.0 + water_depth, 8.0), 0.0, 1.0);
+
+	// Foam Rendering: interactive waves
+	foam_mix_factor += sample_water_waves_height(world_vertex);
+
+	foam_mix_factor += sample_water_ripples(world_vertex);
+
+	// TODO Foam rendering: FFT Waves
+
+	foam_mix_factor = clamp(foam_mix_factor, 0.0, 1.0);
+
+	ALBEDO = min(water_color + texture(foam_texture, world_vertex.xz * uv_scale * 10.0).rgb * foam_mix_factor, vec3(1.0));
 	foam_specular_factor = (1.0 - foam_mix_factor);
+
 
 	// Distance Fade
 	float fade_start = view_distance_max * view_fade_start;
@@ -272,10 +270,8 @@ void fragment() {
 	vec3 ssr_normal = apply_normal_map(TBN, NORMAL, NORMAL_MAP, 0.1);
 
 	vec4 SSR = get_screen_space_reflection(far_clip, steps, ssr_screen_fade, VIEW, ssr_normal, VERTEX, PROJECTION_MATRIX, INV_PROJECTION_MATRIX, depth_texture, screen_texture);
-	ALBEDO = mix(ALBEDO, SSR.rgb , SSR.w * 0.1);
-
+	ALBEDO = mix(ALBEDO, SSR.rgb , SSR.w * 0.025);
 }
-
 
 void light() {
 	vec3 half_vector = normalize(LIGHT + VIEW);

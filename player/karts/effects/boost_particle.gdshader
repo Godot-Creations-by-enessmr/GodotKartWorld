@@ -32,5 +32,6 @@ void vertex() {
 
 void fragment() {
 	ALPHA = texture(alpha_texture, rotateUV(UV, ID * 2.0 * PI)).a;
-	EMISSION = mix(start_color, end_color, current_lifetime) * emission_strength;
+	ALPHA_SCISSOR_THRESHOLD = 0.3;
+	EMISSION = mix(start_color, end_color, current_lifetime) * emission_strength * ALPHA;
 }

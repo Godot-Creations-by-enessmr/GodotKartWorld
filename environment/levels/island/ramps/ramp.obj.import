@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://j22ixrwggtr2"
+path="res://.godot/imported/ramp.obj-9b7d47e9d7b495defdffc4fb9f9c0cc3.mesh"
+
+[deps]
+
+files=["res://.godot/imported/ramp.obj-9b7d47e9d7b495defdffc4fb9f9c0cc3.mesh"]
+
+source_file="res://environment/levels/island/ramps/ramp.obj"
+dest_files=["res://.godot/imported/ramp.obj-9b7d47e9d7b495defdffc4fb9f9c0cc3.mesh", "res://.godot/imported/ramp.obj-9b7d47e9d7b495defdffc4fb9f9c0cc3.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(4, 4, 4)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

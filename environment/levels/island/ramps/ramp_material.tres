@@ -1,0 +1,19 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://b4yxoywx2414d"]
+
+[ext_resource type="Shader" uid="uid://bablkasr0bf4m" path="res://shared/shaders/stylized_shader.gdshader" id="1_2haln"]
+[ext_resource type="Texture2D" uid="uid://c7lgbunrifo6d" path="res://shared/textures/cell_noise2.png" id="2_641ad"]
+[ext_resource type="Texture2D" uid="uid://uuiurbygv8s4" path="res://environment/levels/island/ramps/ramp.png" id="2_kvyhx"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_2haln")
+shader_parameter/specular = 0.174
+shader_parameter/roughness = 0.338
+shader_parameter/metalic = 0.0
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/uv_tiling = Vector2(1, 1)
+shader_parameter/albedo_texture = ExtResource("2_kvyhx")
+shader_parameter/noise = ExtResource("2_641ad")
+shader_parameter/noiseScale = 0.01
+shader_parameter/normalScale = 0.075
+shader_parameter/use_global_position = false
