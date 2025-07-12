@@ -160,8 +160,7 @@ void vertex() {
 	float wave_height_multiplier = get_island_height_multiplier(VERTEX);
 	
 	vec3 displacement = get_displacement(domain_warped_uv);
-	displacement += sample_water_waves_height(VERTEX);
-	displacement += sample_water_ripples(VERTEX) * 0.1;
+	displacement += vec3(0, sample_water_waves_height(VERTEX) + sample_water_ripples(VERTEX) * 0.5, 0);
 	
 	VERTEX += displacement * wave_height_multiplier;
 	world_vertex = VERTEX;
@@ -260,6 +259,7 @@ void fragment() {
 	float far_clip = 256.0;
 	int steps = 16;
 	float ssr_screen_fade = 0.05;
+	float ssr_strength = 0.1 * foam_specular_factor;
 
 	mat3 TBN = mat3(
 		-(model_mat * vec4(TANGENT, 0.0)).xyz,
@@ -270,7 +270,7 @@ void fragment() {
 	vec3 ssr_normal = apply_normal_map(TBN, NORMAL, NORMAL_MAP, 0.1);
 
 	vec4 SSR = get_screen_space_reflection(far_clip, steps, ssr_screen_fade, VIEW, ssr_normal, VERTEX, PROJECTION_MATRIX, INV_PROJECTION_MATRIX, depth_texture, screen_texture);
-	ALBEDO = mix(ALBEDO, SSR.rgb , SSR.w * 0.025);
+	ALBEDO = mix(ALBEDO, SSR.rgb , SSR.w * ssr_strength);
 }
 
 void light() {

@@ -11,9 +11,10 @@ config_version=5
 [application]
 
 config/name="GDWaterKart"
+config/description="A collection of shader effects inspired by the mario kart series"
 run/main_scene="uid://cb0abcesbrlr2"
 config/features=PackedStringArray("4.4", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="uid://drhqj4ignm4f"
 
 [display]
 

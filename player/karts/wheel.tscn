@@ -17,3 +17,4 @@ mesh = ExtResource("3_qswl7")
 skeleton = NodePath("../..")
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
+collision_mask = 24

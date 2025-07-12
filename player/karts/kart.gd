@@ -13,12 +13,14 @@ var boost_timer : float
 
 var wheels : Array[Wheel]
 var steering : float = 0
-var gravity_acceleration : Vector3 = Vector3(0, -9.81, 0)
+var gravity_acceleration : Vector3 = 2.0 * Vector3(0, -9.81, 0)
 var current_model_up : Vector3 = Vector3.UP
 
 
 var trick_timer := 0.0
 var has_tricked := false
+
+var in_water_timer := 0.0
 
 @export_custom(PROPERTY_HINT_NONE, "suffix:m/s") var boost_speed := 30.0
 @export_custom(PROPERTY_HINT_NONE, "suffix:m/s") var boost_acceleration := 50.0
@@ -215,13 +217,21 @@ func _apply_air_force(delta : float) -> void:
 
 func _apply_water_force(delta : float) -> void:
 	if !water_buoyancy_sensor.is_in_water():
+		in_water_timer = 0.0
 		return
-	var water_height := water_buoyancy_sensor.get_water_height()
-	var a : float = 20
-	if velocity.y > 0:
-		a = 2.0
-			
-	velocity.y += (water_height - global_position.y) * delta * a
+	in_water_timer += delta
+		
+	var water_height := water_buoyancy_sensor.get_water_height() + 0.2
+	
+	var water_surface_sticking_strength = clamp(0.5 * in_water_timer, 0.0, 1.0)
+	var water_time_threshold = 1.0
+	
+	if water_surface_sticking_strength >= 0.5 * water_time_threshold:
+		global_position.y = lerp(global_position.y, water_height, 1.0 - pow(0.8, 60.0 * delta * water_surface_sticking_strength))
+		velocity.y = lerp(velocity.y, 0.0, 1.0 - pow(0.5, 60.0 * delta * (1.0 - water_surface_sticking_strength)))
+	if water_surface_sticking_strength < water_time_threshold:
+		var a := 20.0 if velocity.y < 0 else 2.0
+		velocity.y += (water_height - global_position.y) * delta * a
 
 func _physics_process(delta: float) -> void:
 	_apply_steering(delta)	
@@ -236,8 +246,10 @@ func _physics_process(delta: float) -> void:
 	if is_on_ground():
 		_apply_car_engine_force(delta)
 		if wish_jump:
-			trick_timer = 0.25
-			velocity.y += 2
+			if !water_buoyancy_sensor.is_in_water():
+				trick_timer = 0.25
+			in_water_timer = 0.0
+			velocity.y += 4
 	else:
 		_apply_air_force(delta)
 		
