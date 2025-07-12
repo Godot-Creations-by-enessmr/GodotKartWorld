@@ -25,6 +25,9 @@ func is_grounded() -> bool:
 func _ready() -> void:
 	raycast.target_position = Vector3(0, -spring_rest_length, 0)
 
+func get_wheel_position() -> Vector3:
+	return wheel_visual.global_position
+
 
 func _process(delta: float) -> void:
 	var r = speed * delta * radial_speed_factor

@@ -186,6 +186,7 @@ script = ExtResource("1_cyw3l")
 boost_speed = 25.0
 top_speed = 15.0
 acceleration = 15.0
+break_resistance = 2.0
 wheel_base = 2.0
 drift_steering_multiplier = 2.0
 

@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://cpmmio4dniaui"
+path="res://.godot/imported/tire_marks_shader.glsl-f24b86fd6bba77b0c5983180db7ee52c.res"
+
+[deps]
+
+source_file="res://environment/levels/island/tire_marks_shader.glsl"
+dest_files=["res://.godot/imported/tire_marks_shader.glsl-f24b86fd6bba77b0c5983180db7ee52c.res"]
+
+[params]
+

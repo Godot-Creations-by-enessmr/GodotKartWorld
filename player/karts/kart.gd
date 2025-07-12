@@ -18,6 +18,7 @@ var current_model_up : Vector3 = Vector3.UP
 
 
 var trick_timer := 0.0
+var trick_cooldown := 0.4
 var has_tricked := false
 
 var in_water_timer := 0.0
@@ -173,7 +174,7 @@ func _process(delta: float) -> void:
 		if boost_timer <= 0:
 			particles_manager.set_boost(false)
 			
-	if trick_timer > 0 and is_on_ground():
+	if trick_timer > 0 and not has_tricked:
 		trick_timer -= delta
 	
 	debug_label.text = "Position: " + str(global_position) + "\nVelocity: " + str(velocity) 
@@ -204,10 +205,9 @@ func _apply_car_engine_force(delta : float) -> void:
 	elif wish_acceleration < 0 && speed < top_reverse_speed:
 		horizontal_velocity += wish_acceleration * forward * delta * acceleration
 
-		
 	velocity = horizontal_velocity + Vector3.UP * velocity.y
 	
-		
+	
 func _apply_air_force(delta : float) -> void:
 	var forward : Vector3 = -global_transform.basis.z;	
 	var horizontal_velocity := get_horizontal_velocity()
@@ -241,13 +241,13 @@ func _physics_process(delta: float) -> void:
 		has_tricked = true
 		animation_player.current_animation = "trick"
 		particles_manager.play_trick_particles()
-		trick_timer = 0.25
+		trick_timer = trick_cooldown
 	
 	if is_on_ground():
 		_apply_car_engine_force(delta)
 		if wish_jump:
 			if !water_buoyancy_sensor.is_in_water():
-				trick_timer = 0.25
+				trick_timer = trick_cooldown
 			in_water_timer = 0.0
 			velocity.y += 4
 	else:

@@ -22,6 +22,23 @@ uniform float push_strength = 1.0;
 varying vec3 global_position;
 varying float height;
 
+group_uniforms Internal;
+
+uniform sampler2D tire_marks_texture;
+uniform vec2 tire_marks_texture_resulution = vec2(512, 512);
+uniform vec2 tire_marks_texture_size = vec2(512, 512);
+uniform vec2 tire_marks_texture_offset = vec2(0, 0);
+
+group_uniforms;
+
+float sample_water_tire_marks(vec3 global_pos) {
+	vec2 coord = global_pos.xz - tire_marks_texture_offset + 0.5 * tire_marks_texture_size;
+	if (coord.x < 0.0 || coord.y < 0.0 || coord.x >= tire_marks_texture_size.x || coord.y >= tire_marks_texture_size.y)
+		return 0.0;
+	vec2 uv = coord / tire_marks_texture_size;
+	return texture(tire_marks_texture, uv).r;
+}
+
 void vertex() {
     global_position = VERTEX;
 	
@@ -29,16 +46,18 @@ void vertex() {
 	height = 1.0 - clamp(island_height_texture.r + island_height_texture.g, 0, 1);
 
     float influence = clamp(1.0 - distance(global_position.xz, player_position.xz) / push_radius, 0.0, 1.0);
-
     vec3 direction = normalize(player_position - global_position);
     direction.y = 1.0;
+	
+	float tire_mark_strength = clamp(1.0 - sample_water_tire_marks(global_position), 0.1, 1.0);
+	
     vec3 displacement = direction * push_strength * influence;
 	
     VERTEX += get_wind_displacement(VERTEX, 1.0) * (1.0 - influence) * pow(COLOR.r, 3.0);
     VERTEX += displacement * 1.0;
 
     vec4 local = inverse(MODEL_MATRIX) * vec4(VERTEX, 1.0);
-    local.y *= 0.5 * mix(1.0, -0.5, influence) * height;
+    local.y *= 0.5 * mix(1.0, -0.5, influence) * height * tire_mark_strength;
     VERTEX = (MODEL_MATRIX * local).xyz;
 
     global_position = VERTEX;
