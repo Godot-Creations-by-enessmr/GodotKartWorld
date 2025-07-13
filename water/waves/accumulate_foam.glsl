@@ -118,7 +118,7 @@ void main() {
 		float jacobian_determinant = get_jacobian(coord);
 
 
-		state.w = clamp(-0.6 - 8.0 * (jacobian_determinant - 1.0), 0.0, 1.0);
+		state.w = clamp(-1.5 - 8.0 * (jacobian_determinant - 1.0), 0.0, 1.0);
 		// state.w = get_displacement(coord).y;
 	}
 	
