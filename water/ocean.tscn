@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://bjsu0bu5gjesp"]
+[gd_scene load_steps=8 format=3 uid="uid://bjsu0bu5gjesp"]
 
 [ext_resource type="Script" uid="uid://bjam4rsotep6l" path="res://water/ocean.gd" id="1_4xaps"]
 [ext_resource type="Resource" uid="uid://d0nc3ubybbe6o" path="res://water/ocean_settings.tres" id="2_6vxhw"]
 [ext_resource type="Texture2D" uid="uid://bvju2phfhn5gs" path="res://environment/levels/island/island_water_mask.png" id="2_m7ah3"]
 [ext_resource type="Material" uid="uid://dy1iwmm5b777w" path="res://water/water_surface_material.tres" id="5_2g7bk"]
 [ext_resource type="Script" uid="uid://sshwjxnsyesl" path="res://water/waves/water_waves.gd" id="5_m7ah3"]
+[ext_resource type="Script" uid="uid://dbr6tcmdp4mbi" path="res://water/waves/water_foam.gd" id="7_hkljq"]
 [ext_resource type="PackedScene" uid="uid://b554xveqosfto" path="res://water/fft_waves/components/QuadTree3D.tscn" id="7_mh4x3"]
 
 [node name="Ocean" type="Node3D" groups=["ocean"]]
@@ -14,7 +15,7 @@ ocean = ExtResource("2_6vxhw")
 
 [node name="WaterRipples" type="Node" parent="."]
 script = ExtResource("5_m7ah3")
-texture_resolution = Vector2i(1024, 1024)
+texture_resolution = Vector2i(2048, 2048)
 water_material = ExtResource("5_2g7bk")
 c2 = 0.25
 texture_target = "ripples_texture"
@@ -26,6 +27,19 @@ texture_resolution = Vector2i(2048, 2048)
 texture_size = Vector2(256, 256)
 water_material = ExtResource("5_2g7bk")
 damp = 0.025
+
+[node name="WaterFoam" type="Node" parent="."]
+script = ExtResource("7_hkljq")
+texture_resolution = Vector2i(2048, 2048)
+texture_size = Vector2(512, 512)
+target_materials = Array[ShaderMaterial]([ExtResource("5_2g7bk")])
+texture_target = "foam_mask_texture"
+
+[node name="TextureRect" type="TextureRect" parent="WaterFoam"]
+visible = false
+offset_right = 352.0
+offset_bottom = 352.0
+expand_mode = 1
 
 [node name="QuadTree3D" parent="." instance=ExtResource("7_mh4x3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.52588e-05, 0)

@@ -14,3 +14,6 @@ shader_parameter/normalScale = 1.0
 shader_parameter/color = Color(0.513726, 0.733333, 0.282353, 1)
 shader_parameter/push_radius = 2.0
 shader_parameter/push_strength = 1.0
+shader_parameter/tire_marks_texture_resulution = Vector2(512, 512)
+shader_parameter/tire_marks_texture_size = Vector2(512, 512)
+shader_parameter/tire_marks_texture_offset = Vector2(0, 0)

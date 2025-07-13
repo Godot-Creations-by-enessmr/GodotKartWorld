@@ -63,8 +63,8 @@ void fragment() {
 	vec3 color = rock_color.rgb;
 
 	vec4 terrain = texture(terrain_material_map, UV);
-	
-	
+
+
 	vec3 tire_mark_normal = scale_normal_strength(compute_tire_marks_normal(global_position), 0.5);
 	float tire_mark_strength = sample_water_tire_marks(global_position);
 
@@ -78,10 +78,10 @@ void fragment() {
 			color = sand_color.rgb;
 			SPECULAR = 0.7;
 			ROUGHNESS = 0.7;
-			
+
 			NORMAL_MAP = tire_mark_normal;
 			color = mix(color, wheel_sand_color.rgb, tire_mark_strength);
-			
+
 		} else {
 			color = grass_color.rgb;
 			NORMAL_MAP = tire_mark_normal;

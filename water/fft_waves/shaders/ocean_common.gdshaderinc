@@ -101,6 +101,7 @@ vec4 get_normals_jacobian(vec2 uv, vec3 displacement) {
 // and gets stronger linearly as distance increases. It will reach 100% strength
 // at view_distance_max.
 vec2 domain_warp(vec2 uv, float linear_dist) {
+	return uv;
 	vec2 domain_warp = vec2(
 			texture(domain_warp_texture, uv * domain_warp_uv_scale).r,
 			texture(domain_warp_texture, -uv * domain_warp_uv_scale).r);

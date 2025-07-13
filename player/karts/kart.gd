@@ -41,9 +41,10 @@ var in_water_timer := 0.0
 
 @onready var water_buoyancy_sensor : WaterBuoyancySensor = $WaterBuoyancySensor
 @onready var visual_parent : Node3D = $Visual
-@onready var steering_wheel : Node3D = $Visual/Body/Node3D/SteeringWheel
+@onready var visual_kart : Node3D = $Visual/Kart
+@onready var steering_wheel : Node3D = $Visual/Kart/Body/Node3D/SteeringWheel
 @onready var debug_label : Label = $DebugLabel
-@onready var animation_player : AnimationPlayer = $Visual/AnimationPlayer
+@onready var animation_player : AnimationPlayer = $Visual/Kart/AnimationPlayer
 @onready var particles_manager : ParticlesManager = $ParticlesManager
 
 func is_on_ground() -> bool:
@@ -65,6 +66,7 @@ func _apply_steering(delta : float) -> void:
 	var angular_velocity : float = deg_to_rad(air_steering_velocity * steering)
 	
 	var max_steering_angle = lerp(max_steering_angle_slow, max_steering_angle_fast, clamp(horizonal_speed / top_speed, 0.0, 1.0))
+	var avg_steering_angle = lerp(max_steering_angle_slow, max_steering_angle_fast, 1.0)
 
 	if is_on_ground():
 		if wish_break && abs(horizonal_speed) < 1:
@@ -81,9 +83,10 @@ func _apply_steering(delta : float) -> void:
 	rotate_y(-delta * angular_velocity)
 	#exaggerate movements
 	for wheel in wheels:
-		wheel.set_steering(-steering * 2.0 * deg_to_rad(max_steering_angle))
+		wheel.set_steering(-steering * 2.0 * deg_to_rad(avg_steering_angle))
 		wheel.speed = horizonal_speed
-	steering_wheel.rotation.y = -steering * 3.0 * deg_to_rad(max_steering_angle)
+	steering_wheel.rotation.y = -steering * 3.0 * deg_to_rad(avg_steering_angle)
+	visual_kart.rotation.z = steering * 0.5 * deg_to_rad(avg_steering_angle)
 			
 
 func _align_mesh_with_normal(_delta : float, normal: Vector3) -> void:
@@ -107,7 +110,7 @@ func _set_drifing_stage(stage: int) -> void:
 
 
 func _ready() -> void:
-	for child in visual_parent.get_children():
+	for child in visual_kart.get_children():
 		if child is Wheel:
 			wheels.append(child)
 			
@@ -118,8 +121,8 @@ func _process(delta: float) -> void:
 	var new_up := Vector3.UP
 	var t := 0.5
 	if water_buoyancy_sensor.is_in_water():
-		t = 0.25
-		new_up = Vector3.UP
+		t = 0.3
+		new_up = water_buoyancy_sensor.compute_normal()
 	elif is_on_ground():
 		t = 0.025
 		new_up = get_floor_normal()

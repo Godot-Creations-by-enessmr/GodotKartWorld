@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://drlxalm03gm2p"
+path="res://.godot/imported/accumulate_foam.glsl-670b964d717cc2e4d93c5a602e60e79d.res"
+
+[deps]
+
+source_file="res://water/waves/accumulate_foam.glsl"
+dest_files=["res://.godot/imported/accumulate_foam.glsl-670b964d717cc2e4d93c5a602e60e79d.res"]
+
+[params]
+

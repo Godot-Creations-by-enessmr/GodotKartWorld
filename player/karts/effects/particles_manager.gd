@@ -3,16 +3,20 @@ class_name ParticlesManager extends Node3D
 @export var drift_stage_1_color : Color 
 @export var drift_stage_2_color : Color 
 @export var sparks_material : StandardMaterial3D
-@onready var drift_sparks_parent =  $"../Visual/Particles/DriftSparks"
+@onready var drift_sparks_parent =  $"../Visual/Kart/Particles/DriftSparks"
 var drift_spark_particles : Array[GPUParticles3D]
 
-@onready var drifting_sliding_particles_parent =  $"../Visual/Particles/SlidingParticles"
+@onready var drifting_sliding_particles_parent =  $"../Visual/Kart/Particles/SlidingParticles"
 var drifting_sliding_particles : Array[GPUParticles3D]
 
-@onready var boost_particles_parent =  $"../Visual/Particles/Boost"
+@onready var boost_particles_parent =  $"../Visual/Kart/Particles/Boost"
 var boost_particles : Array[GPUParticles3D]
 
 @onready var trick_particle_sparks : GPUParticles3D = $"Trick/Sparks"
+
+@onready var water_spray_particles_parent =  $"../Visual/Kart/Particles/WaterParticles"
+var water_spray_particles : Array[GPUParticles3D]
+
 
 
 func _ready() -> void:
@@ -28,7 +32,12 @@ func _ready() -> void:
 		if child is GPUParticles3D:
 			boost_particles.append(child)
 			
+	for child in water_spray_particles_parent.get_children(true):
+		if child is GPUParticles3D:
+			water_spray_particles.append(child)
+			
 	set_boost(false)
+	set_water_spray(false)
 	set_sliding_particles(false)
 
 # 0 : no drift
@@ -60,5 +69,9 @@ func set_boost(enabled: bool) -> void:
 	for particle in boost_particles:
 		particle.emitting = enabled
 
+func set_water_spray(enabled: bool) -> void:
+	for particle in water_spray_particles:
+		particle.emitting = enabled
+		
 func play_trick_particles() -> void:
 	trick_particle_sparks.emitting = true

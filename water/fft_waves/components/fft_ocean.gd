@@ -1,13 +1,11 @@
 ## Largerly taken from: https://github.com/tessarakkt/godot4-oceanfft
 
 extends Resource
-class_name Ocean3D
-
+class_name OceanFFTWaves
 
 const UNIFORM_SET := 0
 const WORK_GROUP_DIM := 32
 const GOLDEN_RATIO := 1.618033989
-
 
 enum Binding {
 	SETTINGS = 0,
@@ -19,7 +17,6 @@ enum Binding {
 	OUTPUT = 28,
 	DISPLACEMENT = 30,
 }
-
 
 enum FFTResolution {
 	FFT_2x2 = 2,
@@ -34,7 +31,6 @@ enum FFTResolution {
 	FFT_1024x1024 = 1024,
 	FFT_2048x2048 = 2048,
 }
-
 
 ## Whether _simulate() should be called by _process(). The simulation_frameskip
 ## setting will control whether this calls every frame, or skips frames. This
@@ -151,7 +147,7 @@ enum FFTResolution {
 var initialized := false
 
 ## The "accumulated wind" that has blown, for wave scrolling from wind.
-## Updated each frame by Ocean3D._process()
+## Updated each frame by OceanFFTWaves._process()
 var wind_uv_offset := Vector2.ZERO
 
 ## The wind direction.
@@ -207,20 +203,6 @@ var _fft_settings_uniform := RDUniform.new()
 var _sub_pong_uniform := RDUniform.new()
 var _sub_pong_tex:RID
 
-var _foam_texture_size : Vector2
-var _foam_texture_resolution : Vector2i
-var _ping_foam_texture_offset : Vector2i
-var _pong_foam_texture_offset : Vector2i
-var _foam_shader:RID
-var _foam_pipeline:RID
-var _foam_settings_buffer:RID
-var _foam_settings_uniform := RDUniform.new()
-var _ping_uniform_foam: RDUniform = RDUniform.new()
-var _pong_uniform_foam: RDUniform = RDUniform.new()
-var _ping_image_foam: Image = Image.new()
-var _ping_tex_foam: RID
-var _pong_tex_foam : RID
-
 var _waves_readback_ready:Array[bool] = []
 var _waves_image_cascade:Array[Image] = []
 var _waves_texture_cascade:Array[Texture2DRD] = []
@@ -244,7 +226,7 @@ func initialize_simulation() -> void:
 ## Simulate a single iteration of the ocean. Respects frameskip and simulation
 ## enabled settings.
 func simulate(delta:float) -> void:
-	assert(initialized, "Ocean3D not initialized")
+	assert(initialized, "OceanFFTWaves not initialized")
 	
 	if simulation_enabled:
 		_accumulated_delta += delta
@@ -287,7 +269,7 @@ func global_to_pixel(camera:Camera3D, global_pos:Vector3, cascade:int, apply_dom
 	## map before applying it. Make sure to check if the vertex shader should be
 	## updated to account for any changes made here.
 	
-	assert(initialized, "Ocean3D not initialized")
+	assert(initialized, "OceanFFTWaves not initialized")
 	
 	## Convert to UV coordinate
 	## The visual shader uses the global XZ coordinates as UV
@@ -322,7 +304,7 @@ func global_to_pixel(camera:Camera3D, global_pos:Vector3, cascade:int, apply_dom
 ## and resample a few times to get an accurate height. The number of resample
 ## iterations is defined by steps parameter.
 func get_wave_height(camera:Camera3D, global_pos:Vector3, max_cascade:int = 1, steps:int = 2) -> float:
-	assert(initialized, "Ocean3D not initialized")
+	assert(initialized, "OceanFFTWaves not initialized")
 	
 	var pixel:Color
 	var xz_offset := Vector3.ZERO
@@ -356,13 +338,13 @@ func get_wave_height(camera:Camera3D, global_pos:Vector3, max_cascade:int = 1, s
 ## This returns the displacement map already cached on the CPU, it will not
 ## call _simulate(), or marshall additional data from the GPU.
 func get_waves(cascade:int = 0) -> Image:
-	assert(initialized, "Ocean3D not initialized")
+	assert(initialized, "OceanFFTWaves not initialized")
 	return _waves_image_cascade[cascade]
 
 
 ## Get the wave displacement map of a single cascade as a Texture2DRD.
 func get_waves_texture(cascade:int = 0) -> Texture2DRD:
-	assert(initialized, "Ocean3D not initialized")
+	assert(initialized, "OceanFFTWaves not initialized")
 	return _waves_texture_cascade[cascade]
 
 
@@ -370,13 +352,13 @@ func get_waves_texture(cascade:int = 0) -> Texture2DRD:
 ## This returns the displacement map already cached on the CPU, it will not
 ## call _simulate(), or marshall additional data from the GPU.
 func get_all_waves() -> Array[Image]:
-	assert(initialized, "Ocean3D not initialized")
+	assert(initialized, "OceanFFTWaves not initialized")
 	return _waves_image_cascade
 
 
 ## Get the wave displacement maps of all cascades as an Array of Texture2DRDs.
 func get_all_waves_textures() -> Array[Texture2DRD]:
-	assert(initialized, "Ocean3D not initialized")
+	assert(initialized, "OceanFFTWaves not initialized")
 	return _waves_texture_cascade
 
 
@@ -794,9 +776,6 @@ func _simulate(delta:float, sync_heightmap:bool) -> void:
 			
 			p <<= 1
 			is_sub_ping_phase = not is_sub_ping_phase
-			
-		### Compute wave mask texture
-		###########################################################################
 		
 		
 		## Retrieve the displacement map from the Spectrum texture, and store it

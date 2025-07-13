@@ -158,10 +158,10 @@ void vertex() {
 
 	// Vertex Offset
 	float wave_height_multiplier = get_island_height_multiplier(VERTEX);
-	
+
 	vec3 displacement = get_displacement(domain_warped_uv);
 	displacement += vec3(0, sample_water_waves_height(VERTEX) + sample_water_ripples(VERTEX) * 0.5, 0);
-	
+
 	VERTEX += displacement * wave_height_multiplier;
 	world_vertex = VERTEX;
 
@@ -222,9 +222,10 @@ void fragment() {
 	// Foam rendering: Depth
 	foam_mix_factor = clamp(1.0 / pow(1.0 + water_depth, 8.0), 0.0, 1.0);
 
+	// Foam rendering: acucmulated foam
+	foam_mix_factor += sample_foam_mask(world_vertex);
 	// Foam Rendering: interactive waves
-	foam_mix_factor += sample_water_waves_height(world_vertex);
-
+	//foam_mix_factor += sample_water_waves_height(world_vertex); <--- this is solely handled by the foam mask
 	foam_mix_factor += sample_water_ripples(world_vertex);
 
 	// TODO Foam rendering: FFT Waves
@@ -271,6 +272,7 @@ void fragment() {
 
 	vec4 SSR = get_screen_space_reflection(far_clip, steps, ssr_screen_fade, VIEW, ssr_normal, VERTEX, PROJECTION_MATRIX, INV_PROJECTION_MATRIX, depth_texture, screen_texture);
 	ALBEDO = mix(ALBEDO, SSR.rgb , SSR.w * ssr_strength);
+	//ALBEDO = vec3(sample_foam_mask(world_vertex));
 }
 
 void light() {

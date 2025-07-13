@@ -3,11 +3,12 @@ class_name Ocean extends Node3D
 
 @onready var water_ripples : Node = $WaterRipples
 @onready var water_waves : Node = $WaterWaves
+@onready var water_foam : Node = $WaterFoam
 
 @export var island_mask : Texture2D
 var island_mask_image : Image
 @export var island_mask_size := Vector2(960, 960)
-@export var ocean:Ocean3D
+@export var ocean:OceanFFTWaves
 
 
 var player_position : Vector3
@@ -31,6 +32,29 @@ func _process(delta:float) -> void:
 	ocean.simulate(delta)
 	
 	
+	##set textures used for foam computation
+	if water_foam:
+		water_foam.ripples_size_ratio = water_foam.texture_size / water_ripples.texture_size \
+			* Vector2(water_foam.texture_resolution) / Vector2(water_ripples.texture_resolution)
+		water_foam.ripples_resolution = water_ripples.texture_resolution
+		water_foam.ripples_texture_set = water_ripples.get_current_image_set()
+		
+		water_foam.waves_size_ratio = water_foam.texture_size / water_waves.texture_size \
+			* Vector2(water_foam.texture_resolution) / Vector2(water_waves.texture_resolution)
+		water_foam.waves_resolution = water_waves.texture_resolution
+		water_foam.waves_texture_set = water_waves.get_current_image_set()
+		
+		water_foam.fft_resolution = Vector2(ocean.fft_resolution, ocean.fft_resolution)
+		water_foam.fft_size_ratio = water_foam.texture_size / ocean.horizontal_dimension \
+			* Vector2(water_foam.texture_resolution) / Vector2(water_foam.fft_resolution)
+		
+		water_foam.fft_wind_uv_offset = ocean.wind_uv_offset
+		water_foam.fft_cascade_uv_scaled = ocean.cascade_scales
+		water_foam.fft_uv_scale = ocean._uv_scale
+		
+		water_foam.create_fft_waves_cascades_set(ocean.get_all_waves_textures())
+	
+	
 func get_island_mask(pos : Vector3) -> float:
 	return sample_image_billinear(island_mask_image, Vector2(pos.x, pos.z) / island_mask_size + Vector2(0.5, 0.5)).r
 
@@ -42,6 +66,8 @@ func set_player_position(pos : Vector3) -> void:
 	player_position = pos
 	water_ripples.texture_offset = pos
 	water_waves.texture_offset = pos
+	water_foam.texture_offset = pos
+	
 	
 func add_ripple(pos: Vector3, radius: float, strength: float) -> void:
 	water_ripples.add_ripple(pos, radius, strength);

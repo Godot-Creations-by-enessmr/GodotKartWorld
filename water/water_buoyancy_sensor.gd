@@ -33,3 +33,13 @@ func get_water_depth() -> float:
 func _physics_process(_delta: float) -> void:
 	if ocean_node:
 		water_height = ocean_node.get_wave_height(global_position, 3, 5)
+		
+func compute_normal() -> Vector3:
+	if ocean_node:
+		var offset = 0.1
+		var dx = (ocean_node.get_wave_height(global_position + Vector3(offset,0,0), 3, 5) - water_height) / offset;
+		var dz = (ocean_node.get_wave_height(global_position + Vector3(0,0,offset), 3, 5) - water_height) / offset;
+		return Vector3(-dx, 1.0, -dz).normalized();
+		
+	else: 
+		return Vector3(0, 1, 0)

@@ -32,6 +32,9 @@ func add_ripple(position: Vector3, radius: float, strength: float) -> void:
 	pixel_position -= texture_pixel_offset - Vector2i(texture_resolution * 0.5)
 	ripple_origins.append(Vector4(pixel_position.x, pixel_position.y, radius, strength))
 
+func get_current_image_set() -> RID:
+	return texture_sets[next_texture]
+
 func _ready():
 	# In case we're running stuff on the rendering thread
 	# we need to do our initialisation on that thread.

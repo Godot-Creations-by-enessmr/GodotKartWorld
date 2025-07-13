@@ -24,14 +24,16 @@ The project features:
 - Open the project in Godot 4.4 or later.
 
 
-
-
 ## Acknowledgements 
 
-This project is based on some other open source works:
+This project is inspired by, and uses some other open source work:
 - The official godot compute texture demo: https://github.com/godotengine/godot-demo-projects/tree/master/compute/texture
 - The godot ocean FFT addon: https://github.com/tessarakkt/godot4-oceanfft 
-- The FFT related shaders are based on this project: https://github.com/achalpandeyy/OceanFFT
+    - The FFT related shaders are based on this project: https://github.com/achalpandeyy/OceanFFT
+- GDQuest's 3D characters: https://github.com/gdquest-demos/godot-4-3D-Characters
+- "Stylized Spatial Clouds" by "sebashtioon" on Godot shaders: https://godotshaders.com/shader/realistic-spatial-clouds/
+- The screen space reflections handled in the fragment shader of the water are inspired by "smallcableboi" on Godot shaders: https://godotshaders.com/shader/realistic-water-with-reflection-and-refraction/
+
 
 ## Contributing
 

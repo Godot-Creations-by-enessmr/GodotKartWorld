@@ -41,18 +41,18 @@ float sample_water_tire_marks(vec3 global_pos) {
 
 void vertex() {
     global_position = VERTEX;
-	
+
 	vec4 island_height_texture = texture(island_texture, global_position.xz / 680.0 + .5);
 	height = 1.0 - clamp(island_height_texture.r + island_height_texture.g, 0, 1);
 
     float influence = clamp(1.0 - distance(global_position.xz, player_position.xz) / push_radius, 0.0, 1.0);
     vec3 direction = normalize(player_position - global_position);
     direction.y = 1.0;
-	
+
 	float tire_mark_strength = clamp(1.0 - sample_water_tire_marks(global_position), 0.1, 1.0);
-	
+
     vec3 displacement = direction * push_strength * influence;
-	
+
     VERTEX += get_wind_displacement(VERTEX, 1.0) * (1.0 - influence) * pow(COLOR.r, 3.0);
     VERTEX += displacement * 1.0;
 
