@@ -412,6 +412,7 @@ script = ExtResource("3_krwk8")
 height = 0.8
 
 [node name="DebugLabel" type="Label" parent="."]
+visible = false
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0

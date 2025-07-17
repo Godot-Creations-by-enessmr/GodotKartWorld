@@ -16,7 +16,7 @@ func _ready() -> void:
 	_update_visual_item_slots()
 
 func add_item(item : ItemType) -> bool:
-	if items.size() > MAX_ITEM_COUNT:
+	if items.size() >= MAX_ITEM_COUNT:
 		return false
 		
 	items.append(item)
