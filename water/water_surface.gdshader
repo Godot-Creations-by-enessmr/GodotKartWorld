@@ -206,7 +206,7 @@ void fragment() {
 	float refraction_blend_factor = clamp(pow(linear_depth, refraction_distance_power), 0.0, refraction_distance_max) / refraction_distance_max;
 	vec3 water_color = mix(background_color * shallow_color.rgb * refraction_background_brightness, deep_color.rgb, refraction_blend_factor * (1.0 - fresnel));
 
-	water_color = mix(deep_color.rgb, water_color, 1.0 / pow(1.0 + max(water_depth, 0.0), 0.8));
+	water_color = mix(deep_color.rgb, water_color, 1.0 / pow(1.0 + max(water_depth, 0.0), 1.1));
 
 	// Caustics
 	if (water_depth > 0.0) {
@@ -226,13 +226,14 @@ void fragment() {
 	foam_mix_factor += sample_foam_mask(world_vertex);
 	// Foam Rendering: interactive waves
 	//foam_mix_factor += sample_water_waves_height(world_vertex); <--- this is solely handled by the foam mask
-	foam_mix_factor += sample_water_ripples(world_vertex);
+	foam_mix_factor += sample_water_ripples(world_vertex) * 3.0;
 
 	// TODO Foam rendering: FFT Waves
-
 	foam_mix_factor = clamp(foam_mix_factor, 0.0, 1.0);
+	float foam_texture_sample = 0.5 * (texture(foam_texture, world_vertex.xz * uv_scale * 10.0 - 0.00137 * TIME).r + texture(foam_texture, world_vertex.xz * uv_scale * 6.0 + 0.001 * TIME).r);
+	foam_mix_factor = smoothstep(0.6, 0.9, 0.6 * foam_texture_sample + 0.5 * foam_mix_factor);
 
-	ALBEDO = min(water_color + texture(foam_texture, world_vertex.xz * uv_scale * 10.0).rgb * foam_mix_factor, vec3(1.0));
+	ALBEDO = mix(water_color, vec3(1.0), foam_mix_factor);
 	foam_specular_factor = (1.0 - foam_mix_factor);
 
 

@@ -22,6 +22,7 @@ var trick_cooldown := 0.4
 var has_tricked := false
 
 var in_water_timer := 0.0
+var water_normal := Vector3(0,1,0)
 
 @export_custom(PROPERTY_HINT_NONE, "suffix:m/s") var boost_speed := 30.0
 @export_custom(PROPERTY_HINT_NONE, "suffix:m/s") var boost_acceleration := 50.0
@@ -122,7 +123,8 @@ func _process(delta: float) -> void:
 	var t := 0.5
 	if water_buoyancy_sensor.is_in_water():
 		t = 0.3
-		new_up = water_buoyancy_sensor.compute_normal()
+		water_normal = lerp(water_normal, water_buoyancy_sensor.compute_normal(), 1.0 - pow(0.5, 10 * delta))
+		new_up = water_normal
 	elif is_on_ground():
 		t = 0.025
 		new_up = get_floor_normal()
@@ -233,7 +235,7 @@ func _apply_water_force(delta : float) -> void:
 		global_position.y = lerp(global_position.y, water_height, 1.0 - pow(0.8, 60.0 * delta * water_surface_sticking_strength))
 		velocity.y = lerp(velocity.y, 0.0, 1.0 - pow(0.5, 60.0 * delta * (1.0 - water_surface_sticking_strength)))
 	if water_surface_sticking_strength < water_time_threshold:
-		var a := 20.0 if velocity.y < 0 else 2.0
+		var a := 50.0 if velocity.y < 0 else 5.0
 		velocity.y += (water_height - global_position.y) * delta * a
 
 func _physics_process(delta: float) -> void:

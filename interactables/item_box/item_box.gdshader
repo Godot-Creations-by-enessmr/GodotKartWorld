@@ -12,7 +12,6 @@ varying float distance_to_camera;
 varying vec2 node_position_uv;
 
 void vertex() {
-
     vec4 ndc = PROJECTION_MATRIX * vec4(NODE_POSITION_VIEW, 1.0);
     node_position_uv = ndc.xy / ndc.w; // Now in range [-1, 1]);
 	distance_to_camera = distance(CAMERA_POSITION_WORLD, NODE_POSITION_WORLD);

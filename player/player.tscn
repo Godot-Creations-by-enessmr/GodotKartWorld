@@ -37,9 +37,9 @@ max_steering_angle_fast = 6.0
 
 [node name="Inventory" type="Node" parent="." node_paths=PackedStringArray("item_slots")]
 script = ExtResource("5_g6k8r")
-item_slots = [NodePath("Control/InventorySlot/Slot/ItemIcon"), NodePath("Control/InventorySlot2/Slot/ItemIcon2")]
+item_slots = [NodePath("GraphicalInventory/InventorySlot/Slot/ItemIcon"), NodePath("GraphicalInventory/InventorySlot2/Slot/ItemIcon2")]
 
-[node name="Control" type="Control" parent="Inventory"]
+[node name="GraphicalInventory" type="Control" parent="Inventory"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -47,7 +47,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="InventorySlot" type="TextureRect" parent="Inventory/Control"]
+[node name="InventorySlot" type="TextureRect" parent="Inventory/GraphicalInventory"]
 layout_mode = 2
 offset_left = 146.0
 offset_top = 32.0
@@ -56,7 +56,7 @@ offset_bottom = 228.0
 texture = ExtResource("5_qjkh3")
 expand_mode = 1
 
-[node name="Slot" type="Control" parent="Inventory/Control/InventorySlot"]
+[node name="Slot" type="Control" parent="Inventory/GraphicalInventory/InventorySlot"]
 layout_mode = 1
 anchor_left = 0.1
 anchor_top = 0.1
@@ -65,7 +65,7 @@ anchor_bottom = 0.9
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ItemIcon" type="TextureRect" parent="Inventory/Control/InventorySlot/Slot"]
+[node name="ItemIcon" type="TextureRect" parent="Inventory/GraphicalInventory/InventorySlot/Slot"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -75,7 +75,7 @@ grow_vertical = 2
 texture = ExtResource("7_boad6")
 expand_mode = 1
 
-[node name="InventorySlot2" type="TextureRect" parent="Inventory/Control"]
+[node name="InventorySlot2" type="TextureRect" parent="Inventory/GraphicalInventory"]
 layout_mode = 2
 offset_left = 32.0
 offset_top = 32.0
@@ -84,7 +84,7 @@ offset_bottom = 130.0
 texture = ExtResource("5_qjkh3")
 expand_mode = 1
 
-[node name="Slot" type="Control" parent="Inventory/Control/InventorySlot2"]
+[node name="Slot" type="Control" parent="Inventory/GraphicalInventory/InventorySlot2"]
 layout_mode = 1
 anchor_left = 0.1
 anchor_top = 0.1
@@ -93,7 +93,7 @@ anchor_bottom = 0.9
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ItemIcon2" type="TextureRect" parent="Inventory/Control/InventorySlot2/Slot"]
+[node name="ItemIcon2" type="TextureRect" parent="Inventory/GraphicalInventory/InventorySlot2/Slot"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

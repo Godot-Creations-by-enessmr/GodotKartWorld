@@ -45,7 +45,8 @@ void vertex() {
 	vec4 island_height_texture = texture(island_texture, global_position.xz / 680.0 + .5);
 	height = 1.0 - clamp(island_height_texture.r + island_height_texture.g, 0, 1);
 
-    float influence = clamp(1.0 - distance(global_position.xz, player_position.xz) / push_radius, 0.0, 1.0);
+    float influence = clamp(1.0 - (distance(global_position.xz, player_position.xz) / push_radius), 0.0, 1.0);
+	influence *= clamp(1.0 - 0.2 * abs(global_position.y - player_position.y), 0.0, 1.0);
     vec3 direction = normalize(player_position - global_position);
     direction.y = 1.0;
 

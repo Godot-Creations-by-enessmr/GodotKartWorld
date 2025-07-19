@@ -4,10 +4,14 @@ const MAX_ITEM_COUNT : int = 2
 
 var items : Array[ItemType]
 @export var item_slots : Array[TextureRect]
+@onready var inventory_control : Control = $GraphicalInventory
 
 func _update_visual_item_slots() -> void:
+	var item_count = items.size()
+	inventory_control.visible = item_count > 0
+	
 	for slot_index in range(item_slots.size()):
-		if slot_index >= items.size():
+		if slot_index >= item_count:
 			item_slots[slot_index].texture = null
 		else:
 			item_slots[slot_index].texture = items[slot_index].sprite
