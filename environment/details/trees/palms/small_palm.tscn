@@ -1,10 +1,21 @@
-[gd_scene load_steps=3 format=3 uid="uid://cvatswb5my3ro"]
+[gd_scene load_steps=4 format=3 uid="uid://cvatswb5my3ro"]
 
 [ext_resource type="ArrayMesh" uid="uid://x6nqe67fqic1" path="res://environment/details/trees/palms/small_palm.obj" id="1_la8q3"]
 [ext_resource type="Material" uid="uid://cgkunawrnni6b" path="res://environment/details/trees/palms/palm_material.tres" id="1_ne4g8"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_05f76"]
+height = 11.5184
 
 [node name="SmallPalm" type="Node3D"]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 material_override = ExtResource("1_ne4g8")
 mesh = ExtResource("1_la8q3")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+collision_layer = 8
+collision_mask = 255
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.54539, 0)
+shape = SubResource("CapsuleShape3D_05f76")

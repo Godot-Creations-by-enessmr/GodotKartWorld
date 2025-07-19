@@ -12,8 +12,6 @@ class_name Wheel extends Node3D
 @onready var wheel_visual : Node3D = $WheelVisual
 @onready var wheel_mesh : MeshInstance3D = $WheelVisual/WheelMesh
 var compression : float
-var previous_compression: float = 0.0
-var compression_velocity: float = 0.0
 var speed : float = 0.0
 @onready var radial_speed_factor : float = (2 * 0.21 * PI) / 2 * PI
 
@@ -34,25 +32,13 @@ func _process(delta: float) -> void:
 	r = -r if left_side else r
 	wheel_mesh.rotation.x += r
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _physics_process(delta: float) -> void:
 	var wheel_ground_point := raycast.get_collision_point()
 	var raw_distance : float = clamp(wheel_ground_point.distance_to(global_position), 0, spring_rest_length)
-	wheel_visual.position = Vector3(0, -raw_distance, 0)
 	
-	previous_compression = compression
-	compression = spring_rest_length - raw_distance
-	compression_velocity = (compression - previous_compression) / delta
+	compression = lerp(compression, -raw_distance, 1.0 - pow(0.5, 60.0 * delta))
+	wheel_visual.position = Vector3(0, compression, 0)
+
 
 func set_steering(steering : float) -> void:
 	if steering_enabled:
 		wheel_visual.rotation.y = steering
-
-
-func get_local_spring_force() -> Vector3:
-	var spring_force = stiffness * compression
-	var damping := 1000  # Adjust as needed
-	var damping_force = damping * compression_velocity
-	print("damping: %s" % [damping_force])
-	print("spring: %s" % [spring_force])
-	return Vector3.UP * clamp(spring_force - damping_force, -max_force, max_force)

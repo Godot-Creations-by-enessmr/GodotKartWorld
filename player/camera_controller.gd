@@ -1,6 +1,6 @@
 extends Node3D
 
-@export var kart : Node3D
+@export var kart : Kart
 @export var camera : Camera3D
 @export var look_sensitivity : float = 0.1
 @export var under_water_environment : Environment
@@ -43,9 +43,8 @@ func _process(delta: float) -> void:
 			
 		is_under_water = under_water
 	
-	return
 	_camera_reset_cooldown -= delta
-	if _camera_reset_cooldown < 0:
+	if _camera_reset_cooldown < 0 && kart.velocity.length() > 1.0:
 		var wish_basis := kart.global_basis
-		var t = 1 -pow(0.2, 2 * delta)
+		var t = 1 -pow(0.3, 2 * delta)
 		global_basis = global_basis.orthonormalized().slerp(wish_basis.orthonormalized(), t)

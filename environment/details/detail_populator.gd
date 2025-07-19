@@ -111,7 +111,7 @@ func generate_chunk(chunk_size : Vector3, chunk_corner : Vector3) -> MultiMeshIn
 				var uv : Vector2 = face_data[6] * b.x + face_data[7] * b.y + face_data[8] * b.z
 				var terrain_mask = sample_image_billinear(terrain_image, uv)
 				
-				const luminance_min = 0.0
+				#const luminance_min = 0.0
 				const luminance_max = 0.01
 				#var luminance = terrain_mask.r + terrain_mask.g + terrain_mask.b;
 				var luminance = terrain_mask.g;

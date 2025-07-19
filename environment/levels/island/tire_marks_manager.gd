@@ -45,7 +45,7 @@ func _exit_tree():
 
 	RenderingServer.call_on_render_thread(_free_compute_resources)
 
-func _process(delta):
+func _process(_delta):
 	next_texture = (next_texture + 1) % PING_PONG_AMOUNT
 	if tire_marks_texture:
 		tire_marks_texture.texture_rd_rid = texture_rds[next_texture]
@@ -108,15 +108,15 @@ func _initialize_compute_code():
 		texture_sets[i] = _create_uniform_set(texture_rds[i])
 
 
-func _render_process(with_next_texture, tire_origins : Array[Vector4]):
+func _render_process(with_next_texture, tire_origins_list : Array[Vector4]):
 	var push_constant : PackedFloat32Array = PackedFloat32Array()
 	for i in range(4):
-		var tire_origin = Vector4() if tire_origins.size() <= i else tire_origins[i]
+		var tire_origin = Vector4() if tire_origins_list.size() <= i else tire_origins_list[i]
 		push_constant.push_back(tire_origin.x) # x position
 		push_constant.push_back(tire_origin.y) # z position
 		push_constant.push_back(tire_origin.z) # radius
 		push_constant.push_back(tire_origin.w) # strength
-	tire_origins.clear()
+	tire_origins_list.clear()
 
 	push_constant.push_back(texture_resolution.x)
 	push_constant.push_back(texture_resolution.y)

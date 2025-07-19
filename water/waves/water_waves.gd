@@ -61,7 +61,7 @@ func _exit_tree():
 
 	RenderingServer.call_on_render_thread(_free_compute_resources)
 
-func _process(delta):
+func _process(_delta):
 	next_texture = (next_texture + 1) % 3
 	if water_texture:
 		water_texture.texture_rd_rid = texture_rds[next_texture]
@@ -79,7 +79,7 @@ func _process(delta):
 		ripple = ripple_origins.pop_back()
 		#ripple_origins.clear()
 	
-	RenderingServer.call_on_render_thread(_render_process.bind(next_texture, ripple, texture_resolution, texture_size, damp))
+	RenderingServer.call_on_render_thread(_render_process.bind(next_texture, ripple, texture_resolution, texture_size))
 	
 
 ###############################################################################
@@ -135,7 +135,7 @@ func _initialize_compute_code():
 		texture_sets[i] = _create_uniform_set(texture_rds[i])
 
 
-func _render_process(with_next_texture, wave_point, tex_resolution, _tex_size, damp):
+func _render_process(with_next_texture, wave_point, tex_resolution, _tex_size):
 	var push_constant : PackedFloat32Array = PackedFloat32Array()
 	push_constant.push_back(wave_point.x) # x position
 	push_constant.push_back(wave_point.y) # z position

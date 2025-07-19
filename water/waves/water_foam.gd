@@ -58,7 +58,7 @@ func _exit_tree():
 
 	RenderingServer.call_on_render_thread(_free_compute_resources)
 
-func _process(delta):
+func _process(_delta):
 	next_texture = (next_texture + 1) % PING_PONG_AMOUNT
 	if foam_texture:
 		foam_texture.texture_rd_rid = texture_rds[next_texture]

@@ -24,9 +24,7 @@ func _ready() -> void:
 		
 	island_mask_image.convert(Image.FORMAT_RGBA8)
 
-func _process(delta:float) -> void:
-	var camera := get_viewport().get_camera_3d()
-	
+func _process(delta:float) -> void:	
 	if not ocean.initialized:
 		ocean.initialize_simulation()
 	ocean.simulate(delta)

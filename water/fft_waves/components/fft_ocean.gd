@@ -188,7 +188,6 @@ var _pong_tex_cascade:Array[RID] = []
 
 var _spectrum_shader:RID
 var _spectrum_pipeline:RID
-var _is_spectrum_changed := true
 var _spectrum_settings_buffer:RID
 var _spectrum_settings_uniform := RDUniform.new()
 var _spectrum_uniform_cascade:Array[RDUniform] = []
@@ -263,7 +262,7 @@ func force_simulate(delta:float, sync_heightmap:bool = false) -> void:
 ## Convert a global position (on the horizontal XZ plane) to a pixel coordinate
 ## for sampling the wave displacement texture directly. The Y coordinate is
 ## ignored.
-func global_to_pixel(camera:Camera3D, global_pos:Vector3, cascade:int, apply_domain_warp:bool = true) -> Vector2i:
+func global_to_pixel(_camera:Camera3D, global_pos:Vector3, cascade:int) -> Vector2i:
 	## The order of operations in this function is dependent on the order of
 	## operations used in the vertex shader to rotate and scale the displacement
 	## map before applying it. Make sure to check if the vertex shader should be
