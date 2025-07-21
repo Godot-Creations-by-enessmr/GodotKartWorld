@@ -53,7 +53,7 @@ uniform float refraction_background_brightness = 0.2;
 
 // Adjusts how strong the refraction is based on the distance between the ocean
 // pixel and the object behind it.
-uniform float refraction_depth_factor = 0.00001;
+uniform float refraction_depth_factor = 1.0;
 
 
 group_uniforms SubSurfaceScattering;

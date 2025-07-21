@@ -2,18 +2,26 @@
 
 ![Banner Image](https://github.com/JorisAR/GDWaterKart/blob/main/banner.png?raw=true)
 
-Inspired by Mario Kart, This project combines several compute based effects to achieve an interactive world.
+Inspired by Mario Kart World, This project combines several compute based effects to achieve an interactive world.
 
 The project features:
 - An arcade style kart controller
 - A water system featuring:
     - FFT based water waves
     - Water ripples following the player
-    - Large water waves caused by certain exciters.
-    - Simple buoyancy
-
-
-
+    - Large interactive water waves caused by explosions
+    - Simple rigidbody buoyancy
+    - Simple underwater post processing
+    - A water shader that incorporates the above elements, and
+        - Caustics
+        - Foam 
+        - Screen Space Reflections
+        - Refraction
+- Some bonus effects including:
+    - Item boxes
+    - Boost panels
+    - Tire tracks left by the player's kart
+    - Grass swaying in the wind
 
 
 ## Getting Started
@@ -21,12 +29,12 @@ The project features:
 ### Installation
 
 - Clone the repository
-- Open the project in Godot 4.4 or later.
+- Open the project in Godot 4.4 or later
 
 
 ## Acknowledgements 
 
-This project is inspired by, and uses some other open source work:
+This project is inspired by, and borrows from the following other open source work:
 - The official godot compute texture demo: https://github.com/godotengine/godot-demo-projects/tree/master/compute/texture
 - The godot ocean FFT addon: https://github.com/tessarakkt/godot4-oceanfft 
     - The FFT related shaders are based on this project: https://github.com/achalpandeyy/OceanFFT
