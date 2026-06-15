@@ -3,6 +3,7 @@ extends Node
 @export var texture_resolution : Vector2i = Vector2i(512, 512)
 @export var texture_size : Vector2 = Vector2(64, 64)
 @export var texture_offset : Vector3 = Vector3.ZERO
+@export var debug_log_compute := false
 @export var island_material : Array[ShaderMaterial]
 
 @export var texture_target : String = "tire_marks_texture"
@@ -113,7 +114,8 @@ func _initialize_compute_code():
 
 func _render_process(with_next_texture, tire_origins_list : Array[Vector4]):
 	if _render_process_active:
-		print("COMPUTE DEBUG: skipped tire_marks_manager.gd because previous render process is still active")
+		if debug_log_compute:
+			print("COMPUTE DEBUG: skipped tire_marks_manager.gd because previous render process is still active")
 		return
 
 	_render_process_active = true
@@ -156,10 +158,7 @@ func _render_process(with_next_texture, tire_origins_list : Array[Vector4]):
 		_render_process_active = false
 		return
 
-	# Run our compute shader.
-	print("COMPUTE DEBUG: BEGIN TireMarks")
 	var compute_list := rd.compute_list_begin()
-	print("COMPUTE DEBUG: TireMarks compute_list=", compute_list)
 	if compute_list <= 0:
 		print("COMPUTE ERROR: compute_list_begin failed in tire_marks_manager.gd / TireMarks")
 		_render_process_active = false
@@ -170,7 +169,6 @@ func _render_process(with_next_texture, tire_origins_list : Array[Vector4]):
 	rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.size() * 4)
 	rd.compute_list_dispatch(compute_list, x_groups, y_groups, 1)
 	rd.compute_list_end()
-	print("COMPUTE DEBUG: END TireMarks")
 	_render_process_active = false
 
 

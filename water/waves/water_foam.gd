@@ -3,6 +3,7 @@ extends Node
 @export var texture_resolution : Vector2i = Vector2i(512, 512)
 @export var texture_size : Vector2 = Vector2(64, 64)
 @export var texture_offset : Vector3 = Vector3.ZERO
+@export var debug_log_compute := false
 @export var target_materials : Array[ShaderMaterial]
 @export var texture_target : String = "foam_texture"
 
@@ -82,6 +83,7 @@ var _render_process_active := false
 
 var shader : RID
 var pipeline : RID
+var _logged_missing_uniform_sets: Dictionary = {}
 
 var texture_rds : Array = [ RID(), RID() ]
 var texture_sets : Array = [ RID(), RID() ]
@@ -150,9 +152,18 @@ func _initialize_compute_code():
 		}
 
 
+func _log_missing_uniform_set_once(message: String) -> void:
+	if _logged_missing_uniform_sets.has(message):
+		return
+
+	_logged_missing_uniform_sets[message] = true
+	print(message)
+
+
 func _render_process(with_next_texture):
 	if _render_process_active:
-		print("COMPUTE DEBUG: skipped water_foam.gd because previous render process is still active")
+		if debug_log_compute:
+			print("COMPUTE DEBUG: skipped water_foam.gd because previous render process is still active")
 		return
 
 	_render_process_active = true
@@ -197,15 +208,15 @@ func _render_process(with_next_texture):
 	var next_set = texture_sets[with_next_texture]["write_output"]
 	var current_set = texture_sets[(with_next_texture + 1) % PING_PONG_AMOUNT]["read_current"]
 	if not ripples_texture_set.is_valid():
-		print("WaterFoam skipped: ripples_texture_set is empty")
+		_log_missing_uniform_set_once("WaterFoam skipped: ripples_texture_set is empty")
 		_render_process_active = false
 		return
 	if not waves_texture_set.is_valid():
-		print("WaterFoam skipped: waves_texture_set is empty")
+		_log_missing_uniform_set_once("WaterFoam skipped: waves_texture_set is empty")
 		_render_process_active = false
 		return
 	if not fft_waves_texture_set.is_valid():
-		print("WaterFoam skipped: fft_waves_texture_set is empty")
+		_log_missing_uniform_set_once("WaterFoam skipped: fft_waves_texture_set is empty")
 		_render_process_active = false
 		return
 	if not current_set.is_valid():
@@ -217,10 +228,7 @@ func _render_process(with_next_texture):
 		_render_process_active = false
 		return
 
-	# Run our compute shader.
-	print("COMPUTE DEBUG: BEGIN WaterFoam")
 	var compute_list := rd.compute_list_begin()
-	print("COMPUTE DEBUG: WaterFoam compute_list=", compute_list)
 	if compute_list <= 0:
 		print("COMPUTE ERROR: compute_list_begin failed in water_foam.gd / WaterFoam")
 		_render_process_active = false
@@ -234,7 +242,6 @@ func _render_process(with_next_texture):
 	rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.size() * 4)
 	rd.compute_list_dispatch(compute_list, x_groups, y_groups, 1)
 	rd.compute_list_end()
-	print("COMPUTE DEBUG: END WaterFoam")
 	_render_process_active = false
 
 func _free_compute_resources():

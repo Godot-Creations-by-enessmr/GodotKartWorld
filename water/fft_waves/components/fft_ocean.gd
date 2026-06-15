@@ -76,6 +76,7 @@ enum FFTResolution {
 @export_range(0.001, 5.0) var time_scale := 1.0
 
 @export_group("Debug")
+@export var debug_log_fft_compute := false
 @export var debug_disable_initial_spectrum_update := false
 @export var debug_disable_phase_update := false
 @export var debug_disable_spectrum_update := false
@@ -222,12 +223,6 @@ var _simulate_active := false
 
 
 var _rng := RandomNumberGenerator.new()
-var _debug_logged_initial_update:Dictionary = {}
-var _debug_logged_initial_update_after:Dictionary = {}
-var _debug_logged_phase_update:Dictionary = {}
-var _debug_logged_phase_update_after:Dictionary = {}
-var _debug_logged_spectrum_update:Dictionary = {}
-var _debug_logged_spectrum_update_after:Dictionary = {}
 
 
 ## Initialize the simulation
@@ -395,14 +390,6 @@ func _pack_spectrum_settings(cascade:int) -> PackedByteArray:
 
 func _pack_fft_settings(subseq_count:int) -> PackedByteArray:
 	return PackedInt32Array([fft_resolution, subseq_count]).to_byte_array()
-
-
-func _debug_log_once(log_store:Dictionary, key:String, message:String) -> void:
-	if log_store.has(key):
-		return
-
-	log_store[key] = true
-	print(message)
 
 
 #### Render Thread Code
@@ -634,7 +621,8 @@ func _simulate(delta:float, sync_heightmap:bool) -> void:
 		return
 
 	if _simulate_active:
-		print("FFT DEBUG: skipped _simulate because previous _simulate is still active")
+		if debug_log_fft_compute:
+			print("FFT DEBUG: skipped _simulate because previous _simulate is still active")
 		return
 
 	_simulate_active = true
@@ -657,12 +645,9 @@ func _simulate(delta:float, sync_heightmap:bool) -> void:
 		if _is_initial_spectrum_changed:
 			## Update Settings Buffer
 			if not debug_disable_initial_spectrum_update:
-				_debug_log_once(_debug_logged_initial_update, str(cascade), "FFT DEBUG: before initial spectrum buffer_update cascade=%d" % cascade)
 				settings_bytes = _pack_initial_spectrum_settings(cascade)
 				if _rd.buffer_update(_initial_spectrum_settings_buffer_cascade[cascade], 0, settings_bytes.size(), settings_bytes) != OK:
 					print("error updating initial spectrum settings buffer")
-				else:
-					_debug_log_once(_debug_logged_initial_update_after, str(cascade), "FFT DEBUG: after initial spectrum buffer_update cascade=%d" % cascade)
 
 			## Build Uniform Set
 			uniform_set = _rd.uniform_set_create([
@@ -673,10 +658,7 @@ func _simulate(delta:float, sync_heightmap:bool) -> void:
 				_simulate_active = false
 				return
 
-			## Create Compute List
-			print("FFT DEBUG: BEGIN InitialSpectrum cascade=", cascade)
 			compute_list = _rd.compute_list_begin()
-			print("FFT DEBUG: InitialSpectrum compute_list=", compute_list, " cascade=", cascade)
 			if compute_list <= 0:
 				print("FFT ERROR: compute_list_begin failed in InitialSpectrum cascade=", cascade)
 			else:
@@ -685,7 +667,6 @@ func _simulate(delta:float, sync_heightmap:bool) -> void:
 				@warning_ignore("integer_division")
 				_rd.compute_list_dispatch(compute_list, fft_resolution / WORK_GROUP_DIM, fft_resolution / WORK_GROUP_DIM, 1)
 				_rd.compute_list_end()
-				print("FFT DEBUG: END InitialSpectrum cascade=", cascade)
 
 			_rd.free_rid(uniform_set)
 
@@ -710,12 +691,9 @@ func _simulate(delta:float, sync_heightmap:bool) -> void:
 
 		## Update Settings Buffer
 		if not debug_disable_phase_update:
-			_debug_log_once(_debug_logged_phase_update, str(cascade), "FFT DEBUG: before phase buffer_update cascade=%d" % cascade)
 			settings_bytes = _pack_phase_settings(delta * time_scale, cascade)
 			if _rd.buffer_update(_phase_settings_buffer, 0, settings_bytes.size(), settings_bytes) != OK:
 				print("error updating phase settings buffer")
-			else:
-				_debug_log_once(_debug_logged_phase_update_after, str(cascade), "FFT DEBUG: after phase buffer_update cascade=%d" % cascade)
 
 		## Build Uniform Set
 		uniform_set = _rd.uniform_set_create([
@@ -727,10 +705,7 @@ func _simulate(delta:float, sync_heightmap:bool) -> void:
 			_simulate_active = false
 			return
 
-		## Create Compute List
-		print("FFT DEBUG: BEGIN Phase cascade=", cascade)
 		compute_list = _rd.compute_list_begin()
-		print("FFT DEBUG: Phase compute_list=", compute_list, " cascade=", cascade)
 		if compute_list <= 0:
 			print("FFT ERROR: compute_list_begin failed in Phase cascade=", cascade)
 		else:
@@ -739,7 +714,6 @@ func _simulate(delta:float, sync_heightmap:bool) -> void:
 			@warning_ignore("integer_division")
 			_rd.compute_list_dispatch(compute_list, fft_resolution / WORK_GROUP_DIM, fft_resolution / WORK_GROUP_DIM, 1)
 			_rd.compute_list_end()
-			print("FFT DEBUG: END Phase cascade=", cascade)
 
 		_rd.free_rid(uniform_set)
 
@@ -748,12 +722,9 @@ func _simulate(delta:float, sync_heightmap:bool) -> void:
 
 		## Update Settings Buffer
 		if not debug_disable_spectrum_update:
-			_debug_log_once(_debug_logged_spectrum_update, str(cascade), "FFT DEBUG: before spectrum buffer_update cascade=%d" % cascade)
 			settings_bytes = _pack_spectrum_settings(cascade)
 			if _rd.buffer_update(_spectrum_settings_buffer, 0, settings_bytes.size(), settings_bytes) != OK:
 				print("error updating spectrum settings buffer")
-			else:
-				_debug_log_once(_debug_logged_spectrum_update_after, str(cascade), "FFT DEBUG: after spectrum buffer_update cascade=%d" % cascade)
 
 		## Ensure the Spectrum texture binding is correct from previous frames.
 		## It gets changed later on in _simulate().
@@ -771,10 +742,7 @@ func _simulate(delta:float, sync_heightmap:bool) -> void:
 			_simulate_active = false
 			return
 
-		## Create Compute List
-		print("FFT DEBUG: BEGIN Spectrum cascade=", cascade)
 		compute_list = _rd.compute_list_begin()
-		print("FFT DEBUG: Spectrum compute_list=", compute_list, " cascade=", cascade)
 		if compute_list <= 0:
 			print("FFT ERROR: compute_list_begin failed in Spectrum cascade=", cascade)
 		else:
@@ -783,7 +751,6 @@ func _simulate(delta:float, sync_heightmap:bool) -> void:
 			@warning_ignore("integer_division")
 			_rd.compute_list_dispatch(compute_list, fft_resolution / WORK_GROUP_DIM, fft_resolution / WORK_GROUP_DIM, 1)
 			_rd.compute_list_end()
-			print("FFT DEBUG: END Spectrum cascade=", cascade)
 
 		_rd.free_rid(uniform_set)
 
@@ -813,10 +780,7 @@ func _simulate(delta:float, sync_heightmap:bool) -> void:
 				_simulate_active = false
 				return
 
-			## Create Compute List
-			print("FFT DEBUG: BEGIN FFTHorizontal cascade=", cascade, " p=", p)
 			compute_list = _rd.compute_list_begin()
-			print("FFT DEBUG: FFTHorizontal compute_list=", compute_list, " cascade=", cascade, " p=", p)
 			if compute_list <= 0:
 				print("FFT ERROR: compute_list_begin failed in FFTHorizontal cascade=", cascade)
 			else:
@@ -824,7 +788,6 @@ func _simulate(delta:float, sync_heightmap:bool) -> void:
 				_rd.compute_list_bind_uniform_set(compute_list, uniform_set, UNIFORM_SET)
 				_rd.compute_list_dispatch(compute_list, fft_resolution, 1, 1)
 				_rd.compute_list_end()
-				print("FFT DEBUG: END FFTHorizontal cascade=", cascade, " p=", p)
 
 			_rd.free_rid(uniform_set)
 
@@ -856,10 +819,7 @@ func _simulate(delta:float, sync_heightmap:bool) -> void:
 				_simulate_active = false
 				return
 
-			## Create Compute List
-			print("FFT DEBUG: BEGIN FFTVertical cascade=", cascade, " p=", p)
 			compute_list = _rd.compute_list_begin()
-			print("FFT DEBUG: FFTVertical compute_list=", compute_list, " cascade=", cascade, " p=", p)
 			if compute_list <= 0:
 				print("FFT ERROR: compute_list_begin failed in FFTVertical cascade=", cascade)
 			else:
@@ -867,7 +827,6 @@ func _simulate(delta:float, sync_heightmap:bool) -> void:
 				_rd.compute_list_bind_uniform_set(compute_list, uniform_set, UNIFORM_SET)
 				_rd.compute_list_dispatch(compute_list, fft_resolution, 1, 1)
 				_rd.compute_list_end()
-				print("FFT DEBUG: END FFTVertical cascade=", cascade, " p=", p)
 
 			_rd.free_rid(uniform_set)
 

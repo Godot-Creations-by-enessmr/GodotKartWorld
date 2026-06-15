@@ -6,6 +6,7 @@ extends Node
 @export var water_material : ShaderMaterial
 @export var damp : float = 1.0
 @export var c2 : float = 0.09
+@export var debug_log_compute := false
 
 @export var texture_target : String = "waves_texture"
 
@@ -140,7 +141,8 @@ func _initialize_compute_code():
 
 func _render_process(with_next_texture, wave_point, tex_resolution, _tex_size):
 	if _render_process_active:
-		print("COMPUTE DEBUG: skipped water_waves.gd because previous render process is still active")
+		if debug_log_compute:
+			print("COMPUTE DEBUG: skipped water_waves.gd because previous render process is still active")
 		return
 
 	_render_process_active = true
@@ -190,10 +192,7 @@ func _render_process(with_next_texture, wave_point, tex_resolution, _tex_size):
 		_render_process_active = false
 		return
 
-	# Run our compute shader.
-	print("COMPUTE DEBUG: BEGIN WaterWaves")
 	var compute_list := rd.compute_list_begin()
-	print("COMPUTE DEBUG: WaterWaves compute_list=", compute_list)
 	if compute_list <= 0:
 		print("COMPUTE ERROR: compute_list_begin failed in water_waves.gd / WaterWaves")
 		_render_process_active = false
@@ -205,7 +204,6 @@ func _render_process(with_next_texture, wave_point, tex_resolution, _tex_size):
 	rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.size() * 4)
 	rd.compute_list_dispatch(compute_list, x_groups, y_groups, 1)
 	rd.compute_list_end()
-	print("COMPUTE DEBUG: END WaterWaves")
 
 
 	if use_cpu_readback:
