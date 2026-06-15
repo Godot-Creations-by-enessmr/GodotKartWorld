@@ -78,6 +78,7 @@ func _process(_delta):
 # Everything after this point is designed to run on our rendering thread.
 
 var rd : RenderingDevice
+var _render_process_active := false
 
 var shader : RID
 var pipeline : RID
@@ -150,6 +151,12 @@ func _initialize_compute_code():
 
 
 func _render_process(with_next_texture):
+	if _render_process_active:
+		print("COMPUTE DEBUG: skipped water_foam.gd because previous render process is still active")
+		return
+
+	_render_process_active = true
+
 	var push_constant : PackedFloat32Array = PackedFloat32Array()
 	var next_offset : Vector2 = texture_centers[with_next_texture]
 	var current_offset : Vector2 = texture_centers[(with_next_texture - 1) % PING_PONG_AMOUNT]
@@ -189,9 +196,35 @@ func _render_process(with_next_texture):
 
 	var next_set = texture_sets[with_next_texture]["write_output"]
 	var current_set = texture_sets[(with_next_texture + 1) % PING_PONG_AMOUNT]["read_current"]
+	if not ripples_texture_set.is_valid():
+		print("WaterFoam skipped: ripples_texture_set is empty")
+		_render_process_active = false
+		return
+	if not waves_texture_set.is_valid():
+		print("WaterFoam skipped: waves_texture_set is empty")
+		_render_process_active = false
+		return
+	if not fft_waves_texture_set.is_valid():
+		print("WaterFoam skipped: fft_waves_texture_set is empty")
+		_render_process_active = false
+		return
+	if not current_set.is_valid():
+		print("COMPUTE ERROR: empty uniform_set in WaterFoam current_set")
+		_render_process_active = false
+		return
+	if not next_set.is_valid():
+		print("COMPUTE ERROR: empty uniform_set in WaterFoam next_set")
+		_render_process_active = false
+		return
 
 	# Run our compute shader.
+	print("COMPUTE DEBUG: BEGIN WaterFoam")
 	var compute_list := rd.compute_list_begin()
+	print("COMPUTE DEBUG: WaterFoam compute_list=", compute_list)
+	if compute_list <= 0:
+		print("COMPUTE ERROR: compute_list_begin failed in water_foam.gd / WaterFoam")
+		_render_process_active = false
+		return
 	rd.compute_list_bind_compute_pipeline(compute_list, pipeline)
 	rd.compute_list_bind_uniform_set(compute_list, current_set, 0)
 	rd.compute_list_bind_uniform_set(compute_list, next_set, 1)
@@ -201,6 +234,8 @@ func _render_process(with_next_texture):
 	rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.size() * 4)
 	rd.compute_list_dispatch(compute_list, x_groups, y_groups, 1)
 	rd.compute_list_end()
+	print("COMPUTE DEBUG: END WaterFoam")
+	_render_process_active = false
 
 func _free_compute_resources():
 	for i in range(PING_PONG_AMOUNT):

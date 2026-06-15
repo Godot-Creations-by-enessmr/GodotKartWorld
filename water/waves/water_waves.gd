@@ -33,7 +33,7 @@ func add_ripple(position: Vector3, radius: float, strength: float) -> void:
 	ripple_origins.append(Vector4(pixel_position.x, pixel_position.y, radius, strength))
 
 func get_current_image_set() -> RID:
-	return texture_sets[next_texture]
+	return texture_sets[next_texture]["read_current"]
 
 func _ready():
 	# In case we're running stuff on the rendering thread
@@ -86,6 +86,7 @@ func _process(_delta):
 # Everything after this point is designed to run on our rendering thread.
 
 var rd : RenderingDevice
+var _render_process_active := false
 
 var shader : RID
 var pipeline : RID
@@ -138,6 +139,12 @@ func _initialize_compute_code():
 
 
 func _render_process(with_next_texture, wave_point, tex_resolution, _tex_size):
+	if _render_process_active:
+		print("COMPUTE DEBUG: skipped water_waves.gd because previous render process is still active")
+		return
+
+	_render_process_active = true
+
 	var push_constant : PackedFloat32Array = PackedFloat32Array()
 	push_constant.push_back(wave_point.x) # x position
 	push_constant.push_back(wave_point.y) # z position
@@ -170,9 +177,27 @@ func _render_process(with_next_texture, wave_point, tex_resolution, _tex_size):
 	var next_set = texture_sets[with_next_texture]["write_output"]
 	var current_set = texture_sets[(with_next_texture - 1) % 3]["read_current"]
 	var previous_set = texture_sets[(with_next_texture - 2) % 3]["read_previous"]
+	if not current_set.is_valid():
+		print("COMPUTE ERROR: empty uniform_set in WaterWaves current_set")
+		_render_process_active = false
+		return
+	if not previous_set.is_valid():
+		print("COMPUTE ERROR: empty uniform_set in WaterWaves previous_set")
+		_render_process_active = false
+		return
+	if not next_set.is_valid():
+		print("COMPUTE ERROR: empty uniform_set in WaterWaves next_set")
+		_render_process_active = false
+		return
 
 	# Run our compute shader.
+	print("COMPUTE DEBUG: BEGIN WaterWaves")
 	var compute_list := rd.compute_list_begin()
+	print("COMPUTE DEBUG: WaterWaves compute_list=", compute_list)
+	if compute_list <= 0:
+		print("COMPUTE ERROR: compute_list_begin failed in water_waves.gd / WaterWaves")
+		_render_process_active = false
+		return
 	rd.compute_list_bind_compute_pipeline(compute_list, pipeline)
 	rd.compute_list_bind_uniform_set(compute_list, current_set, 0)
 	rd.compute_list_bind_uniform_set(compute_list, previous_set, 1)
@@ -180,6 +205,7 @@ func _render_process(with_next_texture, wave_point, tex_resolution, _tex_size):
 	rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.size() * 4)
 	rd.compute_list_dispatch(compute_list, x_groups, y_groups, 1)
 	rd.compute_list_end()
+	print("COMPUTE DEBUG: END WaterWaves")
 
 
 	if use_cpu_readback:
@@ -189,6 +215,8 @@ func _render_process(with_next_texture, wave_point, tex_resolution, _tex_size):
 				water_image.set_data(texture_resolution.x, texture_resolution.y, false, Image.FORMAT_RF, array)
 
 			rd.texture_get_data_async(texture_rds[with_next_texture], 0, lambda)
+
+	_render_process_active = false
 
 func _free_compute_resources():
 	for i in range(3):
@@ -224,5 +252,3 @@ func get_height(position: Vector3) -> float:
 	var v0 = lerp(v00, v10, frac.x)
 	var v1 = lerp(v01, v11, frac.x)
 	return lerp(v0, v1, frac.y)
-
-

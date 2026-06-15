@@ -75,6 +75,12 @@ enum FFTResolution {
 ## The time scale for the simulation. Speeds up or slows down the waves.
 @export_range(0.001, 5.0) var time_scale := 1.0
 
+@export_group("Debug")
+@export var debug_disable_initial_spectrum_update := false
+@export var debug_disable_phase_update := false
+@export var debug_disable_spectrum_update := false
+@export var debug_disable_fft_simulation := false
+
 ## The wave number ranges of the wave energy spectrum that each displacement
 ## cascade covers.
 @export var cascade_ranges:Array[Vector2] = [Vector2(0.0, 0.03), Vector2(0.03, 0.15), Vector2(0.15, 1.0)]
@@ -197,8 +203,9 @@ var _fft_horizontal_shader:RID
 var _fft_horizontal_pipeline:RID
 var _fft_vertical_shader:RID
 var _fft_vertical_pipeline:RID
-var _fft_settings_buffer:RID
-var _fft_settings_uniform := RDUniform.new()
+var _fft_settings_buffer_by_p:Dictionary = {}
+var _fft_settings_uniform_by_p:Dictionary = {}
+
 var _sub_pong_uniform := RDUniform.new()
 var _sub_pong_tex:RID
 
@@ -211,9 +218,16 @@ var _is_ping_phase := true
 var _frameskip := 0
 var _heightmap_sync_frameskip := 0
 var _accumulated_delta := 0.0
+var _simulate_active := false
 
 
 var _rng := RandomNumberGenerator.new()
+var _debug_logged_initial_update:Dictionary = {}
+var _debug_logged_initial_update_after:Dictionary = {}
+var _debug_logged_phase_update:Dictionary = {}
+var _debug_logged_phase_update_after:Dictionary = {}
+var _debug_logged_spectrum_update:Dictionary = {}
+var _debug_logged_spectrum_update_after:Dictionary = {}
 
 
 ## Initialize the simulation
@@ -226,20 +240,20 @@ func initialize_simulation() -> void:
 ## enabled settings.
 func simulate(delta:float) -> void:
 	assert(initialized, "OceanFFTWaves not initialized")
-	
+
 	if simulation_enabled:
 		_accumulated_delta += delta
-		
+
 		wind_uv_offset += Vector2(cos(wind_direction), sin(wind_direction)) * wave_scroll_speed * delta
 		material.set_shader_parameter("wind_uv_offset", wind_uv_offset)
-		
+
 		if simulation_frameskip > 0:
 			_frameskip += 1
 			if _frameskip <= simulation_frameskip:
 				return
 			else:
 				_frameskip = 0
-		
+
 		var sync_heightmap := heightmap_sync_frameskip != -1
 		if heightmap_sync_frameskip > 0:
 			_heightmap_sync_frameskip += 1
@@ -248,7 +262,7 @@ func simulate(delta:float) -> void:
 			else:
 				sync_heightmap = true
 				_heightmap_sync_frameskip = 0
-		
+
 		RenderingServer.call_on_render_thread(_simulate.bind(_accumulated_delta, sync_heightmap))
 		_accumulated_delta = 0.0
 
@@ -267,69 +281,69 @@ func global_to_pixel(_camera:Camera3D, global_pos:Vector3, cascade:int) -> Vecto
 	## operations used in the vertex shader to rotate and scale the displacement
 	## map before applying it. Make sure to check if the vertex shader should be
 	## updated to account for any changes made here.
-	
+
 	assert(initialized, "OceanFFTWaves not initialized")
-	
+
 	## Convert to UV coordinate
 	## The visual shader uses the global XZ coordinates as UV
 	var uv_pos := Vector2.ZERO
 	uv_pos.x = global_pos.x
 	uv_pos.y = global_pos.z
-	
-	
+
+
 	## Apply UV scale
 	uv_pos *= _uv_scale
 	uv_pos *= 1.0 / cascade_scales[cascade]
-	
+
 	## Offset by wind scrolling
 	uv_pos += wind_uv_offset * cascade_scales[cascade]
-	
+
 	## Normalize values to 0.0-1.0
 	uv_pos.x -= floorf(uv_pos.x)
 	uv_pos.y -= floorf(uv_pos.y)
-	
+
 	## Convert to pixel coordinate
 	var pixel_pos := Vector2i.ZERO
 	pixel_pos.x = floor((fft_resolution - 1) * uv_pos.x)
 	pixel_pos.y = floor((fft_resolution - 1) * uv_pos.y)
-	
+
 	return pixel_pos
 
 
 ## Query the wave height at a given location on the horizontal XZ plane. The Y
 ## coordinate is ignored, and global position in this context is the position
 ## relative to the oceans parent node. Since each pixel encodes both a vertical
-## and horizontal displacement, we need to offset the horizontal displacement 
+## and horizontal displacement, we need to offset the horizontal displacement
 ## and resample a few times to get an accurate height. The number of resample
 ## iterations is defined by steps parameter.
 func get_wave_height(camera:Camera3D, global_pos:Vector3, max_cascade:int = 1, steps:int = 2) -> float:
 	assert(initialized, "OceanFFTWaves not initialized")
-	
+
 	var pixel:Color
 	var xz_offset := Vector3.ZERO
 	var total_height := 0.0
 	var linear_dist := (global_pos - camera.global_position).length()
-	
+
 	## Wave Displacements
 	for cascade in range(max_cascade):
 		for i in range(steps):
 			var pixel_pos := global_to_pixel(camera, global_pos - xz_offset, cascade)
-			
+
 			pixel = _waves_image_cascade[cascade].get_pixelv(pixel_pos)
 			xz_offset.x += pixel.r
 			xz_offset.z += pixel.b
-		
+
 		total_height += pixel.g
 		xz_offset = Vector3.ZERO
-	
+
 	## Wave Amplitude Distance Fade
 	var amplitude_fade_range:float = clamp(linear_dist, 0.0, amplitude_scale_fade_distance) / amplitude_scale_fade_distance
 	total_height *= lerp(amplitude_scale_max, amplitude_scale_min, amplitude_fade_range)
-	
+
 	## Planetary Curve
 	var curvation:float = planetary_curve_strength * (pow(global_pos.x - camera.global_position.x, 2.0) + pow(global_pos.y - camera.global_position.z, 2.0))
 	total_height -= curvation;
-	
+
 	return total_height
 
 
@@ -383,6 +397,14 @@ func _pack_fft_settings(subseq_count:int) -> PackedByteArray:
 	return PackedInt32Array([fft_resolution, subseq_count]).to_byte_array()
 
 
+func _debug_log_once(log_store:Dictionary, key:String, message:String) -> void:
+	if log_store.has(key):
+		return
+
+	log_store[key] = true
+	print(message)
+
+
 #### Render Thread Code
 ################################################################################
 ## All code below this point must be run on the main render thread via
@@ -397,26 +419,26 @@ func _initialize_simulation() -> void:
 	var settings_bytes:PackedByteArray
 	var initial_image_rf := Image.create(fft_resolution, fft_resolution, false, Image.FORMAT_RF)
 	var initial_image_rgf := Image.create(fft_resolution, fft_resolution, false, Image.FORMAT_RGF)
-	
+
 	#### Initialize RDTextureFormats
 	############################################################################
 	## These are initialized once and reused as needed.
-	
+
 	_fmt_r32f.width = fft_resolution
 	_fmt_r32f.height = fft_resolution
 	_fmt_r32f.format = RenderingDevice.DATA_FORMAT_R32_SFLOAT
 	_fmt_r32f.usage_bits = RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT | RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT | RenderingDevice.TEXTURE_USAGE_STORAGE_BIT | RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT
-	
+
 	_fmt_rg32f.width = fft_resolution
 	_fmt_rg32f.height = fft_resolution
 	_fmt_rg32f.format = RenderingDevice.DATA_FORMAT_R32G32_SFLOAT
 	_fmt_rg32f.usage_bits = _fmt_r32f.usage_bits
-	
+
 	_fmt_rgba32f.width = fft_resolution
 	_fmt_rgba32f.height = fft_resolution
 	_fmt_rgba32f.format = RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT
 	_fmt_rgba32f.usage_bits = _fmt_r32f.usage_bits
-	
+
 	#### Compile & Initialize Initial Spectrum Shader
 	############################################################################
 	## The Initial Spectrum texture is initialized empty. It will be generated
@@ -424,57 +446,58 @@ func _initialize_simulation() -> void:
 	## horizontal dimension inputs. It will be static and constant for a given
 	## set of inputs, and doesn't need to be recalculated per frame, only when
 	## inputs change.
-	
+
 	## Compile Shader
 	shader_file = load("res://water/fft_waves/shaders/InitialSpectrum.glsl")
 	_initial_spectrum_shader = _rd.shader_create_from_spirv(shader_file.get_spirv())
 	_initial_spectrum_pipeline = _rd.compute_pipeline_create(_initial_spectrum_shader)
-	
+
 	## Initialize cascaded FFTs
 	_initial_spectrum_settings_buffer_cascade.resize(cascade_ranges.size())
 	_initial_spectrum_settings_uniform_cascade.resize(cascade_ranges.size())
 	_initial_spectrum_tex_cascade.resize(cascade_ranges.size())
 	_initial_spectrum_uniform_cascade.resize(cascade_ranges.size())
-	
+
 	for i in cascade_ranges.size():
 		## Initialize Settings Buffer
 		settings_bytes = _pack_initial_spectrum_settings(i)
 		_initial_spectrum_settings_buffer_cascade[i] = _rd.storage_buffer_create(settings_bytes.size(), settings_bytes)
+
 		_initial_spectrum_settings_uniform_cascade[i] = RDUniform.new()
 		_initial_spectrum_settings_uniform_cascade[i].uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
 		_initial_spectrum_settings_uniform_cascade[i].binding = Binding.SETTINGS
 		_initial_spectrum_settings_uniform_cascade[i].add_id(_initial_spectrum_settings_buffer_cascade[i])
-	
+
 		## Initialized empty, it will be generated on the first frame
 		_initial_spectrum_tex_cascade[i] = _rd.texture_create(_fmt_r32f, RDTextureView.new(), [initial_image_rf.get_data()])
 		_initial_spectrum_uniform_cascade[i] = RDUniform.new()
 		_initial_spectrum_uniform_cascade[i].uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
 		_initial_spectrum_uniform_cascade[i].binding = Binding.INITIAL_SPECTRUM
 		_initial_spectrum_uniform_cascade[i].add_id(_initial_spectrum_tex_cascade[i])
-	
+
 	#### Compile & Initialize Phase Shader
 	############################################################################
 	## Applies time based flow to a crafted random data spectrum.
-	
+
 	## Compile Shader
 	shader_file = load("res://water/fft_waves/shaders/Phase.glsl")
 	_phase_shader = _rd.shader_create_from_spirv(shader_file.get_spirv())
 	_phase_pipeline = _rd.compute_pipeline_create(_phase_shader)
-	
+
 	## Initialize cascade arrays
 	_ping_uniform_cascade.resize(cascade_ranges.size())
 	_pong_uniform_cascade.resize(cascade_ranges.size())
 	_ping_image_cascade.resize(cascade_ranges.size())
 	_ping_tex_cascade.resize(cascade_ranges.size())
 	_pong_tex_cascade.resize(cascade_ranges.size())
-	
+
 	## Initialize Settings Buffer
 	settings_bytes = _pack_phase_settings(0.0, 0)
 	_phase_settings_buffer = _rd.storage_buffer_create(settings_bytes.size(), settings_bytes)
 	_phase_settings_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
 	_phase_settings_uniform.binding = Binding.SETTINGS
 	_phase_settings_uniform.add_id(_phase_settings_buffer)
-	
+
 	#### Initialize Ping Pong Buffer Textures
 	############################################################################
 	## These act as the input and output buffers for the Phase shader.
@@ -489,14 +512,14 @@ func _initialize_simulation() -> void:
 	## Pong, and write to Ping.
 	##
 	## On first start up, Ping gets initialized with crafted random data.
-	
+
 	var ping_data:PackedFloat32Array = []
-	
+
 	## The Ping buffer must be initialized with this crafted randomized data
 	for i in range(fft_resolution * fft_resolution):
 		if ping_data.append(_rng.randf_range(0.0, 1.0) * 2.0 * PI):
 			print("error generating initial ping data")
-	
+
 	for cascade in cascade_ranges.size():
 		_ping_image_cascade[cascade] = Image.create_from_data(fft_resolution, fft_resolution, false, Image.FORMAT_RF, ping_data.to_byte_array())
 		_ping_tex_cascade[cascade] = _rd.texture_create(_fmt_r32f, RDTextureView.new(), [_ping_image_cascade[cascade].get_data()])
@@ -504,7 +527,7 @@ func _initialize_simulation() -> void:
 		_ping_uniform_cascade[cascade].uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
 		_ping_uniform_cascade[cascade].binding = Binding.PING
 		_ping_uniform_cascade[cascade].add_id(_ping_tex_cascade[cascade])
-		
+
 		## The Pong buffer is initialized empty; it will be generated as the output
 		## of the first iteration of the Phase shader based on the Ping input
 		_pong_tex_cascade[cascade] = _rd.texture_create(_fmt_r32f, RDTextureView.new(), [initial_image_rf.get_data()])
@@ -512,31 +535,31 @@ func _initialize_simulation() -> void:
 		_pong_uniform_cascade[cascade].uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
 		_pong_uniform_cascade[cascade].binding = Binding.PONG
 		_pong_uniform_cascade[cascade].add_id(_pong_tex_cascade[cascade])
-	
+
 	#### Compile & Initialize Spectrum Shader
 	############################################################################
 	## Merges the weather parameters calculated in the Initial Spectrum with the
 	## crafted time varying randomness calculated in Phase (and stored in the
 	## Ping/Pong textures)
-	
+
 	## Compile Shader
 	shader_file = load("res://water/fft_waves/shaders/Spectrum.glsl")
 	_spectrum_shader = _rd.shader_create_from_spirv(shader_file.get_spirv())
 	_spectrum_pipeline = _rd.compute_pipeline_create(_spectrum_shader)
-	
+
 	## Initialize Settings Buffer
 	settings_bytes = _pack_spectrum_settings(0)
 	_spectrum_settings_buffer = _rd.storage_buffer_create(settings_bytes.size(), settings_bytes)
 	_spectrum_settings_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
 	_spectrum_settings_uniform.binding = Binding.SETTINGS
 	_spectrum_settings_uniform.add_id(_spectrum_settings_buffer)
-	
+
 	_spectrum_tex_cascade.resize(cascade_ranges.size())
 	_spectrum_uniform_cascade.resize(cascade_ranges.size())
 	_waves_readback_ready.resize(cascade_ranges.size())
 	_waves_image_cascade.resize(cascade_ranges.size())
 	_waves_texture_cascade.resize(cascade_ranges.size())
-	
+
 	for i in cascade_ranges.size():
 		## Initialized empty, it will be generated each frame
 		_spectrum_tex_cascade[i] = _rd.texture_create(_fmt_rg32f, RDTextureView.new(), [initial_image_rgf.get_data()])
@@ -544,45 +567,59 @@ func _initialize_simulation() -> void:
 		_spectrum_uniform_cascade[i].uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
 		_spectrum_uniform_cascade[i].binding = Binding.SPECTRUM
 		_spectrum_uniform_cascade[i].add_id(_spectrum_tex_cascade[i])
-		
+
 		## Bind the displacement map cascade texture to the visual shader
 		_waves_readback_ready[i] = true
 		_waves_image_cascade[i] = Image.create(fft_resolution, fft_resolution, false, Image.FORMAT_RGF)
 		_waves_texture_cascade[i] = Texture2DRD.new()
 		_waves_texture_cascade[i].texture_rd_rid = _spectrum_tex_cascade[i]
-	
+
 	material.set_shader_parameter("cascade_displacements", _waves_texture_cascade)
 	material.set_shader_parameter("cascade_uv_scales", cascade_scales)
 	material.set_shader_parameter("uv_scale", _uv_scale)
-	
+
 	#### Compile & Initialize FFT Shaders
 	############################################################################
 	## Converts the result of the Spectrum shader into a usable displacement map.
 	##
 	## Uses the Spectrum texture and SubPong texture as ping pong buffers. The
 	## resulting displacement map will be stored in the Specturm texture.
-	
+
 	## Compile Shaders
 	shader_file = load("res://water/fft_waves/shaders/FFTHorizontal.glsl")
 	_fft_horizontal_shader = _rd.shader_create_from_spirv(shader_file.get_spirv())
 	_fft_horizontal_pipeline = _rd.compute_pipeline_create(_fft_horizontal_shader)
-	
+
 	shader_file = load("res://water/fft_waves/shaders/FFTVertical.glsl")
 	_fft_vertical_shader = _rd.shader_create_from_spirv(shader_file.get_spirv())
 	_fft_vertical_pipeline = _rd.compute_pipeline_create(_fft_vertical_shader)
-	
-	## Initialize Settings Buffer
-	settings_bytes = _pack_fft_settings(0)
-	_fft_settings_buffer = _rd.storage_buffer_create(settings_bytes.size(), settings_bytes)
-	_fft_settings_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
-	_fft_settings_uniform.binding = Binding.SETTINGS
-	_fft_settings_uniform.add_id(_fft_settings_buffer)
-	
+
+	## Pre-create FFT settings buffers.
+	## One buffer per FFT stage p = 1, 2, 4, 8...
+	_fft_settings_buffer_by_p.clear()
+	_fft_settings_uniform_by_p.clear()
+
+	var fft_p := 1
+	while fft_p < fft_resolution:
+		settings_bytes = _pack_fft_settings(fft_p)
+
+		var settings_buffer := _rd.storage_buffer_create(settings_bytes.size(), settings_bytes)
+
+		var settings_uniform := RDUniform.new()
+		settings_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
+		settings_uniform.binding = Binding.SETTINGS
+		settings_uniform.add_id(settings_buffer)
+
+		_fft_settings_buffer_by_p[fft_p] = settings_buffer
+		_fft_settings_uniform_by_p[fft_p] = settings_uniform
+
+		fft_p <<= 1
+
 	## Initialize empty, will be calculated based on the Spectrum
 	_sub_pong_tex = _rd.texture_create(_fmt_rg32f, RDTextureView.new(), [initial_image_rgf.get_data()])
 	_sub_pong_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
 	_sub_pong_uniform.add_id(_sub_pong_tex)
-	
+
 	initialized = true
 
 
@@ -593,94 +630,135 @@ func _initialize_simulation() -> void:
 ## sync_heightmap is true.
 ## This must be called via RenderingServer.call_on_render_thread().
 func _simulate(delta:float, sync_heightmap:bool) -> void:
+	if debug_disable_fft_simulation:
+		return
+
+	if _simulate_active:
+		print("FFT DEBUG: skipped _simulate because previous _simulate is still active")
+		return
+
+	_simulate_active = true
+
 	var uniform_set:RID
 	var compute_list:int
 	var settings_bytes:PackedByteArray
-	
+
 	#### Iterate & Execute Cascades
 	############################################################################
 	for cascade in cascade_ranges.size():
-		
+
 		#### Update Initial Spectrum
 		########################################################################
 		## Only executed on first frame, or if Wind, FFT Resolution, or
 		## Horizontal Dimension inputs are changed, as the output is constant
 		## for a given set of inputs. The Initial Spectrum is cached in VRAM. It
 		## is not returned to CPU RAM.
-	
+
 		if _is_initial_spectrum_changed:
 			## Update Settings Buffer
-			settings_bytes = _pack_initial_spectrum_settings(cascade)
-			if _rd.buffer_update(_initial_spectrum_settings_buffer_cascade[cascade], 0, settings_bytes.size(), settings_bytes) != OK:
-				print("error updating initial spectrum settings buffer")
-			
+			if not debug_disable_initial_spectrum_update:
+				_debug_log_once(_debug_logged_initial_update, str(cascade), "FFT DEBUG: before initial spectrum buffer_update cascade=%d" % cascade)
+				settings_bytes = _pack_initial_spectrum_settings(cascade)
+				if _rd.buffer_update(_initial_spectrum_settings_buffer_cascade[cascade], 0, settings_bytes.size(), settings_bytes) != OK:
+					print("error updating initial spectrum settings buffer")
+				else:
+					_debug_log_once(_debug_logged_initial_update_after, str(cascade), "FFT DEBUG: after initial spectrum buffer_update cascade=%d" % cascade)
+
 			## Build Uniform Set
 			uniform_set = _rd.uniform_set_create([
 					_initial_spectrum_settings_uniform_cascade[cascade],
 					_initial_spectrum_uniform_cascade[cascade]], _initial_spectrum_shader, UNIFORM_SET)
-			
+			if not uniform_set.is_valid():
+				print("FFT ERROR: empty uniform_set in InitialSpectrum cascade=", cascade)
+				_simulate_active = false
+				return
+
 			## Create Compute List
+			print("FFT DEBUG: BEGIN InitialSpectrum cascade=", cascade)
 			compute_list = _rd.compute_list_begin()
-			_rd.compute_list_bind_compute_pipeline(compute_list, _initial_spectrum_pipeline)
-			_rd.compute_list_bind_uniform_set(compute_list, uniform_set, UNIFORM_SET)
-			@warning_ignore("integer_division")
-			_rd.compute_list_dispatch(compute_list, fft_resolution / WORK_GROUP_DIM, fft_resolution / WORK_GROUP_DIM, 1)
-			_rd.compute_list_end()
-			
+			print("FFT DEBUG: InitialSpectrum compute_list=", compute_list, " cascade=", cascade)
+			if compute_list <= 0:
+				print("FFT ERROR: compute_list_begin failed in InitialSpectrum cascade=", cascade)
+			else:
+				_rd.compute_list_bind_compute_pipeline(compute_list, _initial_spectrum_pipeline)
+				_rd.compute_list_bind_uniform_set(compute_list, uniform_set, UNIFORM_SET)
+				@warning_ignore("integer_division")
+				_rd.compute_list_dispatch(compute_list, fft_resolution / WORK_GROUP_DIM, fft_resolution / WORK_GROUP_DIM, 1)
+				_rd.compute_list_end()
+				print("FFT DEBUG: END InitialSpectrum cascade=", cascade)
+
 			_rd.free_rid(uniform_set)
-		
+
 		## Prevent this from running again until the Wind, FFT Resolution, or
 		## Horizontal Dimension inputs are changed. The condition ensures it
 		## runs for all cascades.
 		if cascade == cascade_ranges.size() - 1:
 			_is_initial_spectrum_changed = false
-	
+
 		#### Execute Phase Shader; Updates Ping Pong Buffers
 		########################################################################
-		
+
 		## Leave the textures in place in VRAM, and just switch the binding
 		## points.
 		if _is_ping_phase:
 			_ping_uniform_cascade[cascade].binding = Binding.PING
 			_pong_uniform_cascade[cascade].binding = Binding.PONG
-		
+
 		else:
 			_ping_uniform_cascade[cascade].binding = Binding.PONG
 			_pong_uniform_cascade[cascade].binding = Binding.PING
-		
+
 		## Update Settings Buffer
-		settings_bytes = _pack_phase_settings(delta * time_scale, cascade)
-		if _rd.buffer_update(_phase_settings_buffer, 0, settings_bytes.size(), settings_bytes) != OK:
-			print("error updating phase settings buffer")
-		
+		if not debug_disable_phase_update:
+			_debug_log_once(_debug_logged_phase_update, str(cascade), "FFT DEBUG: before phase buffer_update cascade=%d" % cascade)
+			settings_bytes = _pack_phase_settings(delta * time_scale, cascade)
+			if _rd.buffer_update(_phase_settings_buffer, 0, settings_bytes.size(), settings_bytes) != OK:
+				print("error updating phase settings buffer")
+			else:
+				_debug_log_once(_debug_logged_phase_update_after, str(cascade), "FFT DEBUG: after phase buffer_update cascade=%d" % cascade)
+
 		## Build Uniform Set
 		uniform_set = _rd.uniform_set_create([
 				_phase_settings_uniform,
 				_ping_uniform_cascade[cascade],
 				_pong_uniform_cascade[cascade]], _phase_shader, UNIFORM_SET)
-		
+		if not uniform_set.is_valid():
+			print("FFT ERROR: empty uniform_set in Phase cascade=", cascade)
+			_simulate_active = false
+			return
+
 		## Create Compute List
+		print("FFT DEBUG: BEGIN Phase cascade=", cascade)
 		compute_list = _rd.compute_list_begin()
-		_rd.compute_list_bind_compute_pipeline(compute_list, _phase_pipeline)
-		_rd.compute_list_bind_uniform_set(compute_list, uniform_set, UNIFORM_SET)
-		@warning_ignore("integer_division")
-		_rd.compute_list_dispatch(compute_list, fft_resolution / WORK_GROUP_DIM, fft_resolution / WORK_GROUP_DIM, 1)
-		_rd.compute_list_end()
-		
+		print("FFT DEBUG: Phase compute_list=", compute_list, " cascade=", cascade)
+		if compute_list <= 0:
+			print("FFT ERROR: compute_list_begin failed in Phase cascade=", cascade)
+		else:
+			_rd.compute_list_bind_compute_pipeline(compute_list, _phase_pipeline)
+			_rd.compute_list_bind_uniform_set(compute_list, uniform_set, UNIFORM_SET)
+			@warning_ignore("integer_division")
+			_rd.compute_list_dispatch(compute_list, fft_resolution / WORK_GROUP_DIM, fft_resolution / WORK_GROUP_DIM, 1)
+			_rd.compute_list_end()
+			print("FFT DEBUG: END Phase cascade=", cascade)
+
 		_rd.free_rid(uniform_set)
-	
+
 		#### Execute Spectrum Shader Cascades
 		########################################################################
-		
+
 		## Update Settings Buffer
-		settings_bytes = _pack_spectrum_settings(cascade)
-		if _rd.buffer_update(_spectrum_settings_buffer, 0, settings_bytes.size(), settings_bytes) != OK:
-			print("error updating spectrum settings buffer")
-		
+		if not debug_disable_spectrum_update:
+			_debug_log_once(_debug_logged_spectrum_update, str(cascade), "FFT DEBUG: before spectrum buffer_update cascade=%d" % cascade)
+			settings_bytes = _pack_spectrum_settings(cascade)
+			if _rd.buffer_update(_spectrum_settings_buffer, 0, settings_bytes.size(), settings_bytes) != OK:
+				print("error updating spectrum settings buffer")
+			else:
+				_debug_log_once(_debug_logged_spectrum_update_after, str(cascade), "FFT DEBUG: after spectrum buffer_update cascade=%d" % cascade)
+
 		## Ensure the Spectrum texture binding is correct from previous frames.
 		## It gets changed later on in _simulate().
 		_spectrum_uniform_cascade[cascade].binding = Binding.SPECTRUM
-		
+
 		## Build Uniform Set
 		uniform_set = _rd.uniform_set_create([
 				_spectrum_settings_uniform,
@@ -688,20 +766,30 @@ func _simulate(delta:float, sync_heightmap:bool) -> void:
 				_spectrum_uniform_cascade[cascade],
 				_ping_uniform_cascade[cascade],
 				_pong_uniform_cascade[cascade]], _spectrum_shader, UNIFORM_SET)
-		
+		if not uniform_set.is_valid():
+			print("FFT ERROR: empty uniform_set in Spectrum cascade=", cascade)
+			_simulate_active = false
+			return
+
 		## Create Compute List
+		print("FFT DEBUG: BEGIN Spectrum cascade=", cascade)
 		compute_list = _rd.compute_list_begin()
-		_rd.compute_list_bind_compute_pipeline(compute_list, _spectrum_pipeline)
-		_rd.compute_list_bind_uniform_set(compute_list, uniform_set, UNIFORM_SET)
-		@warning_ignore("integer_division")
-		_rd.compute_list_dispatch(compute_list, fft_resolution / WORK_GROUP_DIM, fft_resolution / WORK_GROUP_DIM, 1)
-		_rd.compute_list_end()
-		
+		print("FFT DEBUG: Spectrum compute_list=", compute_list, " cascade=", cascade)
+		if compute_list <= 0:
+			print("FFT ERROR: compute_list_begin failed in Spectrum cascade=", cascade)
+		else:
+			_rd.compute_list_bind_compute_pipeline(compute_list, _spectrum_pipeline)
+			_rd.compute_list_bind_uniform_set(compute_list, uniform_set, UNIFORM_SET)
+			@warning_ignore("integer_division")
+			_rd.compute_list_dispatch(compute_list, fft_resolution / WORK_GROUP_DIM, fft_resolution / WORK_GROUP_DIM, 1)
+			_rd.compute_list_end()
+			print("FFT DEBUG: END Spectrum cascade=", cascade)
+
 		_rd.free_rid(uniform_set)
-	
+
 		#### Execute Horizontal FFT Shader Cascades
 		########################################################################
-		
+
 		var is_sub_ping_phase := true
 		var p := 1
 		while p < fft_resolution:
@@ -710,37 +798,42 @@ func _simulate(delta:float, sync_heightmap:bool) -> void:
 			if is_sub_ping_phase:
 				_spectrum_uniform_cascade[cascade].binding = Binding.INPUT
 				_sub_pong_uniform.binding = Binding.OUTPUT
-			
+
 			else:
 				_spectrum_uniform_cascade[cascade].binding = Binding.OUTPUT
 				_sub_pong_uniform.binding = Binding.INPUT
-			
-			## Update Settings Buffer
-			settings_bytes = _pack_fft_settings(p)
-			if _rd.buffer_update(_fft_settings_buffer, 0, settings_bytes.size(), settings_bytes) != OK:
-				print("error updating horizontal FFT settings buffer")
-			
+
 			## Build Uniform Set
 			uniform_set = _rd.uniform_set_create([
-					_fft_settings_uniform,
+					_fft_settings_uniform_by_p[p],
 					_sub_pong_uniform,
 					_spectrum_uniform_cascade[cascade]], _fft_horizontal_shader, UNIFORM_SET)
-			
+			if not uniform_set.is_valid():
+				print("FFT ERROR: empty uniform_set in FFTHorizontal cascade=", cascade, " p=", p)
+				_simulate_active = false
+				return
+
 			## Create Compute List
+			print("FFT DEBUG: BEGIN FFTHorizontal cascade=", cascade, " p=", p)
 			compute_list = _rd.compute_list_begin()
-			_rd.compute_list_bind_compute_pipeline(compute_list, _fft_horizontal_pipeline)
-			_rd.compute_list_bind_uniform_set(compute_list, uniform_set, UNIFORM_SET)
-			_rd.compute_list_dispatch(compute_list, fft_resolution, 1, 1)
-			_rd.compute_list_end()
-			
+			print("FFT DEBUG: FFTHorizontal compute_list=", compute_list, " cascade=", cascade, " p=", p)
+			if compute_list <= 0:
+				print("FFT ERROR: compute_list_begin failed in FFTHorizontal cascade=", cascade)
+			else:
+				_rd.compute_list_bind_compute_pipeline(compute_list, _fft_horizontal_pipeline)
+				_rd.compute_list_bind_uniform_set(compute_list, uniform_set, UNIFORM_SET)
+				_rd.compute_list_dispatch(compute_list, fft_resolution, 1, 1)
+				_rd.compute_list_end()
+				print("FFT DEBUG: END FFTHorizontal cascade=", cascade, " p=", p)
+
 			_rd.free_rid(uniform_set)
-			
+
 			p <<= 1
 			is_sub_ping_phase = not is_sub_ping_phase
-		
+
 		#### Execute Vertical FFT Shader Cascades
 		########################################################################
-		
+
 		p = 1
 		while p < fft_resolution:
 			## Leave the textures in place in VRAM, and just switch the binding
@@ -748,46 +841,52 @@ func _simulate(delta:float, sync_heightmap:bool) -> void:
 			if is_sub_ping_phase:
 				_spectrum_uniform_cascade[cascade].binding = Binding.INPUT
 				_sub_pong_uniform.binding = Binding.OUTPUT
-			
+
 			else:
 				_spectrum_uniform_cascade[cascade].binding = Binding.OUTPUT
 				_sub_pong_uniform.binding = Binding.INPUT
-			
-			## Update Settings Buffer
-			settings_bytes = _pack_fft_settings(p)
-			if _rd.buffer_update(_fft_settings_buffer, 0, settings_bytes.size(), settings_bytes) != OK:
-				print("error updating vertical FFT settings buffer")
-			
+
 			## Build Uniform Set
 			uniform_set = _rd.uniform_set_create([
-					_fft_settings_uniform,
+					_fft_settings_uniform_by_p[p],
 					_sub_pong_uniform,
 					_spectrum_uniform_cascade[cascade]], _fft_vertical_shader, UNIFORM_SET)
-			
+			if not uniform_set.is_valid():
+				print("FFT ERROR: empty uniform_set in FFTVertical cascade=", cascade, " p=", p)
+				_simulate_active = false
+				return
+
 			## Create Compute List
+			print("FFT DEBUG: BEGIN FFTVertical cascade=", cascade, " p=", p)
 			compute_list = _rd.compute_list_begin()
-			_rd.compute_list_bind_compute_pipeline(compute_list, _fft_vertical_pipeline)
-			_rd.compute_list_bind_uniform_set(compute_list, uniform_set, UNIFORM_SET)
-			_rd.compute_list_dispatch(compute_list, fft_resolution, 1, 1)
-			_rd.compute_list_end()
-			
+			print("FFT DEBUG: FFTVertical compute_list=", compute_list, " cascade=", cascade, " p=", p)
+			if compute_list <= 0:
+				print("FFT ERROR: compute_list_begin failed in FFTVertical cascade=", cascade)
+			else:
+				_rd.compute_list_bind_compute_pipeline(compute_list, _fft_vertical_pipeline)
+				_rd.compute_list_bind_uniform_set(compute_list, uniform_set, UNIFORM_SET)
+				_rd.compute_list_dispatch(compute_list, fft_resolution, 1, 1)
+				_rd.compute_list_end()
+				print("FFT DEBUG: END FFTVertical cascade=", cascade, " p=", p)
+
 			_rd.free_rid(uniform_set)
-			
+
 			p <<= 1
 			is_sub_ping_phase = not is_sub_ping_phase
-		
-		
+
+
 		## Retrieve the displacement map from the Spectrum texture, and store it
 		## CPU side for use by buoyancy and wave interaction systems.
 		if sync_heightmap: # && _waves_readback_ready[cascade]:
 			var lambda = func (array : PackedByteArray) -> void:
 				_waves_image_cascade[cascade].set_data(fft_resolution, fft_resolution, false, Image.FORMAT_RGF, array)
 				_waves_readback_ready[cascade] = true
-				
+
 			_rd.texture_get_data_async(_spectrum_tex_cascade[cascade], 0, lambda)
 			#_waves_readback_ready[cascade] = false
-			
+
 			#_waves_image_cascade[cascade].set_data(fft_resolution, fft_resolution, false, Image.FORMAT_RGF, _rd.texture_get_data(_spectrum_tex_cascade[cascade], 0))
-	
+
 	## This needs to get updated outside the cascade iteration loop
 	_is_ping_phase = not _is_ping_phase
+	_simulate_active = false

@@ -65,6 +65,7 @@ func _process(_delta):
 # Everything after this point is designed to run on our rendering thread.
 
 var rd : RenderingDevice
+var _render_process_active := false
 
 var shader : RID
 var pipeline : RID
@@ -111,6 +112,12 @@ func _initialize_compute_code():
 
 
 func _render_process(with_next_texture, tire_origins_list : Array[Vector4]):
+	if _render_process_active:
+		print("COMPUTE DEBUG: skipped tire_marks_manager.gd because previous render process is still active")
+		return
+
+	_render_process_active = true
+
 	var push_constant : PackedFloat32Array = PackedFloat32Array()
 	for i in range(4):
 		var tire_origin = Vector4() if tire_origins_list.size() <= i else tire_origins_list[i]
@@ -140,14 +147,31 @@ func _render_process(with_next_texture, tire_origins_list : Array[Vector4]):
 
 	var next_set = texture_sets[with_next_texture]["write_output"]
 	var current_set = texture_sets[(with_next_texture + 1) % PING_PONG_AMOUNT]["read_current"]
+	if not current_set.is_valid():
+		print("COMPUTE ERROR: empty uniform_set in TireMarks current_set")
+		_render_process_active = false
+		return
+	if not next_set.is_valid():
+		print("COMPUTE ERROR: empty uniform_set in TireMarks next_set")
+		_render_process_active = false
+		return
 
 	# Run our compute shader.
+	print("COMPUTE DEBUG: BEGIN TireMarks")
 	var compute_list := rd.compute_list_begin()
+	print("COMPUTE DEBUG: TireMarks compute_list=", compute_list)
+	if compute_list <= 0:
+		print("COMPUTE ERROR: compute_list_begin failed in tire_marks_manager.gd / TireMarks")
+		_render_process_active = false
+		return
 	rd.compute_list_bind_compute_pipeline(compute_list, pipeline)
 	rd.compute_list_bind_uniform_set(compute_list, current_set, 0)
 	rd.compute_list_bind_uniform_set(compute_list, next_set, 1)
 	rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.size() * 4)
 	rd.compute_list_dispatch(compute_list, x_groups, y_groups, 1)
+	rd.compute_list_end()
+	print("COMPUTE DEBUG: END TireMarks")
+	_render_process_active = false
 
 
 func _free_compute_resources():
