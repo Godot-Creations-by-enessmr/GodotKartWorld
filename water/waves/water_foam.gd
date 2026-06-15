@@ -43,7 +43,7 @@ func _ready():
 
 	for i in range(PING_PONG_AMOUNT):
 		texture_centers[i] = Vector2i.ZERO
-		
+
 	foam_texture = Texture2DRD.new()
 	$TextureRect.texture = foam_texture
 	for material in target_materials:
@@ -65,14 +65,14 @@ func _process(_delta):
 	var offset = Vector2(texture_offset.x, texture_offset.z);
 	var offset_scalar = Vector2(texture_resolution) / texture_size
 	texture_pixel_offset = offset_scalar * offset
-	
+
 	texture_centers[next_texture] = texture_pixel_offset;
-		
+
 	for material in target_materials:
 		material.set_shader_parameter(texture_target + "_offset", Vector2(texture_pixel_offset) / offset_scalar)
-		
+
 	RenderingServer.call_on_render_thread(_render_process.bind(next_texture))
-	
+
 
 ###############################################################################
 # Everything after this point is designed to run on our rendering thread.
@@ -90,7 +90,7 @@ func create_fft_waves_cascades_set(textures : Array[Texture2DRD]) -> void:
 		return
 	if textures.size() != FFT_CASCADE_COUNT:
 		printerr("Not the right amount of casccades supplied to the foam shader")
-	
+
 	var uniforms : Array[RDUniform] = []
 	var sampler = RDSamplerState.new()
 	sampler.repeat_u = RenderingDevice.SAMPLER_REPEAT_MODE_REPEAT
@@ -106,18 +106,17 @@ func create_fft_waves_cascades_set(textures : Array[Texture2DRD]) -> void:
 		uniform.add_id(sampler_rid)
 		uniform.add_id(textures[i].texture_rd_rid)
 		uniforms.append(uniform)
-		
+
 	fft_waves_texture_set = rd.uniform_set_create(uniforms, shader, 4)
-	
+
 	fft_waves_texture_set_initialized = true
 
-func _create_uniform_set(texture_rd : RID) -> RID:
+func _create_uniform_set(texture_rd : RID, set_index : int) -> RID:
 	var uniform := RDUniform.new()
 	uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
 	uniform.binding = 0
 	uniform.add_id(texture_rd)
-	return rd.uniform_set_create([uniform], shader, 0)
-
+	return rd.uniform_set_create([uniform], shader, set_index)
 
 func _initialize_compute_code():
 	rd = RenderingServer.get_rendering_device()
@@ -144,7 +143,10 @@ func _initialize_compute_code():
 	for i in range(PING_PONG_AMOUNT):
 		texture_rds[i] = rd.texture_create(tf, RDTextureView.new(), [])
 		rd.texture_clear(texture_rds[i], Color(0, 0, 0, 0), 0, 1, 0, 1)
-		texture_sets[i] = _create_uniform_set(texture_rds[i])
+		texture_sets[i] = {
+			"read_current": _create_uniform_set(texture_rds[i], 0),
+			"write_output": _create_uniform_set(texture_rds[i], 1),
+		}
 
 
 func _render_process(with_next_texture):
@@ -152,7 +154,7 @@ func _render_process(with_next_texture):
 	var next_offset : Vector2 = texture_centers[with_next_texture]
 	var current_offset : Vector2 = texture_centers[(with_next_texture - 1) % PING_PONG_AMOUNT]
 	var texture_delta = (next_offset - current_offset).round()
-	
+
 	push_constant.push_back(texture_resolution.x)
 	push_constant.push_back(texture_resolution.y)
 	push_constant.push_back(texture_delta.x)
@@ -161,32 +163,32 @@ func _render_process(with_next_texture):
 	push_constant.push_back(texture_size.y)
 	push_constant.push_back(texture_offset.x)
 	push_constant.push_back(texture_offset.z)
-	
+
 	push_constant.push_back(ripples_size_ratio.x)
 	push_constant.push_back(ripples_size_ratio.y)
 	push_constant.push_back(ripples_resolution.x)
 	push_constant.push_back(ripples_resolution.y)
-	
+
 	push_constant.push_back(waves_size_ratio.x)
 	push_constant.push_back(waves_size_ratio.y)
 	push_constant.push_back(waves_resolution.x)
 	push_constant.push_back(waves_resolution.y)
-	
+
 	push_constant.push_back(fft_size_ratio.x)
 	push_constant.push_back(fft_size_ratio.y)
 	push_constant.push_back(fft_resolution.x)
 	push_constant.push_back(fft_resolution.y)
-	
+
 	push_constant.push_back(fft_cascade_uv_scaled[0])
 	push_constant.push_back(fft_cascade_uv_scaled[1])
 	push_constant.push_back(fft_cascade_uv_scaled[2])
 	push_constant.push_back(fft_uv_scale)
-	
+
 	var x_groups = (texture_resolution.x - 1) / 8 + 1
 	var y_groups = (texture_resolution.y - 1) / 8 + 1
 
-	var next_set = texture_sets[with_next_texture]
-	var current_set = texture_sets[(with_next_texture + 1) % PING_PONG_AMOUNT]
+	var next_set = texture_sets[with_next_texture]["write_output"]
+	var current_set = texture_sets[(with_next_texture + 1) % PING_PONG_AMOUNT]["read_current"]
 
 	# Run our compute shader.
 	var compute_list := rd.compute_list_begin()
@@ -199,7 +201,7 @@ func _render_process(with_next_texture):
 	rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.size() * 4)
 	rd.compute_list_dispatch(compute_list, x_groups, y_groups, 1)
 	rd.compute_list_end()
-	
+
 func _free_compute_resources():
 	for i in range(PING_PONG_AMOUNT):
 		if texture_rds[i]:
