@@ -78,8 +78,10 @@ func get_vertex_positions_normals_uvs_of_face(index: float) -> Array:
 	for i in range(0, 3):
 		data.append(mesh_data.get_vertex(mesh_data.get_face_vertex(index, i)))
 	for i in range(0, 3):
+		@warning_ignore("integer_division")
 		data.append(mesh_data.get_vertex_normal(mesh_data.get_face_vertex(index, i)))
 	for i in range(0, 3):
+		@warning_ignore("integer_division")
 		data.append(mesh_data.get_vertex_uv(mesh_data.get_face_vertex(index, i)))
 	return data
 

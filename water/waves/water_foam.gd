@@ -201,8 +201,9 @@ func _render_process(with_next_texture):
 	push_constant.push_back(fft_cascade_uv_scaled[1])
 	push_constant.push_back(fft_cascade_uv_scaled[2])
 	push_constant.push_back(fft_uv_scale)
-
+	@warning_ignore("integer_division")
 	var x_groups = (texture_resolution.x - 1) / 8 + 1
+	@warning_ignore("integer_division")
 	var y_groups = (texture_resolution.y - 1) / 8 + 1
 
 	var next_set = texture_sets[with_next_texture]["write_output"]

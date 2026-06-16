@@ -143,8 +143,9 @@ func _render_process(with_next_texture, tire_origins_list : Array[Vector4]):
 
 	push_constant.push_back(0.0)
 	push_constant.push_back(0.0)
-
+	@warning_ignore("integer_division")
 	var x_groups = (texture_resolution.x - 1) / 8 + 1
+	@warning_ignore("integer_division")
 	var y_groups = (texture_resolution.y - 1) / 8 + 1
 
 	var next_set = texture_sets[with_next_texture]["write_output"]
