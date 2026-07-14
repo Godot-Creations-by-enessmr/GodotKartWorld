@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=10 format=3 uid="uid://dy1iwmm5b777w"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://dy1iwmm5b777w"]
 
 [ext_resource type="Shader" uid="uid://drdcyfjk4au1p" path="res://water/water_surface.gdshader" id="1_qs6ou"]
 [ext_resource type="Texture2D" uid="uid://kscrfvdeu4t4" path="res://water/caustics_texture.jpg" id="2_3k0nc"]
@@ -15,8 +15,8 @@ fractal_lacunarity = 3.0
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_pbym3"]
 width = 1024
 height = 1024
-seamless = true
 noise = SubResource("FastNoiseLite_nywmb")
+seamless = true
 
 [sub_resource type="Texture2DRD" id="Texture2DRD_458q2"]
 
@@ -35,9 +35,6 @@ shader_parameter/vertex_resolution = 256.0
 shader_parameter/domain_warp_uv_scale = 6.25e-05
 shader_parameter/domain_warp_strength = 1500.0
 shader_parameter/domain_warp_texture = SubResource("NoiseTexture2D_pbym3")
-shader_parameter/amplitude_scale_min = 0.25
-shader_parameter/amplitude_scale_max = 1.0
-shader_parameter/amplitude_scale_fade_distance = 12000.0
 shader_parameter/ripples_texture = SubResource("Texture2DRD_458q2")
 shader_parameter/ripples_texture_resolution = Vector2(512, 512)
 shader_parameter/ripples_texture_size = Vector2(32, 32)
@@ -81,6 +78,9 @@ shader_parameter/foam_mix_strength = 1.0
 shader_parameter/foam_diffuse_strength = 1.0
 shader_parameter/foam_diffuse_color = Color(0.917647, 0.968627, 1, 1)
 shader_parameter/foam_texture = ExtResource("3_p72i3")
+shader_parameter/amplitude_scale_min = 0.25
+shader_parameter/amplitude_scale_max = 1.0
+shader_parameter/amplitude_scale_fade_distance = 12000.0
 shader_parameter/caustics_texture = ExtResource("2_3k0nc")
 shader_parameter/caustics_strength = 0.25
 shader_parameter/caustics_scale = 0.1

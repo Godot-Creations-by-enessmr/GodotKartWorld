@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://qnq0ip6fia2o"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://qnq0ip6fia2o"]
 
 [ext_resource type="Shader" uid="uid://d3io0uptwy6r6" path="res://interactables/item_box/item_box_glass.gdshader" id="1_m81jb"]
 

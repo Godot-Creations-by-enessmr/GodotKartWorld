@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://cpbmmxmk4ont7"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://cpbmmxmk4ont7"]
 
 [ext_resource type="Shader" uid="uid://ckr4450jt7m3v" path="res://player/items/bomb/Explosion/dissolve.gdshader" id="1_n1v5k"]
 [ext_resource type="Texture2D" uid="uid://bwrowk4b7t2r" path="res://shared/textures/noise.png" id="2_peu6o"]

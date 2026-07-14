@@ -1,11 +1,7 @@
-[gd_resource type="Resource" script_class="ItemPool" load_steps=4 format=3 uid="uid://bwougoewwwthu"]
+[gd_resource type="Resource" script_class="Inventory" format=3 uid="uid://bwougoewwwthu"]
 
-[ext_resource type="Script" uid="uid://cim828ug0dftd" path="res://player/items/item_type.gd" id="1_haucl"]
-[ext_resource type="Resource" uid="uid://bteev30f14le1" path="res://player/items/bomb/bomb.tres" id="2_8g76r"]
 [ext_resource type="Script" uid="uid://drqp0bigysg4x" path="res://player/items/item_pool.gd" id="2_tfup8"]
 
 [resource]
 script = ExtResource("2_tfup8")
-items = Array[ExtResource("1_haucl")]([ExtResource("2_8g76r")])
-weights = Array[float]([])
 metadata/_custom_type_script = "uid://drqp0bigysg4x"

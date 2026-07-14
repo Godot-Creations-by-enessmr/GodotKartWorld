@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://wwntb0obnmaj"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://wwntb0obnmaj"]
 
 [ext_resource type="Shader" uid="uid://bablkasr0bf4m" path="res://shared/shaders/stylized_shader.gdshader" id="1_5hvv6"]
 [ext_resource type="Texture2D" uid="uid://dr3flrm1nlyya" path="res://environment/levels/island/race_track/track_stripes.png" id="2_xag32"]

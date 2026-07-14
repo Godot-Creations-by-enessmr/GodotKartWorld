@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dg25e8yln6wea"]
+[gd_scene format=3 uid="uid://dg25e8yln6wea"]
 
 [ext_resource type="Script" uid="uid://dnmboat3sqbt1" path="res://player/player.gd" id="1_oul6g"]
 [ext_resource type="Script" uid="uid://b4qki7c3s65xy" path="res://player/camera_controller.gd" id="2_rkbax"]
@@ -7,11 +7,21 @@
 [ext_resource type="Script" uid="uid://cj0ag7syks88s" path="res://player/inventory.gd" id="5_g6k8r"]
 [ext_resource type="Texture2D" uid="uid://cfx0taah1txfi" path="res://player/UI/inventory_slot.png" id="5_qjkh3"]
 [ext_resource type="Texture2D" uid="uid://chj2hftg8xbyq" path="res://player/items/bomb/ui_icon.png" id="7_boad6"]
+[ext_resource type="Texture2D" uid="uid://duggu2dbno46w" path="res://player/items/textures/triple.png" id="8_wodsf"]
+[ext_resource type="Texture2D" uid="uid://bti58gdos5dv5" path="res://player/items/textures/double.png" id="9_32hag"]
+[ext_resource type="Texture2D" uid="uid://d02kaib5qlvkj" path="res://player/items/textures/single.png" id="10_tqiix"]
+[ext_resource type="Texture2D" uid="uid://dv8lqip7hnsfu" path="res://player/items/textures/goldenmushrum.png" id="11_e7oew"]
+[ext_resource type="Texture2D" uid="uid://d2vttlcbfguqs" path="res://player/items/textures/star.png" id="12_c35mf"]
+[ext_resource type="Texture2D" uid="uid://csl0ginb0bfnm" path="res://player/items/textures/feather.png" id="13_65viv"]
+[ext_resource type="Texture2D" uid="uid://ca5gutgpktfrl" path="res://player/items/textures/singleg.png" id="14_x7c3f"]
+[ext_resource type="Texture2D" uid="uid://ckbtjbtabyr87" path="res://player/items/textures/boomerang.png" id="15_bjvpn"]
+[ext_resource type="Texture2D" uid="uid://dg3wc4y6f36y" path="res://player/items/textures/doubleg.png" id="16_tqiix"]
+[ext_resource type="Texture2D" uid="uid://dw4hijsry07aq" path="res://player/items/textures/tripleg.png" id="17_e7oew"]
 
-[node name="Player" type="Node3D" groups=["player"]]
+[node name="Player" type="Node3D" unique_id=222492713 groups=["player"]]
 script = ExtResource("1_oul6g")
 
-[node name="CameraPivot" type="Node3D" parent="." node_paths=PackedStringArray("kart", "camera")]
+[node name="CameraPivot" type="Node3D" parent="." unique_id=2077793726 node_paths=PackedStringArray("kart", "camera")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.563, 0)
 script = ExtResource("2_rkbax")
 kart = NodePath("../Kart")
@@ -20,28 +30,28 @@ look_sensitivity = 0.025
 under_water_environment = ExtResource("3_g6k8r")
 camera_reset_delay = 1.25
 
-[node name="Pivot2" type="SpringArm3D" parent="CameraPivot"]
+[node name="Pivot2" type="SpringArm3D" parent="CameraPivot" unique_id=2000179775]
 transform = Transform3D(1, 0, 0, 0, 0.866026, 0.5, 0, -0.5, 0.866026, 0, 0, 0)
 collision_mask = 30
 spring_length = 4.0
 
-[node name="Camera3D" type="Camera3D" parent="CameraPivot/Pivot2"]
+[node name="Camera3D" type="Camera3D" parent="CameraPivot/Pivot2" unique_id=1836238513]
 transform = Transform3D(1, 0, 0, 0, 1, -2.98023e-08, 0, 2.98023e-08, 1, 0, 0, 0)
 current = true
 fov = 85.0
 
-[node name="Kart" parent="." instance=ExtResource("3_g1dw6")]
+[node name="Kart" parent="." unique_id=90626179 instance=ExtResource("3_g1dw6")]
 collision_mask = 63
 floor_max_angle = 1.0472
 roll_resistance = 0.6
 max_steering_angle_fast = 6.0
 drift_steering_multiplier = 1.5
 
-[node name="Inventory" type="Node" parent="." node_paths=PackedStringArray("item_slots")]
+[node name="Inventory" type="Node" parent="." unique_id=127040009 node_paths=PackedStringArray("item_slots")]
 script = ExtResource("5_g6k8r")
 item_slots = [NodePath("GraphicalInventory/InventorySlot/Slot/ItemIcon"), NodePath("GraphicalInventory/InventorySlot2/Slot/ItemIcon2")]
 
-[node name="GraphicalInventory" type="Control" parent="Inventory"]
+[node name="GraphicalInventory" type="Control" parent="Inventory" unique_id=1336683846]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -49,8 +59,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="InventorySlot" type="TextureRect" parent="Inventory/GraphicalInventory"]
-layout_mode = 2
+[node name="InventorySlot" type="TextureRect" parent="Inventory/GraphicalInventory" unique_id=1911894315]
+layout_mode = 0
 offset_left = 146.0
 offset_top = 32.0
 offset_right = 342.0
@@ -58,7 +68,7 @@ offset_bottom = 228.0
 texture = ExtResource("5_qjkh3")
 expand_mode = 1
 
-[node name="Slot" type="Control" parent="Inventory/GraphicalInventory/InventorySlot"]
+[node name="Slot" type="Control" parent="Inventory/GraphicalInventory/InventorySlot" unique_id=1066009552]
 layout_mode = 1
 anchor_left = 0.1
 anchor_top = 0.1
@@ -67,7 +77,8 @@ anchor_bottom = 0.9
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ItemIcon" type="TextureRect" parent="Inventory/GraphicalInventory/InventorySlot/Slot"]
+[node name="ItemIcon" type="TextureRect" parent="Inventory/GraphicalInventory/InventorySlot/Slot" unique_id=845384226]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -77,8 +88,118 @@ grow_vertical = 2
 texture = ExtResource("7_boad6")
 expand_mode = 1
 
-[node name="InventorySlot2" type="TextureRect" parent="Inventory/GraphicalInventory"]
-layout_mode = 2
+[node name="ItemIcon2" type="TextureRect" parent="Inventory/GraphicalInventory/InventorySlot/Slot" unique_id=1673860551]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_wodsf")
+expand_mode = 1
+
+[node name="ItemIcon3" type="TextureRect" parent="Inventory/GraphicalInventory/InventorySlot/Slot" unique_id=1627918503]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("9_32hag")
+expand_mode = 1
+
+[node name="ItemIcon4" type="TextureRect" parent="Inventory/GraphicalInventory/InventorySlot/Slot" unique_id=838937961]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("10_tqiix")
+expand_mode = 1
+
+[node name="ItemIcon5" type="TextureRect" parent="Inventory/GraphicalInventory/InventorySlot/Slot" unique_id=1985993692]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("11_e7oew")
+expand_mode = 1
+
+[node name="ItemIcon6" type="TextureRect" parent="Inventory/GraphicalInventory/InventorySlot/Slot" unique_id=878164748]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("12_c35mf")
+expand_mode = 1
+
+[node name="ItemIcon7" type="TextureRect" parent="Inventory/GraphicalInventory/InventorySlot/Slot" unique_id=244534829]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("13_65viv")
+expand_mode = 1
+
+[node name="ItemIcon8" type="TextureRect" parent="Inventory/GraphicalInventory/InventorySlot/Slot" unique_id=626713865]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("14_x7c3f")
+expand_mode = 1
+
+[node name="ItemIcon9" type="TextureRect" parent="Inventory/GraphicalInventory/InventorySlot/Slot" unique_id=1081200355]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("15_bjvpn")
+expand_mode = 1
+
+[node name="ItemIcon10" type="TextureRect" parent="Inventory/GraphicalInventory/InventorySlot/Slot" unique_id=2146079635]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("16_tqiix")
+expand_mode = 1
+
+[node name="ItemIcon11" type="TextureRect" parent="Inventory/GraphicalInventory/InventorySlot/Slot" unique_id=1642825555]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("17_e7oew")
+expand_mode = 1
+
+[node name="InventorySlot2" type="TextureRect" parent="Inventory/GraphicalInventory" unique_id=595606087]
+layout_mode = 0
 offset_left = 32.0
 offset_top = 32.0
 offset_right = 130.0
@@ -86,7 +207,7 @@ offset_bottom = 130.0
 texture = ExtResource("5_qjkh3")
 expand_mode = 1
 
-[node name="Slot" type="Control" parent="Inventory/GraphicalInventory/InventorySlot2"]
+[node name="Slot" type="Control" parent="Inventory/GraphicalInventory/InventorySlot2" unique_id=132902953]
 layout_mode = 1
 anchor_left = 0.1
 anchor_top = 0.1
@@ -95,7 +216,8 @@ anchor_bottom = 0.9
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ItemIcon2" type="TextureRect" parent="Inventory/GraphicalInventory/InventorySlot2/Slot"]
+[node name="ItemIcon2" type="TextureRect" parent="Inventory/GraphicalInventory/InventorySlot2/Slot" unique_id=1829852338]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -103,4 +225,114 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("7_boad6")
+expand_mode = 1
+
+[node name="ItemIcon3" type="TextureRect" parent="Inventory/GraphicalInventory/InventorySlot2/Slot" unique_id=1915374106]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_wodsf")
+expand_mode = 1
+
+[node name="ItemIcon4" type="TextureRect" parent="Inventory/GraphicalInventory/InventorySlot2/Slot" unique_id=627169239]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("9_32hag")
+expand_mode = 1
+
+[node name="ItemIcon5" type="TextureRect" parent="Inventory/GraphicalInventory/InventorySlot2/Slot" unique_id=1642554220]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("10_tqiix")
+expand_mode = 1
+
+[node name="ItemIcon6" type="TextureRect" parent="Inventory/GraphicalInventory/InventorySlot2/Slot" unique_id=1500087635]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("12_c35mf")
+expand_mode = 1
+
+[node name="ItemIcon7" type="TextureRect" parent="Inventory/GraphicalInventory/InventorySlot2/Slot" unique_id=1713959538]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("17_e7oew")
+expand_mode = 1
+
+[node name="ItemIcon8" type="TextureRect" parent="Inventory/GraphicalInventory/InventorySlot2/Slot" unique_id=340735957]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("13_65viv")
+expand_mode = 1
+
+[node name="ItemIcon9" type="TextureRect" parent="Inventory/GraphicalInventory/InventorySlot2/Slot" unique_id=977357906]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("14_x7c3f")
+expand_mode = 1
+
+[node name="ItemIcon10" type="TextureRect" parent="Inventory/GraphicalInventory/InventorySlot2/Slot" unique_id=385975516]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("15_bjvpn")
+expand_mode = 1
+
+[node name="ItemIcon11" type="TextureRect" parent="Inventory/GraphicalInventory/InventorySlot2/Slot" unique_id=1554801653]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("16_tqiix")
+expand_mode = 1
+
+[node name="ItemIcon12" type="TextureRect" parent="Inventory/GraphicalInventory/InventorySlot2/Slot" unique_id=157695356]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("17_e7oew")
 expand_mode = 1

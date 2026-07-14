@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://c7vpdk667tfp4"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://c7vpdk667tfp4"]
 
 [ext_resource type="Shader" uid="uid://b10ffkjp0jqhh" path="res://environment/details/grass/grass.gdshader" id="1_ro2we"]
 [ext_resource type="Texture2D" uid="uid://cxggivduv550n" path="res://environment/levels/island/island_material_map_top.png" id="2_dn1sm"]

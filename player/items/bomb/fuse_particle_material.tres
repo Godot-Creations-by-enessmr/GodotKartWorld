@@ -1,4 +1,4 @@
-[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://6i7ybfwt1dk6"]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://6i7ybfwt1dk6"]
 
 [ext_resource type="Texture2D" uid="uid://hvfpsb717xsu" path="res://shared/textures/spark.png" id="1_1ak6x"]
 

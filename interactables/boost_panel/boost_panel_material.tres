@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://bfn6r30w6h3ug"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://bfn6r30w6h3ug"]
 
 [ext_resource type="Shader" uid="uid://dnuf1tdwq1gup" path="res://interactables/boost_panel/boost_panel.gdshader" id="1_o5opj"]
 [ext_resource type="Texture2D" uid="uid://cmxplw5pbl2b4" path="res://interactables/boost_panel/arrow.png" id="2_e8c84"]

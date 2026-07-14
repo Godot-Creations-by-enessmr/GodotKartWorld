@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://bpu37sbehq3g4"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://bpu37sbehq3g4"]
 
 [ext_resource type="Shader" uid="uid://b50d3hybock16" path="res://environment/levels/island/island.gdshader" id="1_vp11t"]
 [ext_resource type="Texture2D" uid="uid://c7lgbunrifo6d" path="res://shared/textures/cell_noise2.png" id="2_qedes"]

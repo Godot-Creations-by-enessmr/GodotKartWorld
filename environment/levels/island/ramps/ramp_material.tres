@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://b4yxoywx2414d"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://b4yxoywx2414d"]
 
 [ext_resource type="Shader" uid="uid://bablkasr0bf4m" path="res://shared/shaders/stylized_shader.gdshader" id="1_2haln"]
 [ext_resource type="Texture2D" uid="uid://c7lgbunrifo6d" path="res://shared/textures/cell_noise2.png" id="2_641ad"]

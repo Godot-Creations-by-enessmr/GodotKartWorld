@@ -1,4 +1,4 @@
-[gd_resource type="Environment" load_steps=3 format=3 uid="uid://b2fa18uw5ynou"]
+[gd_resource type="Environment" format=3 uid="uid://b2fa18uw5ynou"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_whqvj"]
 
@@ -15,8 +15,6 @@ ssao_enabled = true
 ssao_radius = 0.5
 ssil_enabled = true
 sdfgi_min_cell_size = 2.0
-sdfgi_cascade0_distance = 128.0
-sdfgi_max_distance = 2048.0
 sdfgi_y_scale = 0
 glow_enabled = true
 fog_enabled = true

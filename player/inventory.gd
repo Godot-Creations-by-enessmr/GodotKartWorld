@@ -28,7 +28,6 @@ func add_item(item : ItemType) -> bool:
 	return true
 	
 func use_item(player : Player) -> bool:
-	#use item if in slot
 	if items.size() <= 0:
 		return false
 	
@@ -37,4 +36,3 @@ func use_item(player : Player) -> bool:
 	_update_visual_item_slots()
 		
 	return true
-	

@@ -2,6 +2,7 @@ class_name ParticlesManager extends Node3D
 
 @export var drift_stage_1_color : Color 
 @export var drift_stage_2_color : Color 
+@export var drift_stage_3_color : Color
 @export var sparks_material : StandardMaterial3D
 @onready var drift_sparks_parent =  $"../Visual/Kart/Particles/DriftSparks"
 var drift_spark_particles : Array[GPUParticles3D]
@@ -17,6 +18,13 @@ var boost_particles : Array[GPUParticles3D]
 @onready var water_spray_particles_parent =  $"../Visual/Kart/Particles/WaterParticles"
 var water_spray_particles : Array[GPUParticles3D]
 
+var rainbow_hue := 0.0
+var is_rainbow_mode := false
+
+func _process(delta: float) -> void:
+	if is_rainbow_mode:
+		rainbow_hue = fmod(rainbow_hue + delta * 0.3, 1.0)
+		sparks_material.emission = Color.from_hsv(rainbow_hue, 1.0, 1.0)
 
 
 func _ready() -> void:
@@ -44,22 +52,33 @@ func _ready() -> void:
 # 1 : sliding drift
 # 2 : blue
 # 3 : orange
+# 4 : purple (it will be rainbow)
 func set_drifing_stage(stage : int) -> void:	
 	match stage:
 		0:
 			set_sliding_particles(false)
 			drift_sparks_parent.visible = false
+			is_rainbow_mode = false
 		1:
 			set_sliding_particles(true)
 			drift_sparks_parent.visible = false
+			is_rainbow_mode = false
 		2:
 			set_sliding_particles(false)
 			sparks_material.emission = drift_stage_1_color
 			drift_sparks_parent.visible = true
+			is_rainbow_mode = false
 		3:
 			set_sliding_particles(false)
 			sparks_material.emission = drift_stage_2_color
 			drift_sparks_parent.visible = true
+			is_rainbow_mode = false
+
+		4:
+			set_sliding_particles(false)
+			drift_sparks_parent.visible = true
+			is_rainbow_mode = true
+			sparks_material.emission = Color.RED
 
 func set_sliding_particles(enabled: bool) -> void:
 	for particle in drifting_sliding_particles:

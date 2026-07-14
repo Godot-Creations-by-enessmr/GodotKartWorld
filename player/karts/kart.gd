@@ -158,6 +158,8 @@ func _process(delta: float) -> void:
 			set_boost(0.5)
 		if drift_stage == 3:
 			set_boost(1.0)
+		if drift_stage == 4:
+			set_boost(4.0)
 		
 		_set_drifing_stage(0)
 		
@@ -173,6 +175,8 @@ func _process(delta: float) -> void:
 		drift_timer += delta
 		if drift_timer > 3.0 && drift_stage < 3:
 			_set_drifing_stage(3)
+		if drift_timer > 5.0 && drift_stage < 4:
+			_set_drifing_stage(4)
 	
 	if boost_timer > 0:
 		boost_timer -= delta
@@ -272,5 +276,20 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("move_jump"):
 		wish_jump = true;
 
+# In your Kart/Player class
+func get_kart_position() -> Vector3:
+	return global_position
 
+func get_item_direction() -> Vector3:
+	# Return the forward direction of the kart
+	return -global_transform.basis.z
+
+# In your Kart/Player class
+@onready var inventory : Inventory = $Inventory
+
+func add_item(item_type : ItemType) -> void:
+	if inventory:
+		inventory.add_item(item_type)
+	else:
+		push_error("No inventory found on player!")
 	

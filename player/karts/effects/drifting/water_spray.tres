@@ -1,4 +1,4 @@
-[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://bwxlld7p83xw2"]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bwxlld7p83xw2"]
 
 [ext_resource type="Texture2D" uid="uid://b4ydtndobcpj4" path="res://player/karts/effects/drifting/water_spray.png" id="1_yfp5t"]
 

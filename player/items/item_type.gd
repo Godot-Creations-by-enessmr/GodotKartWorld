@@ -24,3 +24,33 @@ func use(player: Player) -> void:
 			item.angular_velocity = axis * 10.0
 		
 		item.global_position += dir * 2
+
+# In ItemType.gd, add this static function:
+static func get_random_item() -> ItemType:
+	var item := ItemType.new()
+	var rand_value := randf()
+	
+	# Load your actual item scenes
+	var mushroom_scene = load("res://items/Mushroom.tscn")
+	var star_scene = load("res://items/Star.tscn")
+	var feather_scene = load("res://items/Feather.tscn")
+	var shell_scene = load("res://items/GreenShell.tscn")
+	
+	if rand_value < 0.10:   # 10% - Star
+		item.name = "Star"
+		item.sprite = load("res://items/sprites/star.png")
+		item.scene = star_scene
+	elif rand_value < 0.30:  # 20% - Feather
+		item.name = "Feather"
+		item.sprite = load("res://items/sprites/feather.png")
+		item.scene = feather_scene
+	elif rand_value < 0.60:  # 30% - Mushroom (most common)
+		item.name = "Mushroom"
+		item.sprite = load("res://items/sprites/mushroom.png")
+		item.scene = mushroom_scene
+	else:                    # 40% - Green Shell
+		item.name = "Green Shell"
+		item.sprite = load("res://items/sprites/shell.png")
+		item.scene = shell_scene
+	
+	return item
