@@ -283,13 +283,3 @@ func get_kart_position() -> Vector3:
 func get_item_direction() -> Vector3:
 	# Return the forward direction of the kart
 	return -global_transform.basis.z
-
-# In your Kart/Player class
-@onready var inventory : Inventory = $Inventory
-
-func add_item(item_type : ItemType) -> void:
-	if inventory:
-		inventory.add_item(item_type)
-	else:
-		push_error("No inventory found on player!")
-	

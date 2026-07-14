@@ -1,7 +1,27 @@
-[gd_resource type="Resource" script_class="Inventory" format=3 uid="uid://bwougoewwwthu"]
+[gd_resource type="Resource" script_class="ItemPool" format=3 uid="uid://bwougoewwwthu"]
 
+[ext_resource type="Script" uid="uid://cim828ug0dftd" path="res://player/items/item_type.gd" id="1_tfup8"]
+[ext_resource type="Texture2D" uid="uid://duggu2dbno46w" path="res://player/items/textures/triple.png" id="2_8g76r"]
 [ext_resource type="Script" uid="uid://drqp0bigysg4x" path="res://player/items/item_pool.gd" id="2_tfup8"]
+[ext_resource type="PackedScene" uid="uid://bt40qo1rd0dqt" path="res://player/items/scenes/tripleshrooms.tscn" id="2_u2rpm"]
+[ext_resource type="PackedScene" uid="uid://d4cjjdyi4ucdo" path="res://player/items/scenes/star.tscn" id="4_qtken"]
+[ext_resource type="Texture2D" uid="uid://d2vttlcbfguqs" path="res://player/items/textures/star.png" id="5_kofj7"]
+
+[sub_resource type="Resource" id="Resource_hq4q0"]
+script = ExtResource("1_tfup8")
+name = "triple_shroom"
+sprite = ExtResource("2_8g76r")
+scene = ExtResource("2_u2rpm")
+metadata/_custom_type_script = "uid://cim828ug0dftd"
+
+[sub_resource type="Resource" id="Resource_h8shr"]
+script = ExtResource("1_tfup8")
+name = "star"
+sprite = ExtResource("5_kofj7")
+scene = ExtResource("4_qtken")
+metadata/_custom_type_script = "uid://cim828ug0dftd"
 
 [resource]
 script = ExtResource("2_tfup8")
+possible_items = Array[ExtResource("1_tfup8")]([SubResource("Resource_hq4q0"), SubResource("Resource_h8shr")])
 metadata/_custom_type_script = "uid://drqp0bigysg4x"

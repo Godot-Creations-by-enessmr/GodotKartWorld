@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <asset>
+    <contributor>
+      <author>Blender User</author>
+      <authoring_tool>Blender 2.77.0 commit date:2016-03-18, commit time:12:34, hash:22a2853</authoring_tool>
+    </contributor>
+    <created>2019-02-16T22:19:57</created>
+    <modified>2019-02-16T22:19:57</modified>
+    <unit name="meter" meter="1"/>
+    <up_axis>Z_UP</up_axis>
+  </asset>
+  <library_images>
+    <image id="ItemBoomerang_FX_Alb_png" name="ItemBoomerang_FX_Alb_png">
+      <init_from>ItemBoomerang_FX_Alb.png</init_from>
+    </image>
+  </library_images>
+  <library_effects>
+    <effect id="M_ItemBoomerang_FX-effect">
+      <profile_COMMON>
+        <newparam sid="ItemBoomerang_FX_Alb_png-surface">
+          <surface type="2D">
+            <init_from>ItemBoomerang_FX_Alb_png</init_from>
+          </surface>
+        </newparam>
+        <newparam sid="ItemBoomerang_FX_Alb_png-sampler">
+          <sampler2D>
+            <source>ItemBoomerang_FX_Alb_png-surface</source>
+          </sampler2D>
+        </newparam>
+        <technique sid="common">
+          <blinn>
+            <emission>
+              <color sid="emission">0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color sid="ambient">0 0 0 1</color>
+            </ambient>
+            <diffuse>
+              <texture texture="ItemBoomerang_FX_Alb_png-sampler" texcoord="geom-ItemBoomerang_FX__M_ItemBoomerang_FX-map1"/>
+            </diffuse>
+            <specular>
+              <color sid="specular">0 0 0 1</color>
+            </specular>
+            <shininess>
+              <float sid="shininess">50</float>
+            </shininess>
+            <index_of_refraction>
+              <float sid="index_of_refraction">1</float>
+            </index_of_refraction>
+          </blinn>
+        </technique>
+      </profile_COMMON>
+    </effect>
+  </library_effects>
+  <library_materials>
+    <material id="M_ItemBoomerang_FX-material" name="M_ItemBoomerang_FX">
+      <instance_effect url="#M_ItemBoomerang_FX-effect"/>
+    </material>
+  </library_materials>
+  <library_geometries>
+    <geometry id="ItemBoomerang_FX__M_ItemBoomerang_FX-mesh" name="ItemBoomerang_FX__M_ItemBoomerang_FX">
+      <mesh>
+        <source id="ItemBoomerang_FX__M_ItemBoomerang_FX-mesh-positions">
+          <float_array id="ItemBoomerang_FX__M_ItemBoomerang_FX-mesh-positions-array" count="192">-1.208984 0.6606445 0.6489258 -1.513672 0.550293 0.5395508 -0.6298828 0.3942871 1.024414 -1.541016 -0.2333984 0.8012695 -0.3391113 0.07745361 1.27832 -0.5112305 -0.1984863 1.291016 -0.3103027 -0.01840209 1.326172 -0.3894043 -0.1142578 1.321289 -0.5219727 -0.6606445 0.1651611 -0.3598633 -0.421875 0.8085938 -1.356445 -0.4995117 0.2279053 -0.5112305 -0.1984863 1.291016 -1.541016 -0.2333984 0.8012695 -0.5112305 -0.1984863 1.291016 1.513672 -0.1142578 -0.298584 -0.3894043 -0.1142578 1.321289 -0.3598633 -0.421875 0.8085938 1.541016 -0.01840209 -0.2498779 -0.3103027 -0.01840209 1.326172 1.299805 -0.3642578 -0.5205078 -0.5219727 -0.6606445 0.1651611 0.9155273 -0.5834961 -0.847168 -1.356445 -0.4995117 0.2279053 -1.259766 -0.3813477 -0.1286621 0.3916016 -0.3383789 -1.120117 0.008895874 -0.1142578 -1.304688 -1.108398 -0.1142578 -0.7001953 -1.09375 -0.01840209 -0.7705078 -0.06781005 -0.01840209 -1.326172 -1.356445 -0.4995117 0.2279053 -1.541016 -0.2333984 0.8012695 -1.259766 -0.3813477 -0.1286621 -1.513672 0.550293 0.5395508 -1.108398 -0.1142578 -0.7001953 -1.314453 0.3459473 -0.09558105 -1.09375 -0.01840209 -0.7705078 -1.123047 0.07745361 -0.6923828 -0.3103027 -0.01840209 1.326172 1.541016 -0.01840209 -0.2498779 -0.3391113 0.07745361 1.27832 1.473633 0.07745361 -0.2646484 -0.6298828 0.3942871 1.024414 1.149414 0.3327637 -0.4006348 -1.208984 0.6606445 0.6489258 0.6513672 0.5610352 -0.6611328 0.230957 0.3056641 -1.023438 -1.314453 0.3459473 -0.09558105 -1.513672 0.550293 0.5395508 -0.04119873 0.07745361 -1.277344 -1.123047 0.07745361 -0.6923828 -0.06781005 -0.01840209 -1.326172 -1.09375 -0.01840209 -0.7705078 1.473633 0.07745361 -0.2646484 1.541016 -0.01840209 -0.2498779 1.149414 0.3327637 -0.4006348 1.513672 -0.1142578 -0.298584 0.6513672 0.5610352 -0.6611328 1.299805 -0.3642578 -0.5205078 0.230957 0.3056641 -1.023438 0.9155273 -0.5834961 -0.847168 -0.04119873 0.07745361 -1.277344 0.3916016 -0.3383789 -1.120117 -0.06781005 -0.01840209 -1.326172 0.008895874 -0.1142578 -1.304688</float_array>
+          <technique_common>
+            <accessor source="#ItemBoomerang_FX__M_ItemBoomerang_FX-mesh-positions-array" count="64" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="ItemBoomerang_FX__M_ItemBoomerang_FX-mesh-normals">
+          <float_array id="ItemBoomerang_FX__M_ItemBoomerang_FX-mesh-normals-array" count="168">-0.4170591 0.301808 0.8573061 -0.4173164 0.3009254 0.8574911 -0.4182018 0.30257 0.8564805 -0.4179614 0.300157 0.8574463 -0.4197936 0.301242 0.8561697 -0.4234419 0.305997 0.8526798 -0.1482456 -0.9144068 0.3766742 -0.148236 -0.9143261 0.3768735 -0.1482474 -0.9144054 0.3766771 0.4131126 -0.7705271 0.4854134 0.4938308 -0.6490513 0.5786741 0.4711565 -0.6867447 0.553528 0.365403 -0.8295958 0.4221987 0.5627144 -0.496396 0.661017 0.5622293 -0.4975891 0.6605325 0.3459042 -0.8485549 0.400381 -0.007599115 -0.9957316 -0.09198313 0.08740651 -0.9953179 0.04126173 -0.2027401 -0.9117357 -0.3572598 -0.2176288 -0.8948082 -0.3898153 -0.2305704 -0.8767782 -0.4220157 -0.3209372 -0.7439297 -0.5861467 -0.3151375 -0.749268 -0.5824825 -0.4129244 -0.4969742 -0.7632235 -0.4122817 -0.5005428 -0.7612364 -0.9580438 -0.06114357 -0.2800246 -0.9580591 -0.06014275 -0.2801883 -0.9577766 -0.05923604 -0.2813452 -0.9577693 -0.05915302 -0.2813878 -0.9578542 -0.05972999 -0.2809764 -0.9584555 -0.06695055 -0.277274 0.5619496 0.4984391 0.6601297 0.5623766 0.4971877 0.6607094 0.4950545 0.6455149 0.5815769 0.5125641 0.6131238 0.6011299 0.3244203 0.8711739 0.3685207 0.3572878 0.8371102 0.4142366 -0.03998017 0.9892197 -0.1408767 0.07474029 0.9967407 0.03036606 -0.2349066 0.8776418 -0.4178084 -0.2091467 0.8983575 -0.3862791 -0.2021913 0.9120126 -0.3568639 -0.3394069 0.7054573 -0.6222003 -0.3097096 0.7591975 -0.5724501 -0.4115262 0.5014675 -0.7610366 -0.4135628 0.4959337 -0.7635547 0.5371337 0.2536261 -0.8044633 0.5378972 0.2548632 -0.8035618 0.5371404 0.2540733 -0.8043177 0.5372434 0.2542768 -0.8041847 0.5378208 0.2547634 -0.8036446 0.5378156 0.254749 -0.8036527 0.5372016 0.2541579 -0.8042502 0.5383026 0.2567722 -0.802682 0.5394433 0.2584536 -0.8013756 0.5342181 0.2462446 -0.808687</float_array>
+          <technique_common>
+            <accessor source="#ItemBoomerang_FX__M_ItemBoomerang_FX-mesh-normals-array" count="56" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="ItemBoomerang_FX__M_ItemBoomerang_FX-mesh-map-0">
+          <float_array id="ItemBoomerang_FX__M_ItemBoomerang_FX-mesh-map-0-array" count="312">0.1076219 0.2893568 0.008911252 0.3249256 0.295552 0.167361 0.008911252 0.3249256 0 0.2400396 0.295552 0.167361 0.295552 0.167361 0 0.2400396 0.3899596 0.0852369 0 0.2400396 0.3341421 0.08104068 0.3899596 0.0852369 0.3899596 0.0852369 0.3341421 0.08104068 0.3993133 0.06974899 0.3341421 0.08104068 0.3736477 0.07135117 0.3993133 0.06974899 0.3306172 0.4464027 0.3831998 0.237583 0.05984586 0.4260471 0.3831998 0.237583 0.3341421 0.08104068 0 0.2400396 0.3831998 0.237583 0 0.2400396 0.05984586 0.4260471 0.3341421 0.08104068 0.9910735 0.5969024 0.3736477 0.07135117 0.3341421 0.08104068 0.3831998 0.237583 0.9910735 0.5969024 0.9910735 0.5969024 1 0.5810941 0.3993133 0.06974899 0.9910735 0.5969024 0.3993133 0.06974899 0.3736477 0.07135117 0.9910735 0.5969024 0.3831998 0.237583 0.9216754 0.6689861 0.3831998 0.237583 0.3306172 0.4464027 0.9216754 0.6689861 0.9216754 0.6689861 0.3306172 0.4464027 0.7970092 0.7748836 0.3306172 0.4464027 0.05984586 0.4260471 0.7970092 0.7748836 0.7970092 0.7748836 0.05984586 0.4260471 0.09130996 0.5417715 0.7970092 0.7748836 0.09130996 0.5417715 0.627039 0.863386 0.09130996 0.5417715 0.5028916 0.9234302 0.627039 0.863386 0.09130996 0.5417715 0.1401694 0.7272297 0.5028916 0.9234302 0.5028916 0.9234302 0.1448997 0.750103 0.4779889 0.930251 0.5028916 0.9234302 0.1401694 0.7272297 0.1448997 0.750103 0.05984586 0.4260471 0 0.2400396 0.09130996 0.5417715 0 0.2400396 0.008911252 0.3249256 0.09130996 0.5417715 0.09130996 0.5417715 0.008911252 0.3249256 0.1401694 0.7272297 0.008911252 0.3249256 0.07338058 0.531014 0.1401694 0.7272297 0.1401694 0.7272297 0.07338058 0.531014 0.1448997 0.750103 0.07338058 0.531014 0.1355306 0.7247273 0.1448997 0.750103 0.3993133 0.06974899 1 0.5810941 0.3899596 0.0852369 1 0.5810941 0.9781338 0.5858854 0.3899596 0.0852369 0.3899596 0.0852369 0.9781338 0.5858854 0.295552 0.167361 0.9781338 0.5858854 0.8730296 0.6299993 0.295552 0.167361 0.295552 0.167361 0.8730296 0.6299993 0.1076219 0.2893568 0.8730296 0.6299993 0.7114519 0.7146258 0.1076219 0.2893568 0.1076219 0.2893568 0.7114519 0.7146258 0.5749599 0.8321202 0.1076219 0.2893568 0.5749599 0.8321202 0.07338058 0.531014 0.1076219 0.2893568 0.07338058 0.531014 0.008911252 0.3249256 0.5749599 0.8321202 0.4866255 0.914641 0.07338058 0.531014 0.07338058 0.531014 0.4866255 0.914641 0.1355306 0.7247273 0.4866255 0.914641 0.4779889 0.930251 0.1355306 0.7247273 0.1355306 0.7247273 0.4779889 0.930251 0.1448997 0.750103 0.9781338 0.5858854 1 0.5810941 0.8730296 0.6299993 1 0.5810941 0.9910735 0.5969024 0.8730296 0.6299993 0.8730296 0.6299993 0.9910735 0.5969024 0.7114519 0.7146258 0.9910735 0.5969024 0.9216754 0.6689861 0.7114519 0.7146258 0.7114519 0.7146258 0.9216754 0.6689861 0.5749599 0.8321202 0.9216754 0.6689861 0.7970092 0.7748836 0.5749599 0.8321202 0.5749599 0.8321202 0.7970092 0.7748836 0.4866255 0.914641 0.7970092 0.7748836 0.627039 0.863386 0.4866255 0.914641 0.4866255 0.914641 0.627039 0.863386 0.4779889 0.930251 0.627039 0.863386 0.5028916 0.9234302 0.4779889 0.930251</float_array>
+          <technique_common>
+            <accessor source="#ItemBoomerang_FX__M_ItemBoomerang_FX-mesh-map-0-array" count="156" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="ItemBoomerang_FX__M_ItemBoomerang_FX-mesh-colors-geom-ItemBoomerang_FX__M_ItemBoomerang_FX-map0" name="geom-ItemBoomerang_FX__M_ItemBoomerang_FX-map0">
+          <float_array id="ItemBoomerang_FX__M_ItemBoomerang_FX-mesh-colors-geom-ItemBoomerang_FX__M_ItemBoomerang_FX-map0-array" count="468">1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1</float_array>
+          <technique_common>
+            <accessor source="#ItemBoomerang_FX__M_ItemBoomerang_FX-mesh-colors-geom-ItemBoomerang_FX__M_ItemBoomerang_FX-map0-array" count="156" stride="3">
+              <param name="R" type="float"/>
+              <param name="G" type="float"/>
+              <param name="B" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="ItemBoomerang_FX__M_ItemBoomerang_FX-mesh-vertices">
+          <input semantic="POSITION" source="#ItemBoomerang_FX__M_ItemBoomerang_FX-mesh-positions"/>
+        </vertices>
+        <polylist material="M_ItemBoomerang_FX-material" count="52">
+          <input semantic="VERTEX" source="#ItemBoomerang_FX__M_ItemBoomerang_FX-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#ItemBoomerang_FX__M_ItemBoomerang_FX-mesh-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#ItemBoomerang_FX__M_ItemBoomerang_FX-mesh-map-0" offset="2" set="0"/>
+          <input semantic="COLOR" source="#ItemBoomerang_FX__M_ItemBoomerang_FX-mesh-colors-geom-ItemBoomerang_FX__M_ItemBoomerang_FX-map0" offset="3" set="0"/>
+          <vcount>3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 </vcount>
+          <p>0 0 0 0 1 0 1 1 2 0 2 2 1 1 3 3 3 1 4 4 2 1 5 5 2 2 6 6 3 2 7 7 4 2 8 8 3 3 9 9 5 3 10 10 4 3 11 11 4 4 12 12 5 4 13 13 6 4 14 14 5 5 15 15 7 5 16 16 6 5 17 17 8 6 18 18 9 6 19 19 10 6 20 20 9 7 21 21 11 7 22 22 12 7 23 23 9 8 24 24 12 8 25 25 10 8 26 26 13 9 27 27 14 10 28 28 15 11 29 29 13 9 30 30 16 12 31 31 14 10 32 32 14 10 33 33 17 13 34 34 18 14 35 35 14 10 36 36 18 14 37 37 15 11 38 38 14 10 39 39 16 12 40 40 19 15 41 41 16 12 42 42 20 16 43 43 19 15 44 44 19 15 45 45 20 16 46 46 21 17 47 47 20 16 48 48 22 18 49 49 21 17 50 50 21 17 51 51 22 18 52 52 23 19 53 53 21 17 54 54 23 19 55 55 24 20 56 56 23 19 57 57 25 21 58 58 24 20 59 59 23 19 60 60 26 22 61 61 25 21 62 62 25 21 63 63 27 23 64 64 28 24 65 65 25 21 66 66 26 22 67 67 27 23 68 68 29 25 69 69 30 25 70 70 31 25 71 71 30 26 72 72 32 26 73 73 31 26 74 74 31 27 75 75 32 27 76 76 33 27 77 77 32 28 78 78 34 28 79 79 33 28 80 80 33 29 81 81 34 29 82 82 35 29 83 83 34 30 84 84 36 30 85 85 35 30 86 86 37 31 87 87 38 32 88 88 39 33 89 89 38 32 90 90 40 34 91 91 39 33 92 92 39 33 93 93 40 34 94 94 41 35 95 95 40 34 96 96 42 36 97 97 41 35 98 98 41 35 99 99 42 36 100 100 43 37 101 101 42 36 102 102 44 38 103 103 43 37 104 104 43 37 105 105 44 38 106 106 45 39 107 107 43 37 108 108 45 39 109 109 46 40 110 110 43 37 111 111 46 40 112 112 47 41 113 113 45 39 114 114 48 42 115 115 46 40 116 116 46 40 117 117 48 42 118 118 49 43 119 119 48 42 120 120 50 44 121 121 49 43 122 122 49 43 123 123 50 44 124 124 51 45 125 125 52 46 126 126 53 46 127 127 54 46 128 128 53 47 129 129 55 47 130 130 54 47 131 131 54 48 132 132 55 48 133 133 56 48 134 134 55 49 135 135 57 49 136 136 56 49 137 137 56 50 138 138 57 50 139 139 58 50 140 140 57 51 141 141 59 51 142 142 58 51 143 143 58 52 144 144 59 52 145 145 60 52 146 146 59 53 147 147 61 53 148 148 60 53 149 149 60 54 150 150 61 54 151 151 62 54 152 152 61 55 153 153 63 55 154 154 62 55 155 155</p>
+        </polylist>
+      </mesh>
+    </geometry>
+  </library_geometries>
+  <library_controllers>
+    <controller id="Armature_ItemBoomerang_FX__M_ItemBoomerang_FX-skin" name="Armature">
+      <skin source="#ItemBoomerang_FX__M_ItemBoomerang_FX-mesh">
+        <bind_shape_matrix>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</bind_shape_matrix>
+        <source id="Armature_ItemBoomerang_FX__M_ItemBoomerang_FX-skin-joints">
+          <Name_array id="Armature_ItemBoomerang_FX__M_ItemBoomerang_FX-skin-joints-array" count="1">ItemBoomerang_FX</Name_array>
+          <technique_common>
+            <accessor source="#Armature_ItemBoomerang_FX__M_ItemBoomerang_FX-skin-joints-array" count="1" stride="1">
+              <param name="JOINT" type="name"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Armature_ItemBoomerang_FX__M_ItemBoomerang_FX-skin-bind_poses">
+          <float_array id="Armature_ItemBoomerang_FX__M_ItemBoomerang_FX-skin-bind_poses-array" count="16">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</float_array>
+          <technique_common>
+            <accessor source="#Armature_ItemBoomerang_FX__M_ItemBoomerang_FX-skin-bind_poses-array" count="1" stride="16">
+              <param name="TRANSFORM" type="float4x4"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Armature_ItemBoomerang_FX__M_ItemBoomerang_FX-skin-weights">
+          <float_array id="Armature_ItemBoomerang_FX__M_ItemBoomerang_FX-skin-weights-array" count="64">1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1</float_array>
+          <technique_common>
+            <accessor source="#Armature_ItemBoomerang_FX__M_ItemBoomerang_FX-skin-weights-array" count="64" stride="1">
+              <param name="WEIGHT" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <joints>
+          <input semantic="JOINT" source="#Armature_ItemBoomerang_FX__M_ItemBoomerang_FX-skin-joints"/>
+          <input semantic="INV_BIND_MATRIX" source="#Armature_ItemBoomerang_FX__M_ItemBoomerang_FX-skin-bind_poses"/>
+        </joints>
+        <vertex_weights count="64">
+          <input semantic="JOINT" source="#Armature_ItemBoomerang_FX__M_ItemBoomerang_FX-skin-joints" offset="0"/>
+          <input semantic="WEIGHT" source="#Armature_ItemBoomerang_FX__M_ItemBoomerang_FX-skin-weights" offset="1"/>
+          <vcount>1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 </vcount>
+          <v>0 0 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 8 0 9 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 17 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 31 0 32 0 33 0 34 0 35 0 36 0 37 0 38 0 39 0 40 0 41 0 42 0 43 0 44 0 45 0 46 0 47 0 48 0 49 0 50 0 51 0 52 0 53 0 54 0 55 0 56 0 57 0 58 0 59 0 60 0 61 0 62 0 63</v>
+        </vertex_weights>
+      </skin>
+    </controller>
+  </library_controllers>
+  <library_visual_scenes>
+    <visual_scene id="Default" name="Default">
+      <node id="Armature" name="Armature" type="NODE">
+        <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+        <node id="ItemBoomerang_FX" name="ItemBoomerang_FX" sid="ItemBoomerang_FX" type="JOINT">
+          <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+        </node>
+      </node>
+      <node id="ItemBoomerang_FX__M_ItemBoomerang_FX" name="ItemBoomerang_FX__M_ItemBoomerang_FX" type="NODE">
+        <translate sid="location">0 0 0</translate>
+        <rotate sid="rotationZ">0 0 1 0</rotate>
+        <rotate sid="rotationY">0 1 0 0</rotate>
+        <rotate sid="rotationX">1 0 0 0</rotate>
+        <scale sid="scale">1 1 1</scale>
+        <instance_controller url="#Armature_ItemBoomerang_FX__M_ItemBoomerang_FX-skin">
+          <skeleton>#ItemBoomerang_FX</skeleton>
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="M_ItemBoomerang_FX-material" target="#M_ItemBoomerang_FX-material">
+                <bind_vertex_input semantic="geom-ItemBoomerang_FX__M_ItemBoomerang_FX-map1" input_semantic="TEXCOORD" input_set="0"/>
+              </instance_material>
+            </technique_common>
+          </bind_material>
+        </instance_controller>
+      </node>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#Default"/>
+  </scene>
+</COLLADA>

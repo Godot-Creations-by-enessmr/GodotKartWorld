@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://d4cjjdyi4ucdo"]
+
+[ext_resource type="PackedScene" uid="uid://1d3mjac0c1gw" path="res://player/items/models/Wii U - Mario Kart 8 - Items - Starman/Starman/ItemStar.dae" id="1_mlc80"]
+
+[node name="ItemStar" unique_id=767081562 instance=ExtResource("1_mlc80")]
+
+[node name="Armature" parent="." index="0" unique_id=277348406]
+bones/0/rotation = Quaternion(0.707107, 0, 0, 0.707107)
+bones/0/scale = Vector3(0.1, 0.1, 0.1)
+
+[node name="ItemStar__mt_ItemStar" parent="Armature" index="0" unique_id=360817120]
+skeleton = NodePath("..")

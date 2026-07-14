@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://bmtai5tcbgdli"]
+
+[ext_resource type="PackedScene" uid="uid://bqi5d00wiebdx" path="res://player/items/models/Wii U - Mario Kart 8 - Items - Golden Mushroom/Golden Mushroom/ItemPowerKinoko.dae" id="1_h8shr"]
+
+[node name="ItemPowerKinoko" unique_id=961812831 instance=ExtResource("1_h8shr")]
+
+[node name="Armature" parent="." index="0" unique_id=82445995]
+bones/0/rotation = Quaternion(0.707107, 0, 0, 0.707107)
+bones/0/scale = Vector3(0.1, 0.1, 0.1)
+
+[node name="ItemPowerKinoko__mt_ItemPowerKinoko" parent="Armature" index="0" unique_id=1691723368]
+skeleton = NodePath("..")
