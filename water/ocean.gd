@@ -54,7 +54,7 @@ func _process(delta:float) -> void:
 	
 	
 func get_island_mask(pos : Vector3) -> float:
-	return sample_image_billinear(island_mask_image, Vector2(pos.x, pos.z) / island_mask_size + Vector2(0.5, 0.5)).r
+	return sample_image_bilinear(island_mask_image, Vector2(pos.x, pos.z) / island_mask_size + Vector2(0.5, 0.5)).r
 
 func get_wave_height(global_pos:Vector3, max_cascade:int = 3, steps:int = 4) -> float:	
 	var height : float = ocean.get_wave_height(get_viewport().get_camera_3d(), global_pos, max_cascade, steps) + water_waves.get_height(global_pos)
@@ -73,23 +73,35 @@ func add_ripple(pos: Vector3, radius: float, strength: float) -> void:
 func add_wave(pos: Vector3, radius: float, strength: float) -> void:
 	water_waves.add_ripple(pos, radius, strength);
 
+func sample_image_bilinear(image: Image, uv: Vector2) -> Color:
+	if image == null or image.is_empty():
+		return Color.BLACK
 
-func sample_image_billinear(image : Image, uv : Vector2) -> Color:
 	if uv.x < 0.0 or uv.y < 0.0 or uv.x >= 1.0 or uv.y >= 1.0:
 		return Color.BLACK
 
-	uv *= Vector2(image.get_size())
-	var px : Vector2 = floor(uv)
-	var frac := uv - px
+	var size: Vector2i = image.get_size()
 
-	var x := int(px.x)
-	var y := int(px.y)
+	# Convert UV to pixel space.
+	# Use size - 1 so the maximum sample lands on the last valid pixel,
+	# not one past the image edge.
+	var pixel_uv: Vector2 = uv * Vector2(size.x - 1, size.y - 1)
 
-	var v00 := image.get_pixel(x,     y    )
-	var v10 := image.get_pixel(x + 1, y    )
-	var v01 := image.get_pixel(x,     y + 1)
-	var v11 := image.get_pixel(x + 1, y + 1)
+	var px: Vector2 = floor(pixel_uv)
+	var frac: Vector2 = pixel_uv - px
 
-	var v0 = lerp(v00, v10, frac.x)
-	var v1 = lerp(v01, v11, frac.x)
-	return lerp(v0, v1, frac.y)
+	var x0: int = clampi(int(px.x), 0, size.x - 1)
+	var y0: int = clampi(int(px.y), 0, size.y - 1)
+
+	var x1: int = clampi(x0 + 1, 0, size.x - 1)
+	var y1: int = clampi(y0 + 1, 0, size.y - 1)
+
+	var v00: Color = image.get_pixel(x0, y0)
+	var v10: Color = image.get_pixel(x1, y0)
+	var v01: Color = image.get_pixel(x0, y1)
+	var v11: Color = image.get_pixel(x1, y1)
+
+	var v0: Color = v00.lerp(v10, frac.x)
+	var v1: Color = v01.lerp(v11, frac.x)
+
+	return v0.lerp(v1, frac.y)
