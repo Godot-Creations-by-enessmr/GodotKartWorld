@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://d4cjjdyi4ucdo" path="res://player/items/scenes/star.tscn" id="4_qtken"]
 [ext_resource type="Texture2D" uid="uid://d2vttlcbfguqs" path="res://player/items/textures/star.png" id="5_kofj7"]
 [ext_resource type="Texture2D" uid="uid://csl0ginb0bfnm" path="res://player/items/textures/feather.png" id="6_qtken"]
+[ext_resource type="PackedScene" uid="uid://ooku6x7pd3fu" path="res://player/items/scenes/feather.tscn" id="6_urq43"]
 [ext_resource type="Resource" uid="uid://bteev30f14le1" path="res://player/items/bomb/bomb.tres" id="7_kofj7"]
 
 [sub_resource type="Resource" id="Resource_hq4q0"]
@@ -27,6 +28,7 @@ metadata/_custom_type_script = "uid://cim828ug0dftd"
 script = ExtResource("1_tfup8")
 name = "feather"
 sprite = ExtResource("6_qtken")
+scene = ExtResource("6_urq43")
 metadata/_custom_type_script = "uid://cim828ug0dftd"
 
 [resource]

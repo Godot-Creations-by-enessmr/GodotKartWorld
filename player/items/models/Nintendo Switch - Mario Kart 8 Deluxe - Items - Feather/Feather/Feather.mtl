@@ -1,0 +1,15 @@
+# Blender MTL File: 'None'
+# Material Count: 1
+
+newmtl m_TS_ItemFeather
+Ns 19.607843
+Ka 1.000000 1.000000 1.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd Textures\TS_ItemFeather_Alb.png
+map_Bump -bm 0.042005 Textures\\TS_ItemFeather_Nrm.png
+map_d Textures\\TS_ItemFeather_Alb.png

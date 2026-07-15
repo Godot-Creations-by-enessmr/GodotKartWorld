@@ -21,6 +21,14 @@ run/main_scene="uid://cb0abcesbrlr2"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="uid://drhqj4ignm4f"
 
+[autoload]
+
+DiscordRPCLoader="*uid://dyj2tk6awmspj"
+
+[debug]
+
+settings/stdout/print_fps=true
+
 [display]
 
 window/size/viewport_width=1920
@@ -30,6 +38,10 @@ window/size/mode=3
 [dotnet]
 
 project/assembly_name="Godot Kart World"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/discord-rpc-gd/plugin.cfg")
 
 [global_group]
 
