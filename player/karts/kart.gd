@@ -16,15 +16,19 @@ var steering : float = 0
 var gravity_acceleration : Vector3 = 2.0 * Vector3(0, -9.81, 0)
 var current_model_up : Vector3 = Vector3.UP
 
-
-var trick_timer := 0.0
-var trick_cooldown := 0.4
-var has_tricked := false
-var feather_trick_active := false
-var feather_trick_count := 0
+# ----- TRICK SYSTEM (INFINITE AIR TRICKS) -----
+var feather_active := false
+var trick_triggered := false  # Track if we already triggered a trick this jump
+var air_time := 0.0           # How long we've been in the air
 
 var in_water_timer := 0.0
 var water_normal := Vector3(0,1,0)
+
+# --- Adjustable feather parameters (exported) ---
+@export_group("Feather")
+@export var feather_initial_vertical_velocity := 8.0
+@export var feather_initial_boost_duration := 0.35
+@export var feather_trick_boost := 1.0  # Boost given on each feather trick
 
 @export_custom(PROPERTY_HINT_NONE, "suffix:m/s") var boost_speed := 30.0
 @export_custom(PROPERTY_HINT_NONE, "suffix:m/s") var boost_acceleration := 50.0
@@ -45,7 +49,7 @@ var water_normal := Vector3(0,1,0)
 @export_group("Air Control")
 @export var air_speed_multiplier := 0.9
 @export var air_drag := 0.1
-@export var air_boost_multiplier := 0.992  # How much speed you keep in air while boosting
+@export var air_boost_multiplier := 0.992
 
 @export_group("Boost")
 @export var max_boost_time := 10.0
@@ -60,6 +64,9 @@ var water_normal := Vector3(0,1,0)
 
 func is_on_ground() -> bool:
 	return is_on_floor() or water_buoyancy_sensor.is_in_water()
+
+func is_in_water() -> bool:
+	return water_buoyancy_sensor.is_in_water()
 
 func get_horizontal_velocity() -> Vector3:
 	return Vector3(velocity.x, 0, velocity.z)
@@ -173,10 +180,6 @@ func _process(delta: float) -> void:
 		
 		_set_drifing_stage(0)
 		
-	if has_tricked and is_on_ground():
-		set_boost(1.0)
-		has_tricked = false
-		
 	if wish_drift && is_on_ground():
 		if drift_stage < 1:
 			_set_drifing_stage(1)
@@ -192,9 +195,6 @@ func _process(delta: float) -> void:
 		boost_timer -= delta
 		if boost_timer <= 0:
 			particles_manager.set_boost(false)
-			
-	if trick_timer > 0 and not has_tricked:
-		trick_timer -= delta
 	
 	debug_label.text = "Position: " + str(global_position) + "\nVelocity: " + str(velocity) 
 
@@ -202,18 +202,18 @@ func set_boost(time : float):
 	boost_timer = min(boost_timer + time, max_boost_time)
 	particles_manager.set_boost(true)
 
+# --- FEATHER TRIGGER (call this from your item system) ---
 func trigger_feather_boost() -> void:
-	var current_horizontal_velocity := get_horizontal_velocity()
-	if current_horizontal_velocity.length_squared() < 1e-4:
-		current_horizontal_velocity = -global_transform.basis.z * max(top_speed * 0.5, 1.0)
-
-	velocity = current_horizontal_velocity + Vector3.UP * 8.0
-	feather_trick_active = true
-	feather_trick_count = 0
-	set_boost(0.35)
+	# Set vertical velocity ONLY - horizontal momentum is preserved
+	velocity.y = feather_initial_vertical_velocity
+	set_boost(feather_initial_boost_duration)
+	
+	# Play the trick
 	animation_player.current_animation = "trick"
 	particles_manager.play_trick_particles()
 	
+	# Activate feather - allows infinite tricks in air
+	feather_active = true
 
 func _apply_car_engine_force(delta : float) -> void:
 	var forward : Vector3 = -global_transform.basis.z;	
@@ -282,35 +282,46 @@ func _physics_process(delta: float) -> void:
 	_apply_steering(delta)	
 	_apply_water_force(delta)	
 	
-	if is_on_ground():
-		feather_trick_active = false
-		feather_trick_count = 0
+	var on_ground := is_on_ground()
+	var in_water := is_in_water()
 	
-	if !is_on_ground() and wish_jump:
-		if feather_trick_active:
-			var boost_time := 0.15 + min(0.1 * feather_trick_count, 0.35)
-			feather_trick_count += 1
-			set_boost(boost_time)
-			velocity.y = max(velocity.y, 3.0)
-			var current_horizontal_velocity := get_horizontal_velocity()
-			if current_horizontal_velocity.length_squared() < 1e-4:
-				current_horizontal_velocity = -global_transform.basis.z * max(top_speed * 0.6, 1.0)
-			velocity = current_horizontal_velocity + Vector3.UP * velocity.y
-			animation_player.current_animation = "trick"
-			particles_manager.play_trick_particles()
-		elif trick_timer <= 0.01:
-			has_tricked = true
-			animation_player.current_animation = "trick"
-			particles_manager.play_trick_particles()
-			trick_timer = trick_cooldown
+	# ----- RESET FEATHER ON LANDING -----
+	if on_ground:
+		feather_active = false
+		trick_triggered = false  # Reset trick trigger when we land
+		air_time = 0.0
 	
-	if is_on_ground():
+	# ----- UPDATE AIR TIME -----
+	if !on_ground:
+		air_time += delta
+	else:
+		air_time = 0.0
+	
+	# ----- TRICK LOGIC -----
+	# ONLY trigger trick if we're actually airborne (air_time > 0.05 seconds)
+	# AND we haven't already triggered a trick this jump
+	var can_trick := (!on_ground or in_water) and air_time > 0.05 and not trick_triggered
+	
+	if can_trick and wish_jump:
+		# We're actually airborne - DO THE TRICK
+		trick_triggered = true  # Prevent multiple tricks from one jump press
+		animation_player.current_animation = "trick"
+		particles_manager.play_trick_particles()
+		
+		# If feather is active, give boost bonus
+		if feather_active:
+			set_boost(feather_trick_boost)
+	
+	# Reset trick_triggered when we release jump
+	if !wish_jump:
+		trick_triggered = false
+	
+	# ----- GROUND / WATER -----
+	if on_ground:
 		_apply_car_engine_force(delta)
 		if wish_jump:
-			if !water_buoyancy_sensor.is_in_water():
-				trick_timer = trick_cooldown
 			in_water_timer = 0.0
-			velocity.y += 4
+			velocity.y += 4   # normal jump
 	else:
 		_apply_air_force(delta)
 		
@@ -328,7 +339,6 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("move_jump"):
 		wish_jump = true;
 
-# In your Kart/Player class
 func get_kart_position() -> Vector3:
 	return global_position
 

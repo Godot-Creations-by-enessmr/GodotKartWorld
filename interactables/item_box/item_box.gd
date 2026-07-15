@@ -9,6 +9,10 @@ var color : Color;
 
 @onready var light_radius = light.omni_range;
 
+# ----- OCEAN GROUP SUPPORT -----
+@export var ocean_group_only := false  # If true, only works on ocean group
+var ocean_group: Node3D  # Reference to the ocean group
+
 func activate() -> void:
 	active = true;
 	visual_item_box.visible = true
@@ -28,7 +32,10 @@ func add_item_to_player(player : Player) -> void:
 
 
 func _ready() -> void:
-	pass # Replace with function body.
+	# Find ocean group if needed
+	if ocean_group_only:
+		ocean_group = get_node("/root/World/OceanGroup")  # Adjust path as needed
+	pass
 
 
 func _process(_delta: float) -> void:
@@ -49,5 +56,17 @@ func _process(_delta: float) -> void:
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	var parent = body.get_parent()
-	if active and parent is Player:
-		add_item_to_player(parent)
+	if not active:
+		return
+		
+	if not (parent is Player):
+		return
+		
+	# Check ocean group restriction
+	if ocean_group_only and ocean_group:
+		# Check if the kart is in the ocean group
+		var kart = parent.kart  # Assuming Player has a 'kart' reference
+		if kart and not kart.is_in_water():
+			return  # Not in ocean, don't give item
+	
+	add_item_to_player(parent)

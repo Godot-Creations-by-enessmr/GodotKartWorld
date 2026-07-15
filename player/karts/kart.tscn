@@ -198,6 +198,7 @@ height = 2.3
 
 [node name="Kart" type="CharacterBody3D" unique_id=320570091]
 script = ExtResource("1_cyw3l")
+feather_initial_vertical_velocity = 20.0
 wheel_base = 2.0
 drift_steering_multiplier = 2.0
 

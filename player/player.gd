@@ -46,6 +46,10 @@ func _input(event: InputEvent) -> void:
 func add_item(item : ItemType) -> void:
 	inventory.add_item(item)
 
+func trigger_feather_boost() -> void:
+	if kart and kart.has_method("trigger_feather_boost"):
+		kart.trigger_feather_boost()
+
 func get_kart_position() -> Vector3:
 	return kart.global_position
 
