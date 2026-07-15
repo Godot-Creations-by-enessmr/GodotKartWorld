@@ -1,6 +1,7 @@
 [gd_scene format=4 uid="uid://ooku6x7pd3fu"]
 
 [ext_resource type="Texture2D" uid="uid://bf7cuj6mfqomk" path="res://player/items/models/Nintendo Switch - Mario Kart 8 Deluxe - Items - Feather/Feather/Textures/ts_itemfeather_alb.png" id="1_ext2e"]
+[ext_resource type="Script" uid="uid://clqsr6dubmffg" path="res://player/items/scripts/feather.gd" id="1_to2i3"]
 [ext_resource type="Texture2D" uid="uid://danomxgqpaf2o" path="res://player/items/models/Nintendo Switch - Mario Kart 8 Deluxe - Items - Feather/Feather/Textures/ts_itemfeather_trm.png" id="2_1qoyt"]
 [ext_resource type="Texture2D" uid="uid://bjlqvrqii2fcj" path="res://player/items/models/Nintendo Switch - Mario Kart 8 Deluxe - Items - Feather/Feather/Textures/ts_itemfeather_spm.png" id="2_5lv33"]
 [ext_resource type="Texture2D" uid="uid://bkrx1gwnm2xa2" path="res://player/items/models/Nintendo Switch - Mario Kart 8 Deluxe - Items - Feather/Feather/Textures/ts_itemfeather_nrm.png" id="2_ld7j8"]
@@ -36,6 +37,7 @@ _surfaces = [{
 blend_shape_mode = 0
 
 [node name="Node3D" type="Node3D" unique_id=39532464]
+script = ExtResource("1_to2i3")
 
 [node name="Skeleton3D" type="Skeleton3D" parent="." unique_id=164436448]
 bones/0/name = "Skl_root"
@@ -57,3 +59,6 @@ bones/1/scale = Vector3(1, 1, 1)
 mesh = SubResource("ArrayMesh_qx043")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=702373792]
+
+[node name="Marker3D" type="Marker3D" parent="." unique_id=288383166]
+transform = Transform3D(0.99720645, 0, 0.074696, 0.014770006, 0.98025554, -0.19718252, -0.07322117, 0.19773495, 0.9775171, 0.007551536, -0.033545494, 0.14094196)

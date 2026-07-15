@@ -20,6 +20,8 @@ var current_model_up : Vector3 = Vector3.UP
 var trick_timer := 0.0
 var trick_cooldown := 0.4
 var has_tricked := false
+var feather_trick_active := false
+var feather_trick_count := 0
 
 var in_water_timer := 0.0
 var water_normal := Vector3(0,1,0)
@@ -39,6 +41,14 @@ var water_normal := Vector3(0,1,0)
 @export_custom(PROPERTY_HINT_NONE, "suffix:degrees/s") var air_steering_velocity := 50.0
 @export_custom(PROPERTY_HINT_NONE, "suffix:m") var wheel_base := 1.5
 @export var drift_steering_multiplier := 1.5
+
+@export_group("Air Control")
+@export var air_speed_multiplier := 0.9
+@export var air_drag := 0.1
+@export var air_boost_multiplier := 0.992  # How much speed you keep in air while boosting
+
+@export_group("Boost")
+@export var max_boost_time := 10.0
 
 @onready var water_buoyancy_sensor : WaterBuoyancySensor = $WaterBuoyancySensor
 @onready var visual_parent : Node3D = $Visual
@@ -189,8 +199,20 @@ func _process(delta: float) -> void:
 	debug_label.text = "Position: " + str(global_position) + "\nVelocity: " + str(velocity) 
 
 func set_boost(time : float):
-	boost_timer = max(boost_timer, time)
+	boost_timer = min(boost_timer + time, max_boost_time)
 	particles_manager.set_boost(true)
+
+func trigger_feather_boost() -> void:
+	var current_horizontal_velocity := get_horizontal_velocity()
+	if current_horizontal_velocity.length_squared() < 1e-4:
+		current_horizontal_velocity = -global_transform.basis.z * max(top_speed * 0.5, 1.0)
+
+	velocity = current_horizontal_velocity + Vector3.UP * 8.0
+	feather_trick_active = true
+	feather_trick_count = 0
+	set_boost(0.35)
+	animation_player.current_animation = "trick"
+	particles_manager.play_trick_particles()
 	
 
 func _apply_car_engine_force(delta : float) -> void:
@@ -207,8 +229,6 @@ func _apply_car_engine_force(delta : float) -> void:
 		horizontal_velocity = horizontal_velocity.lerp(Vector3.ZERO, 1 - pow(0.5, break_resistance * delta))
 	elif boost_timer > 0 && speed < boost_speed:
 		horizontal_velocity += forward * delta * boost_acceleration
-	#elif wish_acceleration == 0:
-		
 	elif wish_acceleration > 0 && speed < top_speed:
 		horizontal_velocity += wish_acceleration * forward * delta * acceleration
 	elif wish_acceleration < 0 && speed < top_reverse_speed:
@@ -218,9 +238,25 @@ func _apply_car_engine_force(delta : float) -> void:
 	
 	
 func _apply_air_force(delta : float) -> void:
-	var forward : Vector3 = -global_transform.basis.z;	
+	var forward : Vector3 = -global_transform.basis.z	
 	var horizontal_velocity := get_horizontal_velocity()
+	
+	# Check if boosting
+	var is_boosting := boost_timer > 0
+	
+	# Apply air drag (reduced when boosting)
+	var drag_multiplier := air_drag * (0.2 if is_boosting else 1.0)
+	horizontal_velocity = horizontal_velocity.lerp(Vector3.ZERO, 1 - pow(0.5, drag_multiplier * delta))
+	
+	# Apply air speed penalty (reduced when boosting)
+	var current_speed = horizontal_velocity.length()
+	var max_air_speed = top_speed * (air_boost_multiplier if is_boosting else air_speed_multiplier)
+	
+	if current_speed > max_air_speed:
+		horizontal_velocity = horizontal_velocity.normalized() * max_air_speed
+	
 	horizontal_velocity = forward * forward.dot(horizontal_velocity)
+	
 	velocity = horizontal_velocity + Vector3.UP * velocity.y + gravity_acceleration * delta
 	
 
@@ -245,12 +281,28 @@ func _apply_water_force(delta : float) -> void:
 func _physics_process(delta: float) -> void:
 	_apply_steering(delta)	
 	_apply_water_force(delta)	
-		
-	if !is_on_ground() and wish_jump and trick_timer <= 0.01:
-		has_tricked = true
-		animation_player.current_animation = "trick"
-		particles_manager.play_trick_particles()
-		trick_timer = trick_cooldown
+	
+	if is_on_ground():
+		feather_trick_active = false
+		feather_trick_count = 0
+	
+	if !is_on_ground() and wish_jump:
+		if feather_trick_active:
+			var boost_time := 0.15 + min(0.1 * feather_trick_count, 0.35)
+			feather_trick_count += 1
+			set_boost(boost_time)
+			velocity.y = max(velocity.y, 3.0)
+			var current_horizontal_velocity := get_horizontal_velocity()
+			if current_horizontal_velocity.length_squared() < 1e-4:
+				current_horizontal_velocity = -global_transform.basis.z * max(top_speed * 0.6, 1.0)
+			velocity = current_horizontal_velocity + Vector3.UP * velocity.y
+			animation_player.current_animation = "trick"
+			particles_manager.play_trick_particles()
+		elif trick_timer <= 0.01:
+			has_tricked = true
+			animation_player.current_animation = "trick"
+			particles_manager.play_trick_particles()
+			trick_timer = trick_cooldown
 	
 	if is_on_ground():
 		_apply_car_engine_force(delta)
@@ -281,5 +333,4 @@ func get_kart_position() -> Vector3:
 	return global_position
 
 func get_item_direction() -> Vector3:
-	# Return the forward direction of the kart
 	return -global_transform.basis.z
