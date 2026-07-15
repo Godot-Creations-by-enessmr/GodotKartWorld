@@ -14,6 +14,7 @@ background_mode = 2
 sky = SubResource("Sky_oc215")
 tonemap_mode = 3
 ssr_max_steps = 16
+sdfgi_enabled = true
 sdfgi_use_occlusion = true
 sdfgi_cascades = 2
 sdfgi_min_cell_size = 4.0

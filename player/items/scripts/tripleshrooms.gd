@@ -9,7 +9,7 @@ func _process(delta: float) -> void:
 	anim.play("rotation")
 	
 	# Find the player by group
-	var player = get_tree().get_first_node_in_group("player")
+	var player = get_tree().get_first_node_in_group("kart(REALOMGICANTBELIVEITMOMGETTHECAMERA)")
 	if player:
 		if smooth_follow:
 			# Smooth follow with lerp

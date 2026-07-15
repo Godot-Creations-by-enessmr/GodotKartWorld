@@ -36,6 +36,7 @@ project/assembly_name="Godot Kart World"
 player=""
 ocean=""
 tire_marks=""
+kart(REALOMGICANTBELIVEITMOMGETTHECAMERA)=""
 
 [input]
 
