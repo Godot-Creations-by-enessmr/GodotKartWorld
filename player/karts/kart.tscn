@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://c4nert4qlemk2" path="res://shared/textures/cloud.png" id="11_i3c53"]
 [ext_resource type="Material" uid="uid://bwxlld7p83xw2" path="res://player/karts/effects/drifting/water_spray.tres" id="12_usafr"]
 [ext_resource type="Texture2D" uid="uid://hvfpsb717xsu" path="res://shared/textures/spark.png" id="14_usafr"]
+[ext_resource type="AudioStream" uid="uid://cn1x227mapumu" path="res://audio/Starman - Mario Kart World (OST).mp3" id="17_qosft"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f5n8r"]
 transparency = 2
@@ -196,11 +197,12 @@ size = Vector2(0.1, 0.1)
 radius = 0.6
 height = 2.3
 
-[node name="Kart" type="CharacterBody3D" unique_id=320570091]
+[node name="Kart" type="CharacterBody3D" unique_id=320570091 node_paths=PackedStringArray("star")]
 script = ExtResource("1_cyw3l")
 feather_initial_vertical_velocity = 20.0
 wheel_base = 2.0
 drift_steering_multiplier = 2.0
+star = NodePath("star")
 
 [node name="ParticlesManager" type="Node3D" parent="." unique_id=1520900876]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.383602)
@@ -420,3 +422,7 @@ anchor_bottom = 1.0
 offset_top = -23.0
 offset_right = 40.0
 grow_vertical = 0
+
+[node name="star" type="AudioStreamPlayer" parent="." unique_id=783045858]
+stream = ExtResource("17_qosft")
+parameters/looping = true

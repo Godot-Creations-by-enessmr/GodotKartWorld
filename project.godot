@@ -43,6 +43,15 @@ project/assembly_name="Godot Kart World"
 
 enabled=PackedStringArray("res://addons/discord-rpc-gd/plugin.cfg")
 
+[file_customization]
+
+folder_colors={
+"res://player/items/": "orange",
+"res://shared/shaders/": "green",
+"res://shared/textures/": "blue",
+"res://water/": "blue"
+}
+
 [global_group]
 
 player=""

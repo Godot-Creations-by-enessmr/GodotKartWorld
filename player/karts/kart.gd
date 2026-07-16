@@ -57,6 +57,11 @@ var water_normal := Vector3(0,1,0)
 @export_group("Boost")
 @export var max_boost_time := 10.0
 
+@export_group("Star Power")
+@export var star_speed_multiplier := 1.5  # Speed advantage when star is active
+@export var star_gradient_speed := 2.0   # Speed of the scrolling gradient
+@export var star: AudioStreamPlayer
+
 @onready var water_buoyancy_sensor : WaterBuoyancySensor = $WaterBuoyancySensor
 @onready var visual_parent : Node3D = $Visual
 @onready var visual_kart : Node3D = $Visual/Kart
@@ -64,6 +69,9 @@ var water_normal := Vector3(0,1,0)
 @onready var debug_label : Label = $DebugLabel
 @onready var animation_player : AnimationPlayer = $Visual/Kart/AnimationPlayer
 @onready var particles_manager : ParticlesManager = $ParticlesManager
+
+# Star Power shader material references
+var star_materials: Array[ShaderMaterial] = []
 
 func is_on_ground() -> bool:
 	return is_on_floor() or water_buoyancy_sensor.is_in_water()
@@ -129,6 +137,65 @@ func _set_drifing_stage(stage: int) -> void:
 	drift_stage = stage
 	particles_manager.set_drifing_stage(stage)
 
+# --- Star Power Shader Setup ---
+func _setup_star_materials() -> void:
+	star_materials.clear()
+	
+	# Get all mesh instances in the kart and apply shader material
+	var meshes = visual_kart.find_children("*", "MeshInstance3D", true, false)
+	for mesh_instance in meshes:
+		if mesh_instance is MeshInstance3D:
+			# Create a copy of the material with star shader
+			var original_material = mesh_instance.get_surface_override_material(0)
+			if original_material == null:
+				original_material = mesh_instance.mesh.surface_get_material(0)
+			
+			var star_material := ShaderMaterial.new()
+			star_material.shader = preload("res://shared/shaders/star_power.gdshader")  # Create this shader
+			
+			# Copy over properties from original material if it's a shader material
+			if original_material is ShaderMaterial:
+				# Copy relevant properties
+				for param in original_material.get_shader_parameter_list():
+					var name = param.name
+					if original_material.has_shader_parameter(name):
+						star_material.set_shader_parameter(name, original_material.get_shader_parameter(name))
+			elif original_material is BaseMaterial3D:
+				# Copy basic material properties
+				star_material.set_shader_parameter("albedo", original_material.albedo_color)
+				star_material.set_shader_parameter("roughness", original_material.roughness)
+				star_material.set_shader_parameter("metallic", original_material.metallic)
+			
+			# Set initial gradient values
+			star_material.set_shader_parameter("gradient_offset", 0.0)
+			star_material.set_shader_parameter("gradient_speed", star_gradient_speed)
+			
+			mesh_instance.set_surface_override_material(0, star_material)
+			star_materials.append(star_material)
+	
+	# Also check for any children with materials recursively
+	for child in visual_kart.get_children(true):
+		if child is MeshInstance3D and child != visual_kart:
+			# Already handled by find_children
+			pass
+
+func _apply_star_gradient(delta: float) -> void:
+	if star_power_active:
+		for material in star_materials:
+			if material and material is ShaderMaterial:
+				var current_offset = material.get_shader_parameter("gradient_offset")
+				current_offset += delta * star_gradient_speed
+				if current_offset > 1.0:
+					current_offset -= 1.0
+				material.set_shader_parameter("gradient_offset", current_offset)
+				star.play()
+
+func _remove_star_materials() -> void:
+	# Restore original materials
+	var meshes = visual_kart.find_children("*", "MeshInstance3D", true, false)
+	for mesh_instance in meshes:
+		if mesh_instance is MeshInstance3D:
+			mesh_instance.set_surface_override_material(0, null)
 
 func _ready() -> void:
 	for child in visual_kart.get_children():
@@ -137,6 +204,8 @@ func _ready() -> void:
 			
 	_set_drifing_stage(0)
 	
+	# Setup star materials initially (they'll be inactive until star power is triggered)
+	_setup_star_materials()
 
 func _process(delta: float) -> void:
 	var new_up := Vector3.UP
@@ -159,6 +228,9 @@ func _process(delta: float) -> void:
 		
 	current_model_up = current_model_up.lerp(new_up, 1 - pow(t, 2 * delta))
 	_align_mesh_with_normal(delta, current_model_up)
+	
+	# Apply star gradient animation
+	_apply_star_gradient(delta)
 		
 	var move_vector = Input.get_vector("move_left", "move_right", "move_backward", "move_forward");
 	wish_steering = move_vector.x
@@ -216,13 +288,28 @@ func set_invincible(enabled: bool) -> void:
 func trigger_star_power(duration: float = 8.0) -> void:
 	star_power_active = true
 	star_power_timer = max(star_power_timer, duration)
-	set_boost(duration)
-	particles_manager.set_rainbow_mode(true)
+	
+	# Enable star gradient on all materials
+	for material in star_materials:
+		if material and material is ShaderMaterial:
+			material.set_shader_parameter("star_active", true)
+	
+	# Enable invincibility
 	set_invincible(true)
+	
+	# Enable rainbow mode but separate from boost
+	particles_manager.set_rainbow_mode(true)
 
 func end_star_power() -> void:
 	star_power_active = false
 	star_power_timer = 0.0
+	
+	# Disable star gradient on all materials
+	for material in star_materials:
+		if material and material is ShaderMaterial:
+			material.set_shader_parameter("star_active", false)
+	
+	star.stop()
 	set_invincible(false)
 	particles_manager.set_rainbow_mode(false)
 
@@ -249,12 +336,22 @@ func _apply_car_engine_force(delta : float) -> void:
 	var speed = horizontal_velocity.length()
 	horizontal_velocity = forward * forward.dot(horizontal_velocity)
 	
+	# Apply star power speed advantage
+	var current_top_speed = top_speed
+	var current_boost_speed = boost_speed
+	var current_acceleration = acceleration
+	
+	if star_power_active:
+		current_top_speed = top_speed * star_speed_multiplier
+		current_boost_speed = boost_speed * star_speed_multiplier
+		current_acceleration = acceleration * star_speed_multiplier
+	
 	if wish_break:
 		horizontal_velocity = horizontal_velocity.lerp(Vector3.ZERO, 1 - pow(0.5, break_resistance * delta))
-	elif boost_timer > 0 && speed < boost_speed:
+	elif boost_timer > 0 && speed < current_boost_speed:
 		horizontal_velocity += forward * delta * boost_acceleration
-	elif wish_acceleration > 0 && speed < top_speed:
-		horizontal_velocity += wish_acceleration * forward * delta * acceleration
+	elif wish_acceleration > 0 && speed < current_top_speed:
+		horizontal_velocity += wish_acceleration * forward * delta * current_acceleration
 	elif wish_acceleration < 0 && speed < top_reverse_speed:
 		horizontal_velocity += wish_acceleration * forward * delta * acceleration
 
@@ -272,9 +369,13 @@ func _apply_air_force(delta : float) -> void:
 	var drag_multiplier := air_drag * (0.2 if is_boosting else 1.0)
 	horizontal_velocity = horizontal_velocity.lerp(Vector3.ZERO, 1 - pow(0.5, drag_multiplier * delta))
 	
-	# Apply air speed penalty (reduced when boosting)
+	# Apply air speed penalty (reduced when boosting and star power)
 	var current_speed = horizontal_velocity.length()
 	var max_air_speed = top_speed * (air_boost_multiplier if is_boosting else air_speed_multiplier)
+	
+	# Star power increases max air speed
+	if star_power_active:
+		max_air_speed *= star_speed_multiplier
 	
 	if current_speed > max_air_speed:
 		horizontal_velocity = horizontal_velocity.normalized() * max_air_speed

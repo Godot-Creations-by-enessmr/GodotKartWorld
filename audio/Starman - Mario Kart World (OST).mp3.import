@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cn1x227mapumu"
+path="res://.godot/imported/Starman - Mario Kart World (OST).mp3-f89b4c5ad01471a8b50c84bf466293fb.mp3str"
+
+[deps]
+
+source_file="res://audio/Starman - Mario Kart World (OST).mp3"
+dest_files=["res://.godot/imported/Starman - Mario Kart World (OST).mp3-f89b4c5ad01471a8b50c84bf466293fb.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
