@@ -1,11 +1,33 @@
-[gd_scene load_steps=3 format=3 uid="uid://cb0abcesbrlr2"]
+[gd_scene format=3 uid="uid://cb0abcesbrlr2"]
 
 [ext_resource type="PackedScene" uid="uid://dg25e8yln6wea" path="res://player/player.tscn" id="1_ig7tw"]
 [ext_resource type="PackedScene" uid="uid://3yckfitk187v" path="res://environment/levels/island/island.tscn" id="3_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://dvg24enq7jua4" path="res://interactables/item_box/item_box.tscn" id="3_h2yge"]
+[ext_resource type="Script" uid="uid://cim828ug0dftd" path="res://player/items/item_type.gd" id="4_efxa6"]
+[ext_resource type="PackedScene" uid="uid://d4cjjdyi4ucdo" path="res://player/items/scenes/star.tscn" id="7_w48qg"]
+[ext_resource type="Texture2D" uid="uid://d2vttlcbfguqs" path="res://player/items/textures/star.png" id="8_vivmo"]
+[ext_resource type="Script" uid="uid://drqp0bigysg4x" path="res://player/items/item_pool.gd" id="11_074og"]
 
-[node name="Main" type="Node"]
+[sub_resource type="Resource" id="Resource_h8shr"]
+script = ExtResource("4_efxa6")
+name = "star"
+sprite = ExtResource("8_vivmo")
+scene = ExtResource("7_w48qg")
+metadata/_custom_type_script = "uid://cim828ug0dftd"
 
-[node name="Player" parent="." instance=ExtResource("1_ig7tw")]
+[sub_resource type="Resource" id="Resource_cegan"]
+script = ExtResource("11_074og")
+possible_items = Array[ExtResource("4_efxa6")]([SubResource("Resource_h8shr")])
+weights = Array[float]([1.0])
+metadata/_custom_type_script = "uid://drqp0bigysg4x"
+
+[node name="Main" type="Node" unique_id=645221743]
+
+[node name="Player" parent="." unique_id=148287529 instance=ExtResource("1_ig7tw")]
 transform = Transform3D(-0.862664, 0, -0.505778, 0, 1, 0, 0.505778, 0, -0.862664, 4.8399, 4.47262, -5.20099)
 
-[node name="Island" parent="." instance=ExtResource("3_1bvp3")]
+[node name="Island" parent="." unique_id=452480876 instance=ExtResource("3_1bvp3")]
+
+[node name="ItemBox" parent="." unique_id=1925263350 instance=ExtResource("3_h2yge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.399588, 3.9538903, -0.9122963)
+item_pool = SubResource("Resource_cegan")

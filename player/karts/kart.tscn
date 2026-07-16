@@ -202,6 +202,7 @@ script = ExtResource("1_cyw3l")
 feather_initial_vertical_velocity = 20.0
 wheel_base = 2.0
 drift_steering_multiplier = 2.0
+air_boost_multiplier = 1.0
 star = NodePath("star")
 
 [node name="ParticlesManager" type="Node3D" parent="." unique_id=1520900876]

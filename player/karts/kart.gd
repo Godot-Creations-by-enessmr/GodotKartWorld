@@ -188,7 +188,6 @@ func _apply_star_gradient(delta: float) -> void:
 				if current_offset > 1.0:
 					current_offset -= 1.0
 				material.set_shader_parameter("gradient_offset", current_offset)
-				star.play()
 
 func _remove_star_materials() -> void:
 	# Restore original materials
@@ -299,6 +298,10 @@ func trigger_star_power(duration: float = 8.0) -> void:
 	
 	# Enable rainbow mode but separate from boost
 	particles_manager.set_rainbow_mode(true)
+	
+	# Play star audio if it exists and isn't already playing
+	if star and not star.playing:
+		star.play()
 
 func end_star_power() -> void:
 	star_power_active = false
@@ -309,7 +312,10 @@ func end_star_power() -> void:
 		if material and material is ShaderMaterial:
 			material.set_shader_parameter("star_active", false)
 	
-	star.stop()
+	# Stop star audio
+	if star and star.playing:
+		star.stop()
+	
 	set_invincible(false)
 	particles_manager.set_rainbow_mode(false)
 
