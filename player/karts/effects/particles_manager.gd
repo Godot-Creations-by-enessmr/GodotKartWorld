@@ -24,7 +24,8 @@ var is_rainbow_mode := false
 func _process(delta: float) -> void:
 	if is_rainbow_mode:
 		rainbow_hue = fmod(rainbow_hue + delta * 0.3, 1.0)
-		sparks_material.emission = Color.from_hsv(rainbow_hue, 1.0, 1.0)
+		if sparks_material:
+			sparks_material.emission = Color.from_hsv(rainbow_hue, 1.0, 1.0)
 
 
 func _ready() -> void:
@@ -87,6 +88,11 @@ func set_sliding_particles(enabled: bool) -> void:
 func set_boost(enabled: bool) -> void:
 	for particle in boost_particles:
 		particle.emitting = enabled
+
+func set_rainbow_mode(enabled: bool) -> void:
+	is_rainbow_mode = enabled
+	if not enabled and sparks_material:
+		sparks_material.emission = Color.WHITE
 
 func set_water_spray(enabled: bool) -> void:
 	for particle in water_spray_particles:

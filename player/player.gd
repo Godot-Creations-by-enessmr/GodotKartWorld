@@ -50,6 +50,10 @@ func trigger_feather_boost() -> void:
 	if kart and kart.has_method("trigger_feather_boost"):
 		kart.trigger_feather_boost()
 
+func trigger_star_power(duration: float = 8.0) -> void:
+	if kart and kart.has_method("trigger_star_power"):
+		kart.trigger_star_power(duration)
+
 func get_kart_position() -> Vector3:
 	return kart.global_position
 

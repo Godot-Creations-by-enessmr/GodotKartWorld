@@ -23,8 +23,18 @@ func deactivate() -> void:
 	visual_item_box.visible = false
 	light.omni_range = 0
 
-func add_item_to_player(player : Player) -> void:	
-	player.add_item(item_pool.get_item());
+func add_item_to_player(player : Player) -> void:
+	var item := item_pool.get_item()
+	if item == null:
+		deactivate()
+		await get_tree().create_timer(1).timeout
+		activate()
+		return
+
+	if item.name.to_lower().contains("star") or (item.scene != null and item.scene.resource_path.contains("star")):
+		player.trigger_star_power()
+	else:
+		player.add_item(item)
 	
 	deactivate()
 	await get_tree().create_timer(1).timeout

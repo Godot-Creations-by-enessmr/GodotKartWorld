@@ -10,6 +10,9 @@ var drift_timer : float
 var drift_stage : int 
 
 var boost_timer : float
+var star_power_active := false
+var star_power_timer := 0.0
+var is_invincible := false
 
 var wheels : Array[Wheel]
 var steering : float = 0
@@ -195,12 +198,33 @@ func _process(delta: float) -> void:
 		boost_timer -= delta
 		if boost_timer <= 0:
 			particles_manager.set_boost(false)
+
+	if star_power_active:
+		star_power_timer -= delta
+		if star_power_timer <= 0:
+			end_star_power()
 	
 	debug_label.text = "Position: " + str(global_position) + "\nVelocity: " + str(velocity) 
 
 func set_boost(time : float):
 	boost_timer = min(boost_timer + time, max_boost_time)
 	particles_manager.set_boost(true)
+
+func set_invincible(enabled: bool) -> void:
+	is_invincible = enabled
+
+func trigger_star_power(duration: float = 8.0) -> void:
+	star_power_active = true
+	star_power_timer = max(star_power_timer, duration)
+	set_boost(duration)
+	particles_manager.set_rainbow_mode(true)
+	set_invincible(true)
+
+func end_star_power() -> void:
+	star_power_active = false
+	star_power_timer = 0.0
+	set_invincible(false)
+	particles_manager.set_rainbow_mode(false)
 
 # --- FEATHER TRIGGER (call this from your item system) ---
 func trigger_feather_boost() -> void:
@@ -307,10 +331,7 @@ func _physics_process(delta: float) -> void:
 		trick_triggered = true  # Prevent multiple tricks from one jump press
 		animation_player.current_animation = "trick"
 		particles_manager.play_trick_particles()
-		
-		# If feather is active, give boost bonus
-		if feather_active:
-			set_boost(feather_trick_boost)
+		set_boost(feather_trick_boost)
 	
 	# Reset trick_triggered when we release jump
 	if !wish_jump:
