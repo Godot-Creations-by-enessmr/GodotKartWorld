@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://6qt7xnymm2vu"
+path="res://.godot/imported/SNES Koopa Troopa Beach (Super Mario Kart).mp3-3a021cc18a1e09ddc379a57d6205b092.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Original Soundtrack/SNES Koopa Troopa Beach (Super Mario Kart).mp3"
+dest_files=["res://.godot/imported/SNES Koopa Troopa Beach (Super Mario Kart).mp3-3a021cc18a1e09ddc379a57d6205b092.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

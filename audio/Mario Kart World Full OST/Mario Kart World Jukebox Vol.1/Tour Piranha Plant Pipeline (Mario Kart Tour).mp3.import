@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bsclos7yrf5ww"
+path="res://.godot/imported/Tour Piranha Plant Pipeline (Mario Kart Tour).mp3-aa08f65c34bf829f158945f25795ff61.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/Tour Piranha Plant Pipeline (Mario Kart Tour).mp3"
+dest_files=["res://.godot/imported/Tour Piranha Plant Pipeline (Mario Kart Tour).mp3-aa08f65c34bf829f158945f25795ff61.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

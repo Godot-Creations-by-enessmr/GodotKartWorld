@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bnmt6yumfdfbn"
+path="res://.godot/imported/Wii Moo Moo Meadows (Route).mp3-474eb2a1cdc0156c3f4d68b1075c2aff.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Original Soundtrack/Wii Moo Moo Meadows (Route).mp3"
+dest_files=["res://.godot/imported/Wii Moo Moo Meadows (Route).mp3-474eb2a1cdc0156c3f4d68b1075c2aff.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cy66yl7gj5p5d"
+path="res://.godot/imported/Title Theme (Super Mario Kart) (Night).mp3-a296ccb7c77d738075bfaf1c527af110.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/Title Theme (Super Mario Kart) (Night).mp3"
+dest_files=["res://.godot/imported/Title Theme (Super Mario Kart) (Night).mp3-a296ccb7c77d738075bfaf1c527af110.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

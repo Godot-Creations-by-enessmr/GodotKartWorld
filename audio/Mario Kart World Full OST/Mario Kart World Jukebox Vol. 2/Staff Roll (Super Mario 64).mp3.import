@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dfbokb0ctcf16"
+path="res://.godot/imported/Staff Roll (Super Mario 64).mp3-eff4b4a3b557a923166dc57d5b9877dc.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Staff Roll (Super Mario 64).mp3"
+dest_files=["res://.godot/imported/Staff Roll (Super Mario 64).mp3-eff4b4a3b557a923166dc57d5b9877dc.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

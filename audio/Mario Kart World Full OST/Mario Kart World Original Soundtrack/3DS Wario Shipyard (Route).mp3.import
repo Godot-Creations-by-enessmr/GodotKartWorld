@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dwqu7w2qaykgk"
+path="res://.godot/imported/3DS Wario Shipyard (Route).mp3-533305b42b367ca0e27e62b698573d0a.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Original Soundtrack/3DS Wario Shipyard (Route).mp3"
+dest_files=["res://.godot/imported/3DS Wario Shipyard (Route).mp3-533305b42b367ca0e27e62b698573d0a.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

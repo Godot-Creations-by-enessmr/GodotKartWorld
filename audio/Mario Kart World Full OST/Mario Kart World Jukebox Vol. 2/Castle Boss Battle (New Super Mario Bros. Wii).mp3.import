@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c8m53552enpop"
+path="res://.godot/imported/Castle Boss Battle (New Super Mario Bros. Wii).mp3-6686eb544eb4598482b5d058cff8a49e.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Castle Boss Battle (New Super Mario Bros. Wii).mp3"
+dest_files=["res://.godot/imported/Castle Boss Battle (New Super Mario Bros. Wii).mp3-6686eb544eb4598482b5d058cff8a49e.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

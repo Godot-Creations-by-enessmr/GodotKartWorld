@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://7ip70yv6e3u1"
+path="res://.godot/imported/Castle BGM (Super Mario World).mp3-d76c1ba801f8f20b4e06dc300a4620e9.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Castle BGM (Super Mario World).mp3"
+dest_files=["res://.godot/imported/Castle BGM (Super Mario World).mp3-d76c1ba801f8f20b4e06dc300a4620e9.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

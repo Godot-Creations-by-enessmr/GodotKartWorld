@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b0plcdkhe2jjo"
+path="res://.godot/imported/N64 Choco Mountain (Route).mp3-f64a6de30dce24df5e116dc8fcf3edaa.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Original Soundtrack/N64 Choco Mountain (Route).mp3"
+dest_files=["res://.godot/imported/N64 Choco Mountain (Route).mp3-f64a6de30dce24df5e116dc8fcf3edaa.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

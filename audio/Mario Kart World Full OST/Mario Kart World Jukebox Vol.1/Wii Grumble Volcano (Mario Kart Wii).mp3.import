@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b1horux43qshj"
+path="res://.godot/imported/Wii Grumble Volcano (Mario Kart Wii).mp3-4695e765e91d1d4c0e94839df2914e96.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/Wii Grumble Volcano (Mario Kart Wii).mp3"
+dest_files=["res://.godot/imported/Wii Grumble Volcano (Mario Kart Wii).mp3-4695e765e91d1d4c0e94839df2914e96.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

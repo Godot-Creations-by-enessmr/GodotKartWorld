@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dms2k0342xs5u"
+path="res://.godot/imported/Title Theme (Mario Kart 64).mp3-fe1cd73e3801ff0e9d06cecb47e0c96b.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/Title Theme (Mario Kart 64).mp3"
+dest_files=["res://.godot/imported/Title Theme (Mario Kart 64).mp3-fe1cd73e3801ff0e9d06cecb47e0c96b.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

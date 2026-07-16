@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bcj46p6k2jimf"
+path="res://.godot/imported/Starview Peak.mp3-c0f7a90bca08d49f4e2d94cc44594276.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Original Soundtrack/Starview Peak.mp3"
+dest_files=["res://.godot/imported/Starview Peak.mp3-c0f7a90bca08d49f4e2d94cc44594276.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

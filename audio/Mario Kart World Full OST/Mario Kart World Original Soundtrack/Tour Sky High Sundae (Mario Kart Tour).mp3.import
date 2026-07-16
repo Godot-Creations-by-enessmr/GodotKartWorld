@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bb2u5q0yi7eh3"
+path="res://.godot/imported/Tour Sky High Sundae (Mario Kart Tour).mp3-d67cf75d981f1a851266f8cafaf0e6f0.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Original Soundtrack/Tour Sky High Sundae (Mario Kart Tour).mp3"
+dest_files=["res://.godot/imported/Tour Sky High Sundae (Mario Kart Tour).mp3-d67cf75d981f1a851266f8cafaf0e6f0.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

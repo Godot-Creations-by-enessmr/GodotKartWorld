@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bqpr6q8tc57vc"
+path="res://.godot/imported/DS Waluigi Pinball (Mario Kart DS) (Night).mp3-226491df0faf4e4ddbadc55326f27cf7.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/DS Waluigi Pinball (Mario Kart DS) (Night).mp3"
+dest_files=["res://.godot/imported/DS Waluigi Pinball (Mario Kart DS) (Night).mp3-226491df0faf4e4ddbadc55326f27cf7.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

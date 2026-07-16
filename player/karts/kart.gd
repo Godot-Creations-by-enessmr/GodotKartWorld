@@ -52,7 +52,7 @@ var water_normal := Vector3(0,1,0)
 @export_group("Air Control")
 @export var air_speed_multiplier := 0.9
 @export var air_drag := 0.1
-@export var air_boost_multiplier := 0.992
+@export var air_boost_multiplier := 1.1
 
 @export_group("Boost")
 @export var max_boost_time := 10.0
@@ -61,6 +61,9 @@ var water_normal := Vector3(0,1,0)
 @export var star_speed_multiplier := 1.5  # Speed advantage when star is active
 @export var star_gradient_speed := 2.0   # Speed of the scrolling gradient
 @export var star: AudioStreamPlayer
+
+@export_group("Music")
+@export var GCN_dih_dieach: AudioStreamPlayer
 
 @onready var water_buoyancy_sensor : WaterBuoyancySensor = $WaterBuoyancySensor
 @onready var visual_parent : Node3D = $Visual
@@ -200,6 +203,7 @@ func _ready() -> void:
 	for child in visual_kart.get_children():
 		if child is Wheel:
 			wheels.append(child)
+	GCN_dih_dieach.play()
 			
 	_set_drifing_stage(0)
 	
@@ -272,6 +276,7 @@ func _process(delta: float) -> void:
 
 	if star_power_active:
 		star_power_timer -= delta
+		GCN_dih_dieach.stop()
 		if star_power_timer <= 0:
 			end_star_power()
 	
@@ -315,6 +320,7 @@ func end_star_power() -> void:
 	# Stop star audio
 	if star and star.playing:
 		star.stop()
+		GCN_dih_dieach.play()
 	
 	set_invincible(false)
 	particles_manager.set_rainbow_mode(false)

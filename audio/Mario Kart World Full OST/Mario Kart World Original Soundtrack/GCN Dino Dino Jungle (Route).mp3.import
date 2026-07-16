@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://umigty12q2ma"
+path="res://.godot/imported/GCN Dino Dino Jungle (Route).mp3-73cef9a78093fa6ff9a54779b2e57e1e.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Original Soundtrack/GCN Dino Dino Jungle (Route).mp3"
+dest_files=["res://.godot/imported/GCN Dino Dino Jungle (Route).mp3-73cef9a78093fa6ff9a54779b2e57e1e.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

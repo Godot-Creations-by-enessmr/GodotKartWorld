@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cgi5pg6mv45f"
+path="res://.godot/imported/Staff Credits (Mario Kart 7).mp3-dc5823b566a713d048f8971af4f55c00.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/Staff Credits (Mario Kart 7).mp3"
+dest_files=["res://.godot/imported/Staff Credits (Mario Kart 7).mp3-dc5823b566a713d048f8971af4f55c00.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

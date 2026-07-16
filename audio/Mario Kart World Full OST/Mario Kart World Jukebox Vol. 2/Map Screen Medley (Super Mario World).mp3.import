@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dijeppx5gsfmo"
+path="res://.godot/imported/Map Screen Medley (Super Mario World).mp3-8e57b67429e36196430cb4af39e75021.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Map Screen Medley (Super Mario World).mp3"
+dest_files=["res://.godot/imported/Map Screen Medley (Super Mario World).mp3-8e57b67429e36196430cb4af39e75021.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

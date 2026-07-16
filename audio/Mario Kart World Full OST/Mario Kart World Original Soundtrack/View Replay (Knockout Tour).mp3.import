@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://4a034vkjmhp4"
+path="res://.godot/imported/View Replay (Knockout Tour).mp3-069265e8de23bee4b40f5533add1a1c1.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Original Soundtrack/View Replay (Knockout Tour).mp3"
+dest_files=["res://.godot/imported/View Replay (Knockout Tour).mp3-069265e8de23bee4b40f5533add1a1c1.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dpxtupqpqi7h3"
+path="res://.godot/imported/DS Airship Fortress (Route).mp3-02ca916e2b10ef8a73168c8c5ba55f9b.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Original Soundtrack/DS Airship Fortress (Route).mp3"
+dest_files=["res://.godot/imported/DS Airship Fortress (Route).mp3-02ca916e2b10ef8a73168c8c5ba55f9b.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

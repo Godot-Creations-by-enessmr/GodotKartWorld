@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cu404vl43m57j"
+path="res://.godot/imported/Super Mario 64 Main Theme (Big Band) (Super Mario 64).mp3-7de2be23b2aa656869b3d1ea3f4f0ca3.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Super Mario 64 Main Theme (Big Band) (Super Mario 64).mp3"
+dest_files=["res://.godot/imported/Super Mario 64 Main Theme (Big Band) (Super Mario 64).mp3-7de2be23b2aa656869b3d1ea3f4f0ca3.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

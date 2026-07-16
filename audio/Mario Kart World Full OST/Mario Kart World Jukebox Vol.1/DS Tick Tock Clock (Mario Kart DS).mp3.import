@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dd48mkrihlj07"
+path="res://.godot/imported/DS Tick Tock Clock (Mario Kart DS).mp3-6170ce0f481af8b84b127fe86b308ec1.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/DS Tick Tock Clock (Mario Kart DS).mp3"
+dest_files=["res://.godot/imported/DS Tick Tock Clock (Mario Kart DS).mp3-6170ce0f481af8b84b127fe86b308ec1.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ce1n4bl07oels"
+path="res://.godot/imported/Hands-on Hall (Super Mario 3D World).mp3-06e8a577ab5731055f3902da2e1b6765.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Hands-on Hall (Super Mario 3D World).mp3"
+dest_files=["res://.godot/imported/Hands-on Hall (Super Mario 3D World).mp3-06e8a577ab5731055f3902da2e1b6765.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

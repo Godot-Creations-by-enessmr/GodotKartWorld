@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://h3an1paryoj4"
+path="res://.godot/imported/Bad Results.mp3-0d09493c6a775d2e5772056063ab6c50.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Original Soundtrack/Bad Results.mp3"
+dest_files=["res://.godot/imported/Bad Results.mp3-0d09493c6a775d2e5772056063ab6c50.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

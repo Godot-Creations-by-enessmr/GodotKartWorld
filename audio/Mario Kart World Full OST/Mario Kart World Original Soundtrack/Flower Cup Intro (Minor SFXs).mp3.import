@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cc6fyxrftdhxe"
+path="res://.godot/imported/Flower Cup Intro (Minor SFXs).mp3-8a65d7c1e2b6069716d96c5d59d711eb.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Original Soundtrack/Flower Cup Intro (Minor SFXs).mp3"
+dest_files=["res://.godot/imported/Flower Cup Intro (Minor SFXs).mp3-8a65d7c1e2b6069716d96c5d59d711eb.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

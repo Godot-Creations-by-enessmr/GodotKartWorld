@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://07owc7b7vor8"
+path="res://.godot/imported/N64 Koopa Troopa Beach (Day) (Mario Kart 64).mp3-1eb5f4245fe68a1bfaab8f7e40c12db7.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/N64 Koopa Troopa Beach (Day) (Mario Kart 64).mp3"
+dest_files=["res://.godot/imported/N64 Koopa Troopa Beach (Day) (Mario Kart 64).mp3-1eb5f4245fe68a1bfaab8f7e40c12db7.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

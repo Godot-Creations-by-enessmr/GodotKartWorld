@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ckjd2mpmv2h4j"
+path="res://.godot/imported/Sprawling Savanna (Super Mario 3D World).mp3-5a6bf5a2458c5b24d27721e19f3e5c43.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Sprawling Savanna (Super Mario 3D World).mp3"
+dest_files=["res://.godot/imported/Sprawling Savanna (Super Mario 3D World).mp3-5a6bf5a2458c5b24d27721e19f3e5c43.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

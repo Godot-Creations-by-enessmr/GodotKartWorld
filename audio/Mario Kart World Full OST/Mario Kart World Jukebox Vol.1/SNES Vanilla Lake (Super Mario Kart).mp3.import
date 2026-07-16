@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ms4x0p07at0g"
+path="res://.godot/imported/SNES Vanilla Lake (Super Mario Kart).mp3-09514dfbe0b209d63f9a5dd16643f486.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/SNES Vanilla Lake (Super Mario Kart).mp3"
+dest_files=["res://.godot/imported/SNES Vanilla Lake (Super Mario Kart).mp3-09514dfbe0b209d63f9a5dd16643f486.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

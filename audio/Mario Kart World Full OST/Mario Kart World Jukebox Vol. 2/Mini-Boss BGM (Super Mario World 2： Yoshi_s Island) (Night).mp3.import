@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://duqx04my2gep5"
+path="res://.godot/imported/Mini-Boss BGM (Super Mario World 2： Yoshi_s Island) (Night).mp3-48439f3186c630d67fed84a64ee18f97.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Mini-Boss BGM (Super Mario World 2： Yoshi_s Island) (Night).mp3"
+dest_files=["res://.godot/imported/Mini-Boss BGM (Super Mario World 2： Yoshi_s Island) (Night).mp3-48439f3186c630d67fed84a64ee18f97.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

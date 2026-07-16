@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dchdarfm0r1x6"
+path="res://.godot/imported/Rainbow Road (Section 4) (Final Lap).mp3-852991cfc045a744a3a4f353a9dec8a9.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Original Soundtrack/Rainbow Road (Section 4) (Final Lap).mp3"
+dest_files=["res://.godot/imported/Rainbow Road (Section 4) (Final Lap).mp3-852991cfc045a744a3a4f353a9dec8a9.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

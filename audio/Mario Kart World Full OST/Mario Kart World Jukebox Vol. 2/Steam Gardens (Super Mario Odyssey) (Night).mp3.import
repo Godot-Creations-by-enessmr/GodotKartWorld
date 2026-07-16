@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://css0wyx0a2u17"
+path="res://.godot/imported/Steam Gardens (Super Mario Odyssey) (Night).mp3-cfcb032d8eb3d978c5074921d755b256.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Steam Gardens (Super Mario Odyssey) (Night).mp3"
+dest_files=["res://.godot/imported/Steam Gardens (Super Mario Odyssey) (Night).mp3-cfcb032d8eb3d978c5074921d755b256.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

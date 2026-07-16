@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://caovyih6fk68o"
+path="res://.godot/imported/GBA Bowser_s Castle (Mario Kart_ Super Circuit) - Mario Kart World (OST).mp3-1b1950995872c5faa715ce6a5e274037.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/GBA Bowser_s Castle (Mario Kart_ Super Circuit) - Mario Kart World (OST).mp3"
+dest_files=["res://.godot/imported/GBA Bowser_s Castle (Mario Kart_ Super Circuit) - Mario Kart World (OST).mp3-1b1950995872c5faa715ce6a5e274037.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

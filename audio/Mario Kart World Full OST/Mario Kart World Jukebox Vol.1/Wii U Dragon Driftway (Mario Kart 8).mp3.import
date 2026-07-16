@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://crbxhbpuu77p0"
+path="res://.godot/imported/Wii U Dragon Driftway (Mario Kart 8).mp3-069913a107d408542c4acc56009bc6ee.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/Wii U Dragon Driftway (Mario Kart 8).mp3"
+dest_files=["res://.godot/imported/Wii U Dragon Driftway (Mario Kart 8).mp3-069913a107d408542c4acc56009bc6ee.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

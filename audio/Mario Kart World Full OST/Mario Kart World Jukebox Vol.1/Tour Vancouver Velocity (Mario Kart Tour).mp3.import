@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dfitxnaixoseo"
+path="res://.godot/imported/Tour Vancouver Velocity (Mario Kart Tour).mp3-313165e76565dcdcbe3889a3005bd7e1.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/Tour Vancouver Velocity (Mario Kart Tour).mp3"
+dest_files=["res://.godot/imported/Tour Vancouver Velocity (Mario Kart Tour).mp3-313165e76565dcdcbe3889a3005bd7e1.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

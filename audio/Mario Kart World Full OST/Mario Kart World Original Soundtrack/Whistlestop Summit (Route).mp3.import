@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dq7jphlvsqwui"
+path="res://.godot/imported/Whistlestop Summit (Route).mp3-c335062f59704eb33ba8e2f1c8421142.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Original Soundtrack/Whistlestop Summit (Route).mp3"
+dest_files=["res://.godot/imported/Whistlestop Summit (Route).mp3-c335062f59704eb33ba8e2f1c8421142.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

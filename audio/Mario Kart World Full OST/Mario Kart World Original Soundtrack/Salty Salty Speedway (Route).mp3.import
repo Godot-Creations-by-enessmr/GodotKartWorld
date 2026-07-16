@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bxiugtng0cwn6"
+path="res://.godot/imported/Salty Salty Speedway (Route).mp3-0438f63e970d4bbaa607a5d99bae636b.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Original Soundtrack/Salty Salty Speedway (Route).mp3"
+dest_files=["res://.godot/imported/Salty Salty Speedway (Route).mp3-0438f63e970d4bbaa607a5d99bae636b.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

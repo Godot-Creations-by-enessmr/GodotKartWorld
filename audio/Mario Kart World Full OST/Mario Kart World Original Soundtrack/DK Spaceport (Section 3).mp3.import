@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://com7d3gahpsce"
+path="res://.godot/imported/DK Spaceport (Section 3).mp3-d5e09fe76540b1652c1f0a62a195ead2.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Original Soundtrack/DK Spaceport (Section 3).mp3"
+dest_files=["res://.godot/imported/DK Spaceport (Section 3).mp3-d5e09fe76540b1652c1f0a62a195ead2.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

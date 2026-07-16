@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://7r26kbavjwmb"
+path="res://.godot/imported/Faraway Oasis (Route).mp3-b55695f64adadd89ba3142b72e9a7dc6.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Original Soundtrack/Faraway Oasis (Route).mp3"
+dest_files=["res://.godot/imported/Faraway Oasis (Route).mp3-b55695f64adadd89ba3142b72e9a7dc6.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

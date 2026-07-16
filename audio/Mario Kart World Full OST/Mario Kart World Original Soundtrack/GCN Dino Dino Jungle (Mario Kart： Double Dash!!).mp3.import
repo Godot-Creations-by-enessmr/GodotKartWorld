@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bmcf7wkq5is5d"
+path="res://.godot/imported/GCN Dino Dino Jungle (Mario Kart： Double Dash!!).mp3-c0e2ff73fd366fc9796e3f1e977d6e19.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Original Soundtrack/GCN Dino Dino Jungle (Mario Kart： Double Dash!!).mp3"
+dest_files=["res://.godot/imported/GCN Dino Dino Jungle (Mario Kart： Double Dash!!).mp3-c0e2ff73fd366fc9796e3f1e977d6e19.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

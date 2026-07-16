@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://d34ri7qlkt0s8"
+path="res://.godot/imported/Cheep Cheep Falls (Route).mp3-7c237effc6d08215067e19b9e73fb7e6.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Original Soundtrack/Cheep Cheep Falls (Route).mp3"
+dest_files=["res://.godot/imported/Cheep Cheep Falls (Route).mp3-7c237effc6d08215067e19b9e73fb7e6.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ct24aqwydk36o"
+path="res://.godot/imported/Banana Cup Intro (Minor SFXs).mp3-61b57695aaf73bce28fbd033eadca557.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Original Soundtrack/Banana Cup Intro (Minor SFXs).mp3"
+dest_files=["res://.godot/imported/Banana Cup Intro (Minor SFXs).mp3-61b57695aaf73bce28fbd033eadca557.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

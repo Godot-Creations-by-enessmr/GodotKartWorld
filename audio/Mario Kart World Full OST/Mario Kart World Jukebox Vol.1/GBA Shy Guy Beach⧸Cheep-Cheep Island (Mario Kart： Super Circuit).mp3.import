@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dobvouttt4j0m"
+path="res://.godot/imported/GBA Shy Guy Beach⧸Cheep-Cheep Island (Mario Kart： Super Circuit).mp3-dd64bb289fd8175c4225452ca6f800c1.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/GBA Shy Guy Beach⧸Cheep-Cheep Island (Mario Kart： Super Circuit).mp3"
+dest_files=["res://.godot/imported/GBA Shy Guy Beach⧸Cheep-Cheep Island (Mario Kart： Super Circuit).mp3-dd64bb289fd8175c4225452ca6f800c1.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

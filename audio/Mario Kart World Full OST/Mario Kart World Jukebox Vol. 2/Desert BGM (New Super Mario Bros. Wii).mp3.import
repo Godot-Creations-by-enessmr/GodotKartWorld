@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://btwi6q236fs5m"
+path="res://.godot/imported/Desert BGM (New Super Mario Bros. Wii).mp3-c88a6942c02e10899f19e3cc4074af38.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Desert BGM (New Super Mario Bros. Wii).mp3"
+dest_files=["res://.godot/imported/Desert BGM (New Super Mario Bros. Wii).mp3-c88a6942c02e10899f19e3cc4074af38.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

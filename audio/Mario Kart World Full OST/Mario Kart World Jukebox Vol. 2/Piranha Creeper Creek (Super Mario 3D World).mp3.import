@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bsvlo25hadmb7"
+path="res://.godot/imported/Piranha Creeper Creek (Super Mario 3D World).mp3-7c7c1660ed064783c9695113daa16cf4.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Piranha Creeper Creek (Super Mario 3D World).mp3"
+dest_files=["res://.godot/imported/Piranha Creeper Creek (Super Mario 3D World).mp3-7c7c1660ed064783c9695113daa16cf4.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

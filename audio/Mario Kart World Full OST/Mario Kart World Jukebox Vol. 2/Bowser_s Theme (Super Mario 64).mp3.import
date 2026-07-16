@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cvhpo1q73elg0"
+path="res://.godot/imported/Bowser_s Theme (Super Mario 64).mp3-75553d4ce03d096e4be4042f899b6a66.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Bowser_s Theme (Super Mario 64).mp3"
+dest_files=["res://.godot/imported/Bowser_s Theme (Super Mario 64).mp3-75553d4ce03d096e4be4042f899b6a66.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

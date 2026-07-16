@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://doe4ft41fl0ko"
+path="res://.godot/imported/3DS Music Park (Mario Kart 7).mp3-36c548964f893fbdd1f92b1e4ce3c6b0.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/3DS Music Park (Mario Kart 7).mp3"
+dest_files=["res://.godot/imported/3DS Music Park (Mario Kart 7).mp3-36c548964f893fbdd1f92b1e4ce3c6b0.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

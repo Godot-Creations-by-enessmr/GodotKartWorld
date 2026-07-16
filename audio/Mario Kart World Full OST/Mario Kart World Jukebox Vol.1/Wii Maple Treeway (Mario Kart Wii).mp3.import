@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://d1aj2wcylcw3f"
+path="res://.godot/imported/Wii Maple Treeway (Mario Kart Wii).mp3-9d96a95af3b5782079b76af8c5d69cb9.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/Wii Maple Treeway (Mario Kart Wii).mp3"
+dest_files=["res://.godot/imported/Wii Maple Treeway (Mario Kart Wii).mp3-9d96a95af3b5782079b76af8c5d69cb9.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

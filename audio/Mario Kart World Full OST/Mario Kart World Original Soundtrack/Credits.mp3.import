@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bur472clna4dv"
+path="res://.godot/imported/Credits.mp3-e3bb082a11e8fc74bf77ef73cb5e09cf.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Original Soundtrack/Credits.mp3"
+dest_files=["res://.godot/imported/Credits.mp3-e3bb082a11e8fc74bf77ef73cb5e09cf.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

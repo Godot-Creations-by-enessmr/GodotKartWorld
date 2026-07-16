@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b7s5ct12m20im"
+path="res://.godot/imported/File Select (Super Mario 64).mp3-3beede58e9d7ba8a0ebe9a6ded25f27b.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/File Select (Super Mario 64).mp3"
+dest_files=["res://.godot/imported/File Select (Super Mario 64).mp3-3beede58e9d7ba8a0ebe9a6ded25f27b.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

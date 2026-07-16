@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://08lf4uiyte85"
+path="res://.godot/imported/Dandelion Depths.mp3-3cd73dc4011b45797d4350467aaa4ff7.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Original Soundtrack/Dandelion Depths.mp3"
+dest_files=["res://.godot/imported/Dandelion Depths.mp3-3cd73dc4011b45797d4350467aaa4ff7.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

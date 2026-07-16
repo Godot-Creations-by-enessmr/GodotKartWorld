@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b5aslijecedpp"
+path="res://.godot/imported/Shifty Ghost Mansion (Super Mario 3D World).mp3-226c12154d02032a2113bc47e2f2cbd2.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Shifty Ghost Mansion (Super Mario 3D World).mp3"
+dest_files=["res://.godot/imported/Shifty Ghost Mansion (Super Mario 3D World).mp3-226c12154d02032a2113bc47e2f2cbd2.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://wv3mxc853liu"
+path="res://.godot/imported/DS Figure-8 Circuit⧸Mario Circuit (Mario Kart DS).mp3-346478dbeee02972ce0d6e9edd3eb733.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/DS Figure-8 Circuit⧸Mario Circuit (Mario Kart DS).mp3"
+dest_files=["res://.godot/imported/DS Figure-8 Circuit⧸Mario Circuit (Mario Kart DS).mp3-346478dbeee02972ce0d6e9edd3eb733.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

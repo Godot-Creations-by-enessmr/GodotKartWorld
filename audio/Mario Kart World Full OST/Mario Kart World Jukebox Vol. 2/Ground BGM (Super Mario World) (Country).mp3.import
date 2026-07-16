@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dn4gqjkhfdlre"
+path="res://.godot/imported/Ground BGM (Super Mario World) (Country).mp3-9774f5a54386006a0c78ad34e708a92f.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Ground BGM (Super Mario World) (Country).mp3"
+dest_files=["res://.godot/imported/Ground BGM (Super Mario World) (Country).mp3-9774f5a54386006a0c78ad34e708a92f.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

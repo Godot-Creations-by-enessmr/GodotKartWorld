@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bbevdwdl6qlp7"
+path="res://.godot/imported/Flower Garden (Super Mario World 2： Yoshi_s Island) (Day).mp3-13734ae12a0a96cffe777736963205da.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Flower Garden (Super Mario World 2： Yoshi_s Island) (Day).mp3"
+dest_files=["res://.godot/imported/Flower Garden (Super Mario World 2： Yoshi_s Island) (Day).mp3-13734ae12a0a96cffe777736963205da.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

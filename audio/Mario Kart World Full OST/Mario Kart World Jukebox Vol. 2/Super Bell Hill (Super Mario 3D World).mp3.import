@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://oyxjc05bh53r"
+path="res://.godot/imported/Super Bell Hill (Super Mario 3D World).mp3-204f0951e0cdea55f8b3b0edc140b177.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Super Bell Hill (Super Mario 3D World).mp3"
+dest_files=["res://.godot/imported/Super Bell Hill (Super Mario 3D World).mp3-204f0951e0cdea55f8b3b0edc140b177.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cc3xcunjduo2q"
+path="res://.godot/imported/Staff Credits (New Super Mario Bros. Wii).mp3-d6efbcba4cd710f880a7f1d56644883b.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Staff Credits (New Super Mario Bros. Wii).mp3"
+dest_files=["res://.godot/imported/Staff Credits (New Super Mario Bros. Wii).mp3-d6efbcba4cd710f880a7f1d56644883b.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

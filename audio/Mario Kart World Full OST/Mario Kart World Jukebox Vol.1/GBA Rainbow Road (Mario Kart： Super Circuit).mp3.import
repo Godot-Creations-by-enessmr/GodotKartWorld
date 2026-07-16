@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bbu2b3es81jf2"
+path="res://.godot/imported/GBA Rainbow Road (Mario Kart： Super Circuit).mp3-828b42b6473ed5f962d4646c0845500f.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/GBA Rainbow Road (Mario Kart： Super Circuit).mp3"
+dest_files=["res://.godot/imported/GBA Rainbow Road (Mario Kart： Super Circuit).mp3-828b42b6473ed5f962d4646c0845500f.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

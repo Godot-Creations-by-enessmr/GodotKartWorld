@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://rjawkmmqqhuj"
+path="res://.godot/imported/Purple Comet (Super Mario Galaxy).mp3-aa4df7a3f490b12063d6cd1e3922a472.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Purple Comet (Super Mario Galaxy).mp3"
+dest_files=["res://.godot/imported/Purple Comet (Super Mario Galaxy).mp3-aa4df7a3f490b12063d6cd1e3922a472.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

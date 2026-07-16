@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dbxh6ybuqkjht"
+path="res://.godot/imported/Bianco Hills (Super Mario Sunshine).mp3-6dcad052d2d077aef11884e9c09fcad6.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Bianco Hills (Super Mario Sunshine).mp3"
+dest_files=["res://.godot/imported/Bianco Hills (Super Mario Sunshine).mp3-6dcad052d2d077aef11884e9c09fcad6.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

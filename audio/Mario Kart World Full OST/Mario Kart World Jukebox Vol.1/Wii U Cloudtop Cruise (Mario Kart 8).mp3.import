@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://muguw68hf7v4"
+path="res://.godot/imported/Wii U Cloudtop Cruise (Mario Kart 8).mp3-c688463ed7fc1738794891efdc91bf53.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/Wii U Cloudtop Cruise (Mario Kart 8).mp3"
+dest_files=["res://.godot/imported/Wii U Cloudtop Cruise (Mario Kart 8).mp3-c688463ed7fc1738794891efdc91bf53.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

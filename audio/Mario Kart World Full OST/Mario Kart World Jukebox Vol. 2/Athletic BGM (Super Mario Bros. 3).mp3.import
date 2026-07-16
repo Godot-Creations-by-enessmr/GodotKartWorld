@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://5hx4dojjv1i4"
+path="res://.godot/imported/Athletic BGM (Super Mario Bros. 3).mp3-c3a9498781082b97ff33348ce159fa05.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Athletic BGM (Super Mario Bros. 3).mp3"
+dest_files=["res://.godot/imported/Athletic BGM (Super Mario Bros. 3).mp3-c3a9498781082b97ff33348ce159fa05.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

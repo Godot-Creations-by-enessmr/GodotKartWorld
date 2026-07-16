@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cmrq033l7o01b"
+path="res://.godot/imported/Steam Gardens (Super Mario Odyssey) (Day).mp3-97156a7728631865bb8caa91b3baef05.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Steam Gardens (Super Mario Odyssey) (Day).mp3"
+dest_files=["res://.godot/imported/Steam Gardens (Super Mario Odyssey) (Day).mp3-97156a7728631865bb8caa91b3baef05.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

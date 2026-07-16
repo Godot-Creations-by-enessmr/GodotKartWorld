@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b735hng8vqqqk"
+path="res://.godot/imported/GCN Dry Dry Desert (Mario Kart： Double Dash!!).mp3-576c2d62ab1d0aab3c2d3ac23e5dccd0.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/GCN Dry Dry Desert (Mario Kart： Double Dash!!).mp3"
+dest_files=["res://.godot/imported/GCN Dry Dry Desert (Mario Kart： Double Dash!!).mp3-576c2d62ab1d0aab3c2d3ac23e5dccd0.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

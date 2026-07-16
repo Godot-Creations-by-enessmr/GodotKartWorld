@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b6pcl7f0qw4ov"
+path="res://.godot/imported/SNES Bowser_s Castle (Super Mario Kart).mp3-86db4e0e1c3e3d4276313e09732d388e.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/SNES Bowser_s Castle (Super Mario Kart).mp3"
+dest_files=["res://.godot/imported/SNES Bowser_s Castle (Super Mario Kart).mp3-86db4e0e1c3e3d4276313e09732d388e.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

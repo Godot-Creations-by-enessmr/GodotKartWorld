@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cw7w7nlgtgxbw"
+path="res://.godot/imported/Wii Delfino Pier (Mario Kart Wii).mp3-d28dc1d5258afc8fd37c97a060fcab2e.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/Wii Delfino Pier (Mario Kart Wii).mp3"
+dest_files=["res://.godot/imported/Wii Delfino Pier (Mario Kart Wii).mp3-d28dc1d5258afc8fd37c97a060fcab2e.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bvi7s8jl6rukn"
+path="res://.godot/imported/Beach Theme (Super Mario 3D Land) (Day).mp3-4c58637c23ded3f73f9c2d00232aee4e.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Beach Theme (Super Mario 3D Land) (Day).mp3"
+dest_files=["res://.godot/imported/Beach Theme (Super Mario 3D Land) (Day).mp3-4c58637c23ded3f73f9c2d00232aee4e.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

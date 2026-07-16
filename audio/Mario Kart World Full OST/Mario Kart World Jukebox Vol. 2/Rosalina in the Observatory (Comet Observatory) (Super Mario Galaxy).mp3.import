@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://lm2w5k21gs71"
+path="res://.godot/imported/Rosalina in the Observatory (Comet Observatory) (Super Mario Galaxy).mp3-fc20cba9b3e3d5cb81f3284efc530dc9.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Rosalina in the Observatory (Comet Observatory) (Super Mario Galaxy).mp3"
+dest_files=["res://.godot/imported/Rosalina in the Observatory (Comet Observatory) (Super Mario Galaxy).mp3-fc20cba9b3e3d5cb81f3284efc530dc9.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

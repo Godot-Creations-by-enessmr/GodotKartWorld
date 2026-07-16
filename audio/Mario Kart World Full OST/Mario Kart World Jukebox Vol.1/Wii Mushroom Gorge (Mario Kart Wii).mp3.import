@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c0ydod3t0xdju"
+path="res://.godot/imported/Wii Mushroom Gorge (Mario Kart Wii).mp3-2a0ef05563293c6dfa30271c13a22bcb.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/Wii Mushroom Gorge (Mario Kart Wii).mp3"
+dest_files=["res://.godot/imported/Wii Mushroom Gorge (Mario Kart Wii).mp3-2a0ef05563293c6dfa30271c13a22bcb.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

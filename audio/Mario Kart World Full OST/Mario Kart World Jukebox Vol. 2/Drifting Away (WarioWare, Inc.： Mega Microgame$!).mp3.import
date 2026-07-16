@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ddb60suaxey3n"
+path="res://.godot/imported/Drifting Away (WarioWare, Inc.： Mega Microgame$!).mp3-6ecd36ae8011a447c0b562e5acdd9897.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Drifting Away (WarioWare, Inc.： Mega Microgame$!).mp3"
+dest_files=["res://.godot/imported/Drifting Away (WarioWare, Inc.： Mega Microgame$!).mp3-6ecd36ae8011a447c0b562e5acdd9897.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

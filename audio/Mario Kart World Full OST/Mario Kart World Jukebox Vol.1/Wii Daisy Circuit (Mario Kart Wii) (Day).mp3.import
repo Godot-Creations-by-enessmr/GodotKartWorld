@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://17f6dgl3rh8d"
+path="res://.godot/imported/Wii Daisy Circuit (Mario Kart Wii) (Day).mp3-d50c6809c1baa951da91475badd88221.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/Wii Daisy Circuit (Mario Kart Wii) (Day).mp3"
+dest_files=["res://.godot/imported/Wii Daisy Circuit (Mario Kart Wii) (Day).mp3-d50c6809c1baa951da91475badd88221.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

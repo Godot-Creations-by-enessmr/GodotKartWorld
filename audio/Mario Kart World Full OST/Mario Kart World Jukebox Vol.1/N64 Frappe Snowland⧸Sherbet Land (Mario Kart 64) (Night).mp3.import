@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://lvmtx4e17bl1"
+path="res://.godot/imported/N64 Frappe Snowland⧸Sherbet Land (Mario Kart 64) (Night).mp3-75564587df62d1f8824561cb280809d1.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/N64 Frappe Snowland⧸Sherbet Land (Mario Kart 64) (Night).mp3"
+dest_files=["res://.godot/imported/N64 Frappe Snowland⧸Sherbet Land (Mario Kart 64) (Night).mp3-75564587df62d1f8824561cb280809d1.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

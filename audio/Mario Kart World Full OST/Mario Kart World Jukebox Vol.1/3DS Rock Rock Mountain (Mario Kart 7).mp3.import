@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://d72dvfepudkb"
+path="res://.godot/imported/3DS Rock Rock Mountain (Mario Kart 7).mp3-d91db999c6bbf33adb99b43d22491212.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/3DS Rock Rock Mountain (Mario Kart 7).mp3"
+dest_files=["res://.godot/imported/3DS Rock Rock Mountain (Mario Kart 7).mp3-d91db999c6bbf33adb99b43d22491212.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

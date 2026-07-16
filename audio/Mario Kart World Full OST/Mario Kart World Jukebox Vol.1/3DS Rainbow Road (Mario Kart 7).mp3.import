@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cboeuow2bmvsq"
+path="res://.godot/imported/3DS Rainbow Road (Mario Kart 7).mp3-4d62c6eacf1a0d7f1ff0171bd41c7c90.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/3DS Rainbow Road (Mario Kart 7).mp3"
+dest_files=["res://.godot/imported/3DS Rainbow Road (Mario Kart 7).mp3-4d62c6eacf1a0d7f1ff0171bd41c7c90.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bw54a058jt27g"
+path="res://.godot/imported/Tour Squeaky Clean Sprint (Mario Kart Tour).mp3-a73932bcf8baf9037d8823fe65e948d7.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/Tour Squeaky Clean Sprint (Mario Kart Tour).mp3"
+dest_files=["res://.godot/imported/Tour Squeaky Clean Sprint (Mario Kart Tour).mp3-a73932bcf8baf9037d8823fe65e948d7.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

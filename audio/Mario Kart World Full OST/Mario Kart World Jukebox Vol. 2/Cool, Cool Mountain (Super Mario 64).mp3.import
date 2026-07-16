@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://r37wu6ne2jc4"
+path="res://.godot/imported/Cool, Cool Mountain (Super Mario 64).mp3-72b001c07545f7ebe1ad2981dc41d783.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Cool, Cool Mountain (Super Mario 64).mp3"
+dest_files=["res://.godot/imported/Cool, Cool Mountain (Super Mario 64).mp3-72b001c07545f7ebe1ad2981dc41d783.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

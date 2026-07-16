@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cn0ug3stenwe2"
+path="res://.godot/imported/The Mario Drawing Song (Flipnote Studio).mp3-3c96e2eb6ce7ec0032b97f6b65e746bd.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/The Mario Drawing Song (Flipnote Studio).mp3"
+dest_files=["res://.godot/imported/The Mario Drawing Song (Flipnote Studio).mp3-3c96e2eb6ce7ec0032b97f6b65e746bd.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

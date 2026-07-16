@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cfgiql3gp7jsa"
+path="res://.godot/imported/3DS Shy Guy Bazaar (Route).mp3-75fc0048b61fef9a922c0b60b3d1c2eb.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Original Soundtrack/3DS Shy Guy Bazaar (Route).mp3"
+dest_files=["res://.godot/imported/3DS Shy Guy Bazaar (Route).mp3-75fc0048b61fef9a922c0b60b3d1c2eb.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://hfuc5wq3sbq3"
+path="res://.godot/imported/Dark Hallway (Main Theme) (Luigi_s Mansion) .mp3-5859f51bfd2d4a1563af137a7e9f289b.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Dark Hallway (Main Theme) (Luigi_s Mansion) .mp3"
+dest_files=["res://.godot/imported/Dark Hallway (Main Theme) (Luigi_s Mansion) .mp3-5859f51bfd2d4a1563af137a7e9f289b.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

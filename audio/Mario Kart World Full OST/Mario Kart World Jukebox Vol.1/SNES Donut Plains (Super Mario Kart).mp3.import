@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ccgkwrtg3dmho"
+path="res://.godot/imported/SNES Donut Plains (Super Mario Kart).mp3-ba652e0dc469fcce47d04c5b31207825.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/SNES Donut Plains (Super Mario Kart).mp3"
+dest_files=["res://.godot/imported/SNES Donut Plains (Super Mario Kart).mp3-ba652e0dc469fcce47d04c5b31207825.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ns8peqf3r4qi"
+path="res://.godot/imported/Gusty Garden Galaxy (Super Mario Galaxy).mp3-9601026d62962dc1f1e73df05ed1c0b5.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Gusty Garden Galaxy (Super Mario Galaxy).mp3"
+dest_files=["res://.godot/imported/Gusty Garden Galaxy (Super Mario Galaxy).mp3-9601026d62962dc1f1e73df05ed1c0b5.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

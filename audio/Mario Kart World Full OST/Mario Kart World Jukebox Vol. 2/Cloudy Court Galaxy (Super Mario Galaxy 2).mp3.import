@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c1kpnnrvobwxb"
+path="res://.godot/imported/Cloudy Court Galaxy (Super Mario Galaxy 2).mp3-39f70ad17120494fb0b94681a12ed693.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Cloudy Court Galaxy (Super Mario Galaxy 2).mp3"
+dest_files=["res://.godot/imported/Cloudy Court Galaxy (Super Mario Galaxy 2).mp3-39f70ad17120494fb0b94681a12ed693.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

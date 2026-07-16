@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cuwbg8ly6jt2j"
+path="res://.godot/imported/Overworld BGM (Super Mario Land 2： 6 Golden Coins).mp3-230f40cc15780ca58bc87a6261211cfc.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Overworld BGM (Super Mario Land 2： 6 Golden Coins).mp3"
+dest_files=["res://.godot/imported/Overworld BGM (Super Mario Land 2： 6 Golden Coins).mp3-230f40cc15780ca58bc87a6261211cfc.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

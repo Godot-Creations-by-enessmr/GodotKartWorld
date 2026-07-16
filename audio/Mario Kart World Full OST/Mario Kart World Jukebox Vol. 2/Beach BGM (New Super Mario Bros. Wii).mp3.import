@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://chfst5sxfs7e5"
+path="res://.godot/imported/Beach BGM (New Super Mario Bros. Wii).mp3-c365bd8c293ffc4ffca824871b5a0b40.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Beach BGM (New Super Mario Bros. Wii).mp3"
+dest_files=["res://.godot/imported/Beach BGM (New Super Mario Bros. Wii).mp3-c365bd8c293ffc4ffca824871b5a0b40.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cju4uw16hlogb"
+path="res://.godot/imported/GBA Cheese Land (Mario Kart： Super Circuit).mp3-7bb887883e65909153f98be13b1a5900.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/GBA Cheese Land (Mario Kart： Super Circuit).mp3"
+dest_files=["res://.godot/imported/GBA Cheese Land (Mario Kart： Super Circuit).mp3-7bb887883e65909153f98be13b1a5900.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

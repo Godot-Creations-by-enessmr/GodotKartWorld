@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://chtbc3ot3avmq"
+path="res://.godot/imported/N64 Toad_s Turnpike (Mario Kart 64).mp3-25dec2d33f57cc94ffcbad1f0e1abcc6.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/N64 Toad_s Turnpike (Mario Kart 64).mp3"
+dest_files=["res://.godot/imported/N64 Toad_s Turnpike (Mario Kart 64).mp3-25dec2d33f57cc94ffcbad1f0e1abcc6.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

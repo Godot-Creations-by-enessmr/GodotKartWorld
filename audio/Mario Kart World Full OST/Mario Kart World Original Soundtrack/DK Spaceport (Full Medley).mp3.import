@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c7h3ed2thi3ua"
+path="res://.godot/imported/DK Spaceport (Full Medley).mp3-2dfafc14c46f1d30dfa579981f061a48.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Original Soundtrack/DK Spaceport (Full Medley).mp3"
+dest_files=["res://.godot/imported/DK Spaceport (Full Medley).mp3-2dfafc14c46f1d30dfa579981f061a48.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

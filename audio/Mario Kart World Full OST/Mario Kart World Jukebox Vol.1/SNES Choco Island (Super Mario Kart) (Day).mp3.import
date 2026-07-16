@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c3prjgkk853kq"
+path="res://.godot/imported/SNES Choco Island (Super Mario Kart) (Day).mp3-b7b448d424a18b8567223f8f49475049.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/SNES Choco Island (Super Mario Kart) (Day).mp3"
+dest_files=["res://.godot/imported/SNES Choco Island (Super Mario Kart) (Day).mp3-b7b448d424a18b8567223f8f49475049.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b0a3dnwnxpn2n"
+path="res://.godot/imported/GBA Ribbon Road (Mario Kart： Super Circuit).mp3-398fe7f34ce02482fe8d81720d83d9e8.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol.1/GBA Ribbon Road (Mario Kart： Super Circuit).mp3"
+dest_files=["res://.godot/imported/GBA Ribbon Road (Mario Kart： Super Circuit).mp3-398fe7f34ce02482fe8d81720d83d9e8.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

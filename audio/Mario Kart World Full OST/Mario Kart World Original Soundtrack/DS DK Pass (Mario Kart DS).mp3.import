@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ctkkmpjgqq521"
+path="res://.godot/imported/DS DK Pass (Mario Kart DS).mp3-6d4e7191cc28c3d32197338b543ad8d6.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Original Soundtrack/DS DK Pass (Mario Kart DS).mp3"
+dest_files=["res://.godot/imported/DS DK Pass (Mario Kart DS).mp3-6d4e7191cc28c3d32197338b543ad8d6.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

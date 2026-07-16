@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://d4ffaiw4vlgad"
+path="res://.godot/imported/Wii Toad_s Factory (With Intro) (Mario Kart Wii).mp3-607ab776eb4b27dbd2c5d907c467abc0.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Original Soundtrack/Wii Toad_s Factory (With Intro) (Mario Kart Wii).mp3"
+dest_files=["res://.godot/imported/Wii Toad_s Factory (With Intro) (Mario Kart Wii).mp3-607ab776eb4b27dbd2c5d907c467abc0.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

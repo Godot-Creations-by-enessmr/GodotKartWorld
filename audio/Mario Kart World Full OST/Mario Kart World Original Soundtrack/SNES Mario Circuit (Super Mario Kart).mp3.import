@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://jsooiwv5l8uv"
+path="res://.godot/imported/SNES Mario Circuit (Super Mario Kart).mp3-5e92e3c8a0bf628057c112490cd9ab07.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Original Soundtrack/SNES Mario Circuit (Super Mario Kart).mp3"
+dest_files=["res://.godot/imported/SNES Mario Circuit (Super Mario Kart).mp3-5e92e3c8a0bf628057c112490cd9ab07.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

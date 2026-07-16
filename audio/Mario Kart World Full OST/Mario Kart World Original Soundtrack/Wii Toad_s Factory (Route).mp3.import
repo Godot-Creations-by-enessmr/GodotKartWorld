@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bgtjool3aookx"
+path="res://.godot/imported/Wii Toad_s Factory (Route).mp3-07bbf1010cf338ce02296efbfa116143.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Original Soundtrack/Wii Toad_s Factory (Route).mp3"
+dest_files=["res://.godot/imported/Wii Toad_s Factory (Route).mp3-07bbf1010cf338ce02296efbfa116143.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

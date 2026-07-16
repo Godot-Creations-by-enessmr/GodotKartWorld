@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://d3h4q36u4baew"
+path="res://.godot/imported/Rice Beach (Wario Land： Super Mario Land 3).mp3-1ba082d9c07d0404431fd815525bf1e4.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Rice Beach (Wario Land： Super Mario Land 3).mp3"
+dest_files=["res://.godot/imported/Rice Beach (Wario Land： Super Mario Land 3).mp3-1ba082d9c07d0404431fd815525bf1e4.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

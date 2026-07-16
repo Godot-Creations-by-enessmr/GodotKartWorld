@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b84qrj3a2w8se"
+path="res://.godot/imported/Captain Toad Goes Forth (Super Mario 3D World).mp3-ca78b18229f8d1827d990c949975d0c4.mp3str"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Jukebox Vol. 2/Captain Toad Goes Forth (Super Mario 3D World).mp3"
+dest_files=["res://.godot/imported/Captain Toad Goes Forth (Super Mario 3D World).mp3-ca78b18229f8d1827d990c949975d0c4.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
