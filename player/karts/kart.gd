@@ -248,6 +248,17 @@ func _process(delta: float) -> void:
 	
 	debug_label.text = "Position: " + str(global_position) + "\nVelocity: " + str(velocity) 
 
+func play_item_roll_animation(item: ItemType) -> void:
+	if item == null:
+		return
+	
+	var animation_name := item.name.to_lower().replace(" ", "_").replace("-", "_") + "_roll"
+	if animation_name.is_empty():
+		return
+	
+	if animation_player and is_instance_valid(animation_player) and animation_player.has_animation(animation_name):
+		animation_player.play(animation_name)
+
 func set_boost(time : float):
 	boost_timer = min(boost_timer + time, max_boost_time)
 	particles_manager.set_boost(true)
