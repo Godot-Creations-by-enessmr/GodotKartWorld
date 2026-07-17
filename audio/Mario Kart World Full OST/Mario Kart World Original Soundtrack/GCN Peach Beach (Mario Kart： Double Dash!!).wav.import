@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://ddbabvpdu2n46"
+path="res://.godot/imported/GCN Peach Beach (Mario Kart： Double Dash!!).wav-14b5eb7a86ddae358d62cb1d7ce8e3c1.sample"
+
+[deps]
+
+source_file="res://audio/Mario Kart World Full OST/Mario Kart World Original Soundtrack/GCN Peach Beach (Mario Kart： Double Dash!!).wav"
+dest_files=["res://.godot/imported/GCN Peach Beach (Mario Kart： Double Dash!!).wav-14b5eb7a86ddae358d62cb1d7ce8e3c1.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

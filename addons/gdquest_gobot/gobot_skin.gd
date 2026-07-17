@@ -33,20 +33,20 @@ signal foot_step
 func _ready():
 	pass
 	#_blink_timer.connect(
-			#"timeout",
-			#func():
-				#_left_eye_mat.albedo_texture = _close_eye
-				#_right_eye_mat.albedo_texture = _close_eye
-				#_closed_eyes_timer.start(0.2)
-	#)
-#
-	#_closed_eyes_timer.connect(
-			#"timeout",
-			#func():
-				#_left_eye_mat.albedo_texture = _open_eye
-				#_right_eye_mat.albedo_texture = _open_eye
-				#_blink_timer.start(randf_range(1.0, 8.0))
-	#)
+	#		"timeout",
+	#		func():
+#				_left_eye_mat.albedo_texture = _close_eye
+#				_right_eye_mat.albedo_texture = _close_eye
+#				_closed_eyes_timer.start(0.2)
+#	)
+
+#	_closed_eyes_timer.connect(
+#			"timeout",
+#			func():
+#				_left_eye_mat.albedo_texture = _open_eye
+#				_right_eye_mat.albedo_texture = _open_eye
+#				_blink_timer.start(randf_range(1.0, 8.0))
+#	)
 
 
 func _set_blink(state: bool):

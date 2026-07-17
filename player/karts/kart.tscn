@@ -17,7 +17,7 @@
 [ext_resource type="Material" uid="uid://bwxlld7p83xw2" path="res://player/karts/effects/drifting/water_spray.tres" id="12_usafr"]
 [ext_resource type="Texture2D" uid="uid://hvfpsb717xsu" path="res://shared/textures/spark.png" id="14_usafr"]
 [ext_resource type="AudioStream" uid="uid://cn1x227mapumu" path="res://audio/Starman - Mario Kart World (OST).mp3" id="17_qosft"]
-[ext_resource type="AudioStream" uid="uid://c6oeforkmnbqj" path="res://audio/Mario Kart World Full OST/Mario Kart World Original Soundtrack/GCN Peach Beach (Mario Kart： Double Dash!!).mp3" id="18_k8uti"]
+[ext_resource type="AudioStream" uid="uid://bayp0s6865ldi" path="res://audio/WAWSTRM/GCN_Dih_Beach_Son_Im_Crine.tres" id="18_k8uti"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f5n8r"]
 transparency = 2
@@ -432,4 +432,3 @@ parameters/looping = true
 
 [node name="the BLUDinator - teedle" type="AudioStreamPlayer" parent="." unique_id=800326401]
 stream = ExtResource("18_k8uti")
-parameters/looping = true
