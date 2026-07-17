@@ -5,31 +5,13 @@
 [ext_resource type="Texture2D" uid="uid://cfdf62ci74tew" path="res://addons/gdquest_gobot/textures/closed_eyes.png" id="3_atmtp"]
 [ext_resource type="Texture2D" uid="uid://dq675fmt1rg8c" path="res://addons/gdquest_gobot/textures/open_eye.png" id="3_aysq5"]
 [ext_resource type="Script" uid="uid://ccph1ovcfvysm" path="res://addons/gdquest_gobot/skeleton_ik_3d.gd" id="5_n25xx"]
-[ext_resource type="Texture2D" uid="uid://bt5o0sr6peltq" path="res://addons/gdquest_gobot/model/gobot_gobot_diffuse.png" id="6_mhg17"]
-[ext_resource type="Texture2D" uid="uid://d28w5bql3g21l" path="res://addons/gdquest_gobot/model/gobot_gobot_normal.png" id="7_x5eul"]
-[ext_resource type="Texture2D" uid="uid://cgkj45d67dalm" path="res://addons/gdquest_gobot/model/gobot_gobot_roughness.png" id="8_e376u"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t4001"]
 render_priority = 1
 transparency = 1
-albedo_color = Color(0.972549, 0.27451, 0, 0)
+albedo_color = Color(0.972549, 0.27450982, 0, 0)
 emission_enabled = true
 emission = Color(0.972549, 0.27451, 0, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3368a"]
-albedo_texture = ExtResource("6_mhg17")
-metallic = 1.0
-metallic_specular = 0.55
-roughness_texture = ExtResource("8_e376u")
-normal_enabled = true
-normal_texture = ExtResource("7_x5eul")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x50t6"]
-resource_local_to_scene = true
-albedo_texture = ExtResource("3_aysq5")
-roughness = 0.6
-uv1_offset = Vector3(0.1, 0, 0)
-texture_repeat = false
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ge76d"]
 animation = &"Sit"
@@ -105,14 +87,14 @@ bones/0/position = Vector3(0.13743106, 0.22596449, 0.14104913)
 bones/0/rotation = Quaternion(-0.05327925, 0.014099659, -0.2830317, 0.95752585)
 bones/1/position = Vector3(-0.13743104, 0.22596452, 0.14104912)
 bones/1/rotation = Quaternion(-0.053279586, -0.014100432, 0.2830314, 0.95752585)
-bones/2/position = Vector3(4.109123e-23, 0.35671327, 1.0991752e-09)
-bones/2/rotation = Quaternion(0.06973424, 0.025151322, -0.0017587529, 0.99724704)
+bones/2/position = Vector3(5.268115e-23, 0.36651358, 7.6372464e-10)
+bones/2/rotation = Quaternion(0.06975527, 0.005847995, -0.000408932, 0.9975469)
 bones/3/rotation = Quaternion(1, -2.8125276e-16, -7.54979e-08, -3.7252965e-09)
 bones/4/rotation = Quaternion(-0.7016073, -0.22547925, -0.13291654, 0.6627515)
 bones/5/rotation = Quaternion(0.013590774, -0.20734869, 0.29218608, 0.9335144)
 bones/6/rotation = Quaternion(-0.7016072, 0.22547935, 0.13291667, 0.66275156)
 bones/7/rotation = Quaternion(0.013590777, 0.20734876, -0.29218605, 0.9335144)
-bones/8/rotation = Quaternion(-0.6321905, -0.27906084, -0.6737129, 0.2618611)
+bones/8/rotation = Quaternion(-0.5996882, -0.29110923, -0.7028001, 0.24839835)
 bones/9/rotation = Quaternion(3.004044e-07, 4.75504e-07, -0.39502862, 0.9186688)
 bones/10/rotation = Quaternion(-0.28973192, -0.63745815, -0.21743849, 0.680017)
 bones/11/rotation = Quaternion(0.4879064, -0.017439965, 0.008545371, 0.8726799)
@@ -120,7 +102,7 @@ bones/12/rotation = Quaternion(-0.37122408, -0.0019769545, 0.0058536865, 0.92852
 bones/13/rotation = Quaternion(-0.5023332, 1.5031335e-05, -2.852206e-05, 0.8646742)
 bones/14/rotation = Quaternion(-0.37122396, -0.0019769557, 0.005853653, 0.9285228)
 bones/15/rotation = Quaternion(-0.5023333, 1.5001622e-05, -2.8472557e-05, 0.86467415)
-bones/16/rotation = Quaternion(-0.6828327, 0.25777698, 0.62232906, 0.2828378)
+bones/16/rotation = Quaternion(-0.71144426, 0.24414031, 0.5894073, 0.29468906)
 bones/17/rotation = Quaternion(3.1079023e-07, -5.5570496e-07, 0.39502865, 0.9186688)
 bones/18/rotation = Quaternion(-0.289732, 0.6374581, 0.21743855, 0.680017)
 bones/19/rotation = Quaternion(0.48790643, 0.01743998, -0.008545455, 0.8726798)
@@ -151,8 +133,6 @@ transform = Transform3D(0.988758, -0.146704, -0.0289164, -0.136666, -0.808191, -
 
 [node name="Gobot" parent="gobot/Armature/Skeleton3D" index="2" unique_id=1005223939]
 material_overlay = SubResource("StandardMaterial3D_t4001")
-surface_material_override/0 = SubResource("StandardMaterial3D_3368a")
-surface_material_override/1 = SubResource("StandardMaterial3D_x50t6")
 
 [node name="BlinkTimer" type="Timer" parent="." unique_id=1633134427]
 unique_name_in_owner = true

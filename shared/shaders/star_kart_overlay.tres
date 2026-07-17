@@ -1,0 +1,19 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://dvifisosif10l"]
+
+[ext_resource type="Shader" uid="uid://ci51oweg705ls" path="res://shared/shaders/star_power.gdshader" id="1_5kjut"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_5kjut")
+shader_parameter/star_active = true
+shader_parameter/gradient_offset = 0.0
+shader_parameter/gradient_speed = 2.0
+shader_parameter/color1 = Color(1, 0, 0, 1)
+shader_parameter/color2 = Color(1, 0.5, 0, 1)
+shader_parameter/color3 = Color(1, 1, 0, 1)
+shader_parameter/color4 = Color(0, 1, 0, 1)
+shader_parameter/color5 = Color(0, 0, 1, 1)
+shader_parameter/color6 = Color(0.5, 0, 1, 1)
+shader_parameter/albedo = Color(0.8, 0.8, 0.8, 1)
+shader_parameter/roughness = 0.5
+shader_parameter/metallic = 0.0

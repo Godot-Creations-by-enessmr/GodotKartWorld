@@ -27,6 +27,10 @@ var air_time := 0.0           # How long we've been in the air
 var in_water_timer := 0.0
 var water_normal := Vector3(0,1,0)
 
+# Star Power overlay
+var star_material: ShaderMaterial = null
+var star_mesh_instances: Array[MeshInstance3D] = []
+
 # --- Adjustable feather parameters (exported) ---
 @export_group("Feather")
 @export var feather_initial_vertical_velocity := 8.0
@@ -72,9 +76,6 @@ var water_normal := Vector3(0,1,0)
 @onready var debug_label : Label = $DebugLabel
 @onready var animation_player : AnimationPlayer = $Visual/Kart/AnimationPlayer
 @onready var particles_manager : ParticlesManager = $ParticlesManager
-
-# Star Power shader material references
-var star_materials: Array[ShaderMaterial] = []
 
 func is_on_ground() -> bool:
 	return is_on_floor() or water_buoyancy_sensor.is_in_water()
@@ -140,64 +141,29 @@ func _set_drifing_stage(stage: int) -> void:
 	drift_stage = stage
 	particles_manager.set_drifing_stage(stage)
 
-# --- Star Power Shader Setup ---
-func _setup_star_materials() -> void:
-	star_materials.clear()
+func _setup_star_material() -> void:
+	# Create the star shader material
+	star_material = ShaderMaterial.new()
+	star_material.shader = preload("res://shared/shaders/star_power.gdshader")
 	
-	# Get all mesh instances in the kart and apply shader material
+	# Set initial values
+	star_material.set_shader_parameter("gradient_offset", 0.0)
+	star_material.set_shader_parameter("gradient_speed", star_gradient_speed)
+	star_material.set_shader_parameter("star_active", false)  # Start inactive
+	
+	# Store all mesh instances we'll apply the overlay to
 	var meshes = visual_kart.find_children("*", "MeshInstance3D", true, false)
 	for mesh_instance in meshes:
 		if mesh_instance is MeshInstance3D:
-			# Create a copy of the material with star shader
-			var original_material = mesh_instance.get_surface_override_material(0)
-			if original_material == null:
-				original_material = mesh_instance.mesh.surface_get_material(0)
-			
-			var star_material := ShaderMaterial.new()
-			star_material.shader = preload("res://shared/shaders/star_power.gdshader")  # Create this shader
-			
-			# Copy over properties from original material if it's a shader material
-			if original_material is ShaderMaterial:
-				# Copy relevant properties
-				for param in original_material.get_shader_parameter_list():
-					var name = param.name
-					if original_material.has_shader_parameter(name):
-						star_material.set_shader_parameter(name, original_material.get_shader_parameter(name))
-			elif original_material is BaseMaterial3D:
-				# Copy basic material properties
-				star_material.set_shader_parameter("albedo", original_material.albedo_color)
-				star_material.set_shader_parameter("roughness", original_material.roughness)
-				star_material.set_shader_parameter("metallic", original_material.metallic)
-			
-			# Set initial gradient values
-			star_material.set_shader_parameter("gradient_offset", 0.0)
-			star_material.set_shader_parameter("gradient_speed", star_gradient_speed)
-			
-			mesh_instance.set_surface_override_material(0, star_material)
-			star_materials.append(star_material)
-	
-	# Also check for any children with materials recursively
-	for child in visual_kart.get_children(true):
-		if child is MeshInstance3D and child != visual_kart:
-			# Already handled by find_children
-			pass
+			star_mesh_instances.append(mesh_instance)
 
 func _apply_star_gradient(delta: float) -> void:
-	if star_power_active:
-		for material in star_materials:
-			if material and material is ShaderMaterial:
-				var current_offset = material.get_shader_parameter("gradient_offset")
-				current_offset += delta * star_gradient_speed
-				if current_offset > 1.0:
-					current_offset -= 1.0
-				material.set_shader_parameter("gradient_offset", current_offset)
-
-func _remove_star_materials() -> void:
-	# Restore original materials
-	var meshes = visual_kart.find_children("*", "MeshInstance3D", true, false)
-	for mesh_instance in meshes:
-		if mesh_instance is MeshInstance3D:
-			mesh_instance.set_surface_override_material(0, null)
+	if star_power_active and star_material:
+		var current_offset = star_material.get_shader_parameter("gradient_offset")
+		current_offset += delta * star_gradient_speed
+		if current_offset > 1.0:
+			current_offset -= 1.0
+		star_material.set_shader_parameter("gradient_offset", current_offset)
 
 func _ready() -> void:
 	for child in visual_kart.get_children():
@@ -207,8 +173,8 @@ func _ready() -> void:
 			
 	_set_drifing_stage(0)
 	
-	# Setup star materials initially (they'll be inactive until star power is triggered)
-	_setup_star_materials()
+	# Setup star material
+	_setup_star_material()
 
 func _process(delta: float) -> void:
 	var new_up := Vector3.UP
@@ -293,10 +259,14 @@ func trigger_star_power(duration: float = 8.0) -> void:
 	star_power_active = true
 	star_power_timer = max(star_power_timer, duration)
 	
-	# Enable star gradient on all materials
-	for material in star_materials:
-		if material and material is ShaderMaterial:
-			material.set_shader_parameter("star_active", true)
+	# Apply the overlay to all mesh instances
+	for mesh_instance in star_mesh_instances:
+		if is_instance_valid(mesh_instance):
+			mesh_instance.material_overlay = star_material
+	
+	# Enable star_active in shader
+	if star_material:
+		star_material.set_shader_parameter("star_active", true)
 	
 	# Enable invincibility
 	set_invincible(true)
@@ -312,10 +282,14 @@ func end_star_power() -> void:
 	star_power_active = false
 	star_power_timer = 0.0
 	
-	# Disable star gradient on all materials
-	for material in star_materials:
-		if material and material is ShaderMaterial:
-			material.set_shader_parameter("star_active", false)
+	# Remove the overlay from all mesh instances
+	for mesh_instance in star_mesh_instances:
+		if is_instance_valid(mesh_instance):
+			mesh_instance.material_overlay = null
+	
+	# Disable star_active in shader
+	if star_material:
+		star_material.set_shader_parameter("star_active", false)
 	
 	# Stop star audio
 	if star and star.playing:
@@ -478,3 +452,9 @@ func get_kart_position() -> Vector3:
 
 func get_item_direction() -> Vector3:
 	return -global_transform.basis.z
+
+func _exit_tree() -> void:
+	# Make sure to clean up when the node is removed
+	for mesh_instance in star_mesh_instances:
+		if is_instance_valid(mesh_instance):
+			mesh_instance.material_overlay = null
