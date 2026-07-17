@@ -20,7 +20,7 @@ func _ready() -> void:
 	_update_visual_item_slots()
 
 func _get_roll_animation_name(item : ItemType) -> String:
-	if item == null or item.name.is_empty():
+	if item == null:
 		return ""
 	
 	var base_name := item.name.to_lower().replace(" ", "_").replace("-", "_")
@@ -30,12 +30,14 @@ func _trigger_roll_animation(item : ItemType, player : Player) -> void:
 	if item == null or player == null:
 		return
 	
-	var animation_name := _get_roll_animation_name(item)
-	if animation_name.is_empty():
+	# Pass the ItemType directly, NOT a string
+	if player.kart and player.kart.has_method("play_item_roll_animation"):
+		player.kart.play_item_roll_animation(item)  # Pass item, not animation_name
 		return
 	
-	if player.kart and player.kart.has_method("play_item_roll_animation"):
-		player.kart.play_item_roll_animation(item)
+	# Fallback: convert to animation name and play directly
+	var animation_name := _get_roll_animation_name(item)
+	if animation_name.is_empty():
 		return
 	
 	if player.kart and player.kart.animation_player and player.kart.animation_player.has_animation(animation_name):

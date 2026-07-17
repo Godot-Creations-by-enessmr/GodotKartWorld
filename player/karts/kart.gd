@@ -248,15 +248,15 @@ func _process(delta: float) -> void:
 	
 	debug_label.text = "Position: " + str(global_position) + "\nVelocity: " + str(velocity) 
 
-func play_item_roll_animation(item: ItemType) -> void:
-	if item == null:
+func play_item_roll_animation(item_type: ItemType) -> void:
+	if not animation_player:
 		return
 	
-	var animation_name := item.name.to_lower().replace(" ", "_").replace("-", "_") + "_roll"
-	if animation_name.is_empty():
-		return
+	# Convert ItemType to animation name here
+	var base_name := item_type.name.to_lower().replace(" ", "_").replace("-", "_")
+	var animation_name := base_name + "_roll"
 	
-	if animation_player and is_instance_valid(animation_player) and animation_player.has_animation(animation_name):
+	if animation_player.has_animation(animation_name):
 		animation_player.play(animation_name)
 
 func set_boost(time : float):
