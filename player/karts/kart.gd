@@ -21,8 +21,8 @@ var current_model_up : Vector3 = Vector3.UP
 
 # ----- TRICK SYSTEM (INFINITE AIR TRICKS) -----
 var feather_active := false
-var trick_triggered := false  # Track if we already triggered a trick this jump
-var air_time := 0.0           # How long we've been in the air
+var trick_triggered := false
+var air_time := 0.0
 
 var in_water_timer := 0.0
 var water_normal := Vector3(0,1,0)
@@ -31,11 +31,21 @@ var water_normal := Vector3(0,1,0)
 var star_material: ShaderMaterial = null
 var star_mesh_instances: Array[MeshInstance3D] = []
 
+# ----- CHARGE JUMP SYSTEM -----
+var is_charging_jump := false
+var charge_time := 0.0
+var is_charging_blue := false
+var jump_press_time := 0.0
+var is_hold_jump := false
+const TAP_THRESHOLD := 0.3
+const MAX_CHARGE_TIME := 2.5
+const MIN_JUMP_VELOCITY := 4.0
+
 # --- Adjustable feather parameters (exported) ---
 @export_group("Feather")
 @export var feather_initial_vertical_velocity := 8.0
 @export var feather_initial_boost_duration := 0.35
-@export var feather_trick_boost := 1.0  # Boost given on each feather trick
+@export var feather_trick_boost := 1.0
 
 @export_custom(PROPERTY_HINT_NONE, "suffix:m/s") var boost_speed := 30.0
 @export_custom(PROPERTY_HINT_NONE, "suffix:m/s") var boost_acceleration := 50.0
@@ -62,12 +72,15 @@ var star_mesh_instances: Array[MeshInstance3D] = []
 @export var max_boost_time := 10.0
 
 @export_group("Star Power")
-@export var star_speed_multiplier := 1.5  # Speed advantage when star is active
-@export var star_gradient_speed := 2.0   # Speed of the scrolling gradient
-@export var star: AudioStreamPlayer
+@export var star_speed_multiplier := 1.5
+@export var star_gradient_speed := 2.0
+@export var star: AudioStreamPlayer3D
 
 @export_group("Music")
 @export var GCN_dih_dieach: AudioStreamPlayer
+
+@export_group("Chargejump")
+@export var charge_particles: GPUParticles3D = null
 
 @onready var water_buoyancy_sensor : WaterBuoyancySensor = $WaterBuoyancySensor
 @onready var visual_parent : Node3D = $Visual
@@ -79,6 +92,9 @@ var star_mesh_instances: Array[MeshInstance3D] = []
 
 func is_on_ground() -> bool:
 	return is_on_floor() or water_buoyancy_sensor.is_in_water()
+
+func is_on_solid_ground() -> bool:
+	return is_on_floor()
 
 func is_in_water() -> bool:
 	return water_buoyancy_sensor.is_in_water()
@@ -93,40 +109,42 @@ func reset_buffer() -> void:
 
 func _apply_steering(delta : float) -> void:
 	var v := get_horizontal_velocity()
-	var horizonal_speed : float = v.length() * sign(v.dot(-global_transform.basis.z))
+	var horizontal_speed : float = v.length() * sign(v.dot(-global_transform.basis.z))
 	steering = lerp(steering, wish_steering, 1.0 - pow(0.5, 60.0 * delta))
 	
 	var angular_velocity : float = deg_to_rad(air_steering_velocity * steering)
 	
-	var max_steering_angle = lerp(max_steering_angle_slow, max_steering_angle_fast, clamp(horizonal_speed / top_speed, 0.0, 1.0))
+	var max_steering_angle = lerp(max_steering_angle_slow, max_steering_angle_fast, clamp(horizontal_speed / top_speed, 0.0, 1.0))
 	var avg_steering_angle = lerp(max_steering_angle_slow, max_steering_angle_fast, 1.0)
 
 	if is_on_ground():
-		if wish_break && abs(horizonal_speed) < 1:
+		if wish_break && abs(horizontal_speed) < 1:
 			angular_velocity = deg_to_rad(handbrake_steering_velocity * steering)
-		else:
+		elif abs(horizontal_speed) > 1e-2:
 			var steering_angle : float
 			if wish_drift:
 				steering_angle = drift_steering_multiplier * max_steering_angle * (wish_drift_direction * 0.6 + 0.4 * steering)
-			elif abs(horizonal_speed) > 1e-2:
+			else:
 				steering_angle = max_steering_angle * steering
-			angular_velocity = (horizonal_speed * tan(deg_to_rad(steering_angle))) / wheel_base
-	
+			angular_velocity = (horizontal_speed * tan(deg_to_rad(steering_angle))) / wheel_base
+		else:
+			angular_velocity = 0.0
 	
 	rotate_y(-delta * angular_velocity)
-	#exaggerate movements
 	for wheel in wheels:
 		wheel.set_steering(-steering * 2.0 * deg_to_rad(avg_steering_angle))
-		wheel.speed = horizonal_speed
+		wheel.speed = horizontal_speed
 	steering_wheel.rotation.y = -steering * 3.0 * deg_to_rad(avg_steering_angle)
 	visual_kart.rotation.z = steering * 0.5 * deg_to_rad(avg_steering_angle)
-			
 
 func _align_mesh_with_normal(_delta : float, normal: Vector3) -> void:
 	var up := normal.normalized()
 	var forward := -global_transform.basis.z
 	forward = (forward - up * forward.dot(up)).normalized()
 
+	if forward.length() < 0.001:
+		return
+		
 	var right := up.cross(forward).normalized()
 
 	var new_basis := Basis()
@@ -142,16 +160,13 @@ func _set_drifing_stage(stage: int) -> void:
 	particles_manager.set_drifing_stage(stage)
 
 func _setup_star_material() -> void:
-	# Create the star shader material
 	star_material = ShaderMaterial.new()
 	star_material.shader = preload("res://shared/shaders/star_power.gdshader")
 	
-	# Set initial values
 	star_material.set_shader_parameter("gradient_offset", 0.0)
 	star_material.set_shader_parameter("gradient_speed", star_gradient_speed)
-	star_material.set_shader_parameter("star_active", false)  # Start inactive
+	star_material.set_shader_parameter("star_active", false)
 	
-	# Store all mesh instances we'll apply the overlay to
 	var meshes = visual_kart.find_children("*", "MeshInstance3D", true, false)
 	for mesh_instance in meshes:
 		if mesh_instance is MeshInstance3D:
@@ -172,11 +187,10 @@ func _ready() -> void:
 	GCN_dih_dieach.play()
 			
 	_set_drifing_stage(0)
-	
-	# Setup star material
 	_setup_star_material()
 
 func _process(delta: float) -> void:
+	# Only visuals and passive updates remain here
 	var new_up := Vector3.UP
 	var t := 0.5
 	if water_buoyancy_sensor.is_in_water():
@@ -189,52 +203,18 @@ func _process(delta: float) -> void:
 	else:
 		var lean_strength := -0.2
 		var up := Vector3.UP
-		var forward : Vector3 = global_transform.basis.z;
-		var side := forward.cross(up);		
+		var forward : Vector3 = -global_transform.basis.z
+		var side := forward.cross(up)		
 		var vertical_velocity := velocity.dot(up)
-		var lean_angle : float = clamp(vertical_velocity * lean_strength, -0.2, 0.2)  # In radians		
+		var lean_angle : float = clamp(vertical_velocity * lean_strength, -0.2, 0.2)
 		new_up = up.rotated(side.normalized(), lean_angle)
 		
 	current_model_up = current_model_up.lerp(new_up, 1 - pow(t, 2 * delta))
 	_align_mesh_with_normal(delta, current_model_up)
 	
-	# Apply star gradient animation
 	_apply_star_gradient(delta)
-		
-	var move_vector = Input.get_vector("move_left", "move_right", "move_backward", "move_forward");
-	wish_steering = move_vector.x
-	wish_acceleration = move_vector.y
-	wish_break = Input.is_action_pressed("move_brake") \
-		or Input.is_action_pressed("move_forward") and Input.is_action_pressed("move_backward")
 	
-	if Input.is_action_just_pressed("move_jump") && wish_steering != 0 && wish_acceleration > 0:
-		wish_drift = true
-		wish_drift_direction = sign(wish_steering)
-		_set_drifing_stage(0)
-		drift_timer = 0.0
-		
-	if Input.is_action_just_released("move_jump") or wish_acceleration <= 0:
-		wish_drift = false
-		if drift_stage == 2:
-			set_boost(0.5)
-		if drift_stage == 3:
-			set_boost(1.0)
-		if drift_stage == 4:
-			set_boost(4.0)
-		
-		_set_drifing_stage(0)
-		
-	if wish_drift && is_on_ground():
-		if drift_stage < 1:
-			_set_drifing_stage(1)
-		if drift_timer > 0.8 and drift_stage < 2:
-			_set_drifing_stage(2)
-		drift_timer += delta
-		if drift_timer > 3.0 && drift_stage < 3:
-			_set_drifing_stage(3)
-		if drift_timer > 5.0 && drift_stage < 4:
-			_set_drifing_stage(4)
-	
+	# Star power / boost timer updates (non‑physics)
 	if boost_timer > 0:
 		boost_timer -= delta
 		if boost_timer <= 0:
@@ -246,13 +226,64 @@ func _process(delta: float) -> void:
 		if star_power_timer <= 0:
 			end_star_power()
 	
-	debug_label.text = "Position: " + str(global_position) + "\nVelocity: " + str(velocity) 
+	debug_label.text = "Position: " + str(global_position) + "\nVelocity: " + str(velocity)
+
+# ----- CHARGE JUMP FUNCTIONS -----
+func _set_charge_particle_color(color: Color) -> void:
+	if not charge_particles:
+		return
+	var mesh = charge_particles.draw_pass_1
+	if mesh:
+		var material = mesh.surface_get_material(0)
+		if material is StandardMaterial3D:
+			material.albedo_color = color
+
+func _start_charge_jump() -> void:
+	if is_on_ground() or is_in_water():
+		is_charging_jump = true
+		is_charging_blue = false
+		charge_time = 0.0
+		if charge_particles:
+			charge_particles.emitting = true
+			charge_particles.scale = Vector3(1, 1, 1)
+			_set_charge_particle_color(Color(0.3, 0.5, 1.0, 0.8))
+
+func _cancel_charge_jump() -> void:
+	is_charging_jump = false
+	is_charging_blue = false
+	charge_time = 0.0
+	if charge_particles:
+		charge_particles.emitting = false
+		charge_particles.scale = Vector3(1, 1, 1)
+
+func _perform_charge_jump() -> void:
+	if not is_charging_jump:
+		return
+	
+	var charge_percent = clamp(charge_time / MAX_CHARGE_TIME, 0.0, 1.0)
+	var jump_velocity = lerp(MIN_JUMP_VELOCITY, feather_initial_vertical_velocity, charge_percent)
+	velocity.y = jump_velocity
+	
+	if charge_time > 1.0:
+		set_boost(min(charge_time * 0.2, 1.5))
+	
+	if charge_time >= 2.0:
+		particles_manager.play_trick_particles()
+	
+	is_charging_jump = false
+	is_charging_blue = false
+	charge_time = 0.0
+	
+	if charge_particles:
+		charge_particles.emitting = false
+		charge_particles.scale = Vector3(1, 1, 1)
+	
+	in_water_timer = 0.0
 
 func play_item_roll_animation(item_type: ItemType) -> void:
 	if not animation_player:
 		return
 	
-	# Convert ItemType to animation name here
 	var base_name := item_type.name.to_lower().replace(" ", "_").replace("-", "_")
 	var animation_name := base_name + "_roll"
 	
@@ -270,22 +301,16 @@ func trigger_star_power(duration: float = 8.0) -> void:
 	star_power_active = true
 	star_power_timer = max(star_power_timer, duration)
 	
-	# Apply the overlay to all mesh instances
 	for mesh_instance in star_mesh_instances:
 		if is_instance_valid(mesh_instance):
 			mesh_instance.material_overlay = star_material
 	
-	# Enable star_active in shader
 	if star_material:
 		star_material.set_shader_parameter("star_active", true)
 	
-	# Enable invincibility
 	set_invincible(true)
-	
-	# Enable rainbow mode but separate from boost
 	particles_manager.set_rainbow_mode(true)
 	
-	# Play star audio if it exists and isn't already playing
 	if star and not star.playing:
 		star.play()
 
@@ -293,16 +318,13 @@ func end_star_power() -> void:
 	star_power_active = false
 	star_power_timer = 0.0
 	
-	# Remove the overlay from all mesh instances
 	for mesh_instance in star_mesh_instances:
 		if is_instance_valid(mesh_instance):
 			mesh_instance.material_overlay = null
 	
-	# Disable star_active in shader
 	if star_material:
 		star_material.set_shader_parameter("star_active", false)
 	
-	# Stop star audio
 	if star and star.playing:
 		star.stop()
 		GCN_dih_dieach.play()
@@ -310,30 +332,26 @@ func end_star_power() -> void:
 	set_invincible(false)
 	particles_manager.set_rainbow_mode(false)
 
-# --- FEATHER TRIGGER (call this from your item system) ---
 func trigger_feather_boost() -> void:
-	# Set vertical velocity ONLY - horizontal momentum is preserved
 	velocity.y = feather_initial_vertical_velocity
 	set_boost(feather_initial_boost_duration)
 	
-	# Play the trick
-	animation_player.current_animation = "trick"
+	animation_player.play("trick")
 	particles_manager.play_trick_particles()
 	
-	# Activate feather - allows infinite tricks in air
 	feather_active = true
 
 func _apply_car_engine_force(delta : float) -> void:
-	var forward : Vector3 = -global_transform.basis.z;	
+	var forward : Vector3 = -global_transform.basis.z
 	var horizontal_velocity := get_horizontal_velocity()
 	
-	#drag
 	horizontal_velocity = horizontal_velocity.lerp(Vector3.ZERO, 1 - pow(0.5, roll_resistance * delta))
 	
-	var speed = horizontal_velocity.length()
-	horizontal_velocity = forward * forward.dot(horizontal_velocity)
+	if not wish_drift:
+		horizontal_velocity = forward * forward.dot(horizontal_velocity)
 	
-	# Apply star power speed advantage
+	var speed = horizontal_velocity.length()
+	
 	var current_top_speed = top_speed
 	var current_boost_speed = boost_speed
 	var current_acceleration = acceleration
@@ -345,32 +363,27 @@ func _apply_car_engine_force(delta : float) -> void:
 	
 	if wish_break:
 		horizontal_velocity = horizontal_velocity.lerp(Vector3.ZERO, 1 - pow(0.5, break_resistance * delta))
-	elif boost_timer > 0 && speed < current_boost_speed:
+	elif boost_timer > 0 and speed < current_boost_speed:
 		horizontal_velocity += forward * delta * boost_acceleration
-	elif wish_acceleration > 0 && speed < current_top_speed:
+	elif wish_acceleration > 0 and speed < current_top_speed:
 		horizontal_velocity += wish_acceleration * forward * delta * current_acceleration
-	elif wish_acceleration < 0 && speed < top_reverse_speed:
+	elif wish_acceleration < 0 and speed < top_reverse_speed:
 		horizontal_velocity += wish_acceleration * forward * delta * acceleration
 
 	velocity = horizontal_velocity + Vector3.UP * velocity.y
 	
-	
 func _apply_air_force(delta : float) -> void:
-	var forward : Vector3 = -global_transform.basis.z	
+	var forward : Vector3 = -global_transform.basis.z
 	var horizontal_velocity := get_horizontal_velocity()
 	
-	# Check if boosting
 	var is_boosting := boost_timer > 0
 	
-	# Apply air drag (reduced when boosting)
 	var drag_multiplier := air_drag * (0.2 if is_boosting else 1.0)
 	horizontal_velocity = horizontal_velocity.lerp(Vector3.ZERO, 1 - pow(0.5, drag_multiplier * delta))
 	
-	# Apply air speed penalty (reduced when boosting and star power)
 	var current_speed = horizontal_velocity.length()
 	var max_air_speed = top_speed * (air_boost_multiplier if is_boosting else air_speed_multiplier)
 	
-	# Star power increases max air speed
 	if star_power_active:
 		max_air_speed *= star_speed_multiplier
 	
@@ -381,9 +394,8 @@ func _apply_air_force(delta : float) -> void:
 	
 	velocity = horizontal_velocity + Vector3.UP * velocity.y + gravity_acceleration * delta
 	
-
 func _apply_water_force(delta : float) -> void:
-	if !water_buoyancy_sensor.is_in_water():
+	if not water_buoyancy_sensor.is_in_water():
 		in_water_timer = 0.0
 		return
 	in_water_timer += delta
@@ -401,49 +413,112 @@ func _apply_water_force(delta : float) -> void:
 		velocity.y += (water_height - global_position.y) * delta * a
 
 func _physics_process(delta: float) -> void:
+	# ----- READ INPUT (fresh every physics step) -----
+	var move_vector = Input.get_vector("move_left", "move_right", "move_backward", "move_forward")
+	wish_steering = move_vector.x
+	wish_acceleration = move_vector.y
+	wish_break = Input.is_action_pressed("move_brake") \
+		or Input.is_action_pressed("move_forward") and Input.is_action_pressed("move_backward")
+	
+	# ----- DRIFT START (highest priority) -----
+	if Input.is_action_just_pressed("move_jump"):
+		if abs(wish_steering) > 0.1 and wish_acceleration > 0 and is_on_ground():
+			wish_drift = true
+			wish_drift_direction = sign(wish_steering)
+			_set_drifing_stage(0)
+			drift_timer = 0.0
+			is_hold_jump = false
+			wish_jump = false
+			reset_buffer()
+			move_and_slide()
+			return  # skip the rest this physics tick
+	
+	# ----- CHARGE JUMP UPDATE (after drift check) -----
+	if is_hold_jump and is_on_ground() and abs(wish_steering) < 0.1 and not is_charging_jump and not wish_drift:
+		var elapsed = (Time.get_ticks_msec() / 1000.0) - jump_press_time
+		if elapsed > TAP_THRESHOLD:
+			_start_charge_jump()
+	
+	if is_charging_jump:
+		charge_time += delta
+		
+		if charge_time >= 1.5 and not is_charging_blue:
+			is_charging_blue = true
+			_set_charge_particle_color(Color(0.0, 0.4, 1.0, 0.8))
+		
+		if charge_particles:
+			var charge_percent = min(charge_time / MAX_CHARGE_TIME, 1.0)
+			charge_particles.scale = Vector3(1 + charge_percent * 3, 1 + charge_percent * 3, 1 + charge_percent * 3)
+		
+		if abs(wish_steering) > 0.1:
+			_cancel_charge_jump()
+	
+	# ----- JUMP / DRIFT RELEASE -----
+	if Input.is_action_just_released("move_jump"):
+		if is_charging_jump:
+			_perform_charge_jump()
+		elif wish_drift:
+			if drift_stage == 2:
+				set_boost(0.5)
+			if drift_stage == 3:
+				set_boost(1.0)
+			if drift_stage == 4:
+				set_boost(4.0)
+			wish_drift = false
+			_set_drifing_stage(0)
+		is_hold_jump = false
+	
+	# ----- DRIFT UPDATE -----
+	if wish_drift and is_on_ground() and not is_charging_jump:
+		if drift_stage < 1:
+			_set_drifing_stage(1)
+		if drift_timer > 0.8 and drift_stage < 2:
+			_set_drifing_stage(2)
+		drift_timer += delta
+		if drift_timer > 3.0 and drift_stage < 3:
+			_set_drifing_stage(3)
+		if drift_timer > 5.0 and drift_stage < 4:
+			_set_drifing_stage(4)
+	
+	# ----- STEERING & WATER FORCES -----
 	_apply_steering(delta)	
 	_apply_water_force(delta)	
 	
+	# ----- AIR / TRICK SYSTEM -----
+	var on_solid_ground := is_on_solid_ground()
 	var on_ground := is_on_ground()
-	var in_water := is_in_water()
 	
-	# ----- RESET FEATHER ON LANDING -----
-	if on_ground:
+	if on_solid_ground:
 		feather_active = false
-		trick_triggered = false  # Reset trick trigger when we land
+		trick_triggered = false
 		air_time = 0.0
-	
-	# ----- UPDATE AIR TIME -----
-	if !on_ground:
-		air_time += delta
 	else:
-		air_time = 0.0
+		air_time += delta
 	
-	# ----- TRICK LOGIC -----
-	# ONLY trigger trick if we're actually airborne (air_time > 0.05 seconds)
-	# AND we haven't already triggered a trick this jump
-	var can_trick := (!on_ground or in_water) and air_time > 0.05 and not trick_triggered
+	var can_trick := not on_solid_ground and air_time > 0.05 and not trick_triggered
 	
 	if can_trick and wish_jump:
-		# We're actually airborne - DO THE TRICK
-		trick_triggered = true  # Prevent multiple tricks from one jump press
-		animation_player.current_animation = "trick"
+		trick_triggered = true
+		animation_player.play("trick")
 		particles_manager.play_trick_particles()
 		set_boost(feather_trick_boost)
 	
-	# Reset trick_triggered when we release jump
-	if !wish_jump:
+	if not wish_jump:
 		trick_triggered = false
 	
-	# ----- GROUND / WATER -----
+	# ----- TAP JUMP (instant hop) -----
+	if wish_jump and is_on_ground() and not is_charging_jump and not wish_drift:
+		velocity.y = MIN_JUMP_VELOCITY
+		in_water_timer = 0.0
+		wish_jump = false
+	
+	# ----- APPLY ENGINE / AIR FORCES -----
 	if on_ground:
 		_apply_car_engine_force(delta)
-		if wish_jump:
-			in_water_timer = 0.0
-			velocity.y += 4   # normal jump
 	else:
 		_apply_air_force(delta)
-		
+	
+	# ----- FINALIZE -----
 	reset_buffer()
 	move_and_slide()
 	
@@ -452,11 +527,15 @@ func _physics_process(delta: float) -> void:
 		if c.get_collider() is RigidBody3D:
 			const push_force = 1.0
 			c.get_collider().apply_central_impulse(-c.get_normal() * push_force)
-	
-	
+
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("move_jump"):
-		wish_jump = true;
+		wish_jump = true
+		jump_press_time = Time.get_ticks_msec() / 1000.0
+		is_hold_jump = true
+		
+	if event.is_action_released("move_jump"):
+		is_hold_jump = false
 
 func get_kart_position() -> Vector3:
 	return global_position
@@ -465,7 +544,6 @@ func get_item_direction() -> Vector3:
 	return -global_transform.basis.z
 
 func _exit_tree() -> void:
-	# Make sure to clean up when the node is removed
 	for mesh_instance in star_mesh_instances:
 		if is_instance_valid(mesh_instance):
 			mesh_instance.material_overlay = null

@@ -18,6 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://hvfpsb717xsu" path="res://shared/textures/spark.png" id="14_usafr"]
 [ext_resource type="AudioStream" uid="uid://cn1x227mapumu" path="res://audio/Starman - Mario Kart World (OST).mp3" id="17_qosft"]
 [ext_resource type="AudioStream" uid="uid://bayp0s6865ldi" path="res://audio/WAWSTRM/GCN_Dih_Beach_Son_Im_Crine.tres" id="18_k8uti"]
+[ext_resource type="AudioStream" uid="uid://b2gygtg5x5k3n" path="res://audio/action.mp3" id="19_vekkg"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f5n8r"]
 transparency = 2
@@ -82,6 +83,18 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector3(0, 0, 0)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../../1 YOSHILLION dollars - teedle subtitle:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="Animation" id="Animation_4e78f"]
 resource_name = "trick"
@@ -97,6 +110,18 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector3(0, 0, 0), Vector3(6.28319, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../../1 YOSHILLION dollars - teedle subtitle:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_f5n8r"]
@@ -198,7 +223,19 @@ size = Vector2(0.1, 0.1)
 radius = 0.6
 height = 2.3
 
-[node name="Kart" type="CharacterBody3D" unique_id=320570091 node_paths=PackedStringArray("star", "GCN_dih_dieach")]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vekkg"]
+gravity = Vector3(0, 0, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jk2mk"]
+transparency = 1
+cull_mode = 2
+albedo_color = Color(1, 1, 1, 0.45490196)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_tcnsm"]
+material = SubResource("StandardMaterial3D_jk2mk")
+size = Vector2(1, 1)
+
+[node name="Kart" type="CharacterBody3D" unique_id=320570091 node_paths=PackedStringArray("star", "GCN_dih_dieach", "charge_particles")]
 script = ExtResource("1_cyw3l")
 feather_initial_vertical_velocity = 20.0
 feather_trick_boost = 1.5
@@ -207,6 +244,7 @@ drift_steering_multiplier = 2.0
 air_boost_multiplier = 1.0
 star = NodePath("star")
 GCN_dih_dieach = NodePath("the BLUDinator - teedle")
+charge_particles = NodePath("GPUParticles3D")
 
 [node name="ParticlesManager" type="Node3D" parent="." unique_id=1520900876]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.383602)
@@ -427,9 +465,20 @@ offset_top = -23.0
 offset_right = 40.0
 grow_vertical = 0
 
-[node name="star" type="AudioStreamPlayer" parent="." unique_id=783045858]
+[node name="star" type="AudioStreamPlayer3D" parent="." unique_id=820189927]
 stream = ExtResource("17_qosft")
 parameters/looping = true
 
 [node name="the BLUDinator - teedle" type="AudioStreamPlayer" parent="." unique_id=800326401]
 stream = ExtResource("18_k8uti")
+
+[node name="1 YOSHILLION dollars - teedle subtitle" type="AudioStreamPlayer" parent="." unique_id=1990423786]
+stream = ExtResource("19_vekkg")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=122610765]
+transform = Transform3D(1, 0, 0, 0, 0.8660254, 0.5, 0, -0.5, 0.8660254, 0, -0.246, -1.4707438)
+lifetime = 0.2
+fixed_fps = 144
+trail_lifetime = 0.5
+process_material = SubResource("ParticleProcessMaterial_vekkg")
+draw_pass_1 = SubResource("PlaneMesh_tcnsm")

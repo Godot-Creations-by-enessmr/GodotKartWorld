@@ -8,13 +8,21 @@ var items : Array[ItemType]
 
 func _update_visual_item_slots() -> void:
 	var item_count = items.size()
-	inventory_control.visible = item_count > 0
 	
+	# Show/hide the inventory UI
+	if inventory_control:
+		inventory_control.visible = item_count > 0
+	
+	# Update each slot
 	for slot_index in range(item_slots.size()):
-		if slot_index >= item_count:
-			item_slots[slot_index].texture = null
-		else:
+		if slot_index < item_count and items[slot_index]:
+			# Show the item sprite
 			item_slots[slot_index].texture = items[slot_index].sprite
+			item_slots[slot_index].visible = true
+		else:
+			# Clear the slot
+			item_slots[slot_index].texture = null
+			item_slots[slot_index].visible = false
 
 func _ready() -> void:
 	_update_visual_item_slots()
@@ -30,12 +38,12 @@ func _trigger_roll_animation(item : ItemType, player : Player) -> void:
 	if item == null or player == null:
 		return
 	
-	# Pass the ItemType directly, NOT a string
+	# Pass the ItemType directly to the kart
 	if player.kart and player.kart.has_method("play_item_roll_animation"):
-		player.kart.play_item_roll_animation(item)  # Pass item, not animation_name
+		player.kart.play_item_roll_animation(item)
 		return
 	
-	# Fallback: convert to animation name and play directly
+	# Fallback: play directly on animation player
 	var animation_name := _get_roll_animation_name(item)
 	if animation_name.is_empty():
 		return

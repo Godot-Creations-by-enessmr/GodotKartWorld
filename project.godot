@@ -48,6 +48,7 @@ enabled=PackedStringArray("res://addons/discord-rpc-gd/plugin.cfg")
 folder_colors={
 "res://addons/": "gray",
 "res://audio/": "yellow",
+"res://audio/Mario Kart World Full OST/": "red",
 "res://environment/": "green",
 "res://environment/details/": "pink",
 "res://environment/details/grass/": "green",
