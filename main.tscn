@@ -24,7 +24,7 @@ metadata/_custom_type_script = "uid://drqp0bigysg4x"
 [node name="Main" type="Node" unique_id=645221743]
 
 [node name="Player" parent="." unique_id=148287529 instance=ExtResource("1_ig7tw")]
-transform = Transform3D(-0.862664, 0, -0.505778, 0, 1, 0, 0.505778, 0, -0.862664, 4.8399, 4.47262, -5.20099)
+transform = Transform3D(0.8946222, 0, -0.44682395, 0, 1, 0, 0.44682395, 0, 0.8946222, -156.08725, 54.720245, 85.328674)
 
 [node name="Island" parent="." unique_id=452480876 instance=ExtResource("3_1bvp3")]
 

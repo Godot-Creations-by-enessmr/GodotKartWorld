@@ -237,6 +237,7 @@ size = Vector2(1, 1)
 
 [node name="Kart" type="CharacterBody3D" unique_id=320570091 node_paths=PackedStringArray("star", "GCN_dih_dieach", "charge_particles")]
 script = ExtResource("1_cyw3l")
+rail_grind_speed_normal = 30.0
 feather_initial_vertical_velocity = 20.0
 feather_trick_boost = 1.5
 wheel_base = 2.0
@@ -310,27 +311,33 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 3.5069
 [node name="GobotSkin" parent="Visual/Kart/Character" unique_id=161526920 instance=ExtResource("6_ffnty")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0.19278, 0.253395)
 
-[node name="VehicleWheel3D" parent="Visual/Kart" unique_id=497167046 instance=ExtResource("2_k70jy")]
+[node name="VehicleWheel3D" parent="Visual/Kart" unique_id=497167046 node_paths=PackedStringArray("grind_sparks") instance=ExtResource("2_k70jy")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.6, 0.227493, 0.659778)
 steering_enabled = true
 traction_enabled = true
 left_side = true
 spring_rest_length = 0.5
+grind_sparks = NodePath("../Particles/RailSparks/Particles2")
 
-[node name="VehicleWheel3D2" parent="Visual/Kart" unique_id=119624423 instance=ExtResource("2_k70jy")]
+[node name="VehicleWheel3D2" parent="Visual/Kart" unique_id=119624423 node_paths=PackedStringArray("grind_sparks") instance=ExtResource("2_k70jy")]
 transform = Transform3D(1, 0, 1.47027e-07, 0, 1, 0, -1.47027e-07, 0, 1, -0.6, 0.227493, 0.659778)
 steering_enabled = true
 traction_enabled = true
 spring_rest_length = 0.5
+grind_sparks = NodePath("../Particles/RailSparks/Particles")
 
-[node name="VehicleWheel3D3" parent="Visual/Kart" unique_id=640737656 instance=ExtResource("2_k70jy")]
+[node name="VehicleWheel3D3" parent="Visual/Kart" unique_id=640737656 node_paths=PackedStringArray("grind_sparks") instance=ExtResource("2_k70jy")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.6, 0.227493, -0.540219)
 left_side = true
+is_front = false
 spring_rest_length = 0.5
+grind_sparks = NodePath("../Particles/DriftSparks/Particles2")
 
-[node name="VehicleWheel3D4" parent="Visual/Kart" unique_id=709825859 instance=ExtResource("2_k70jy")]
+[node name="VehicleWheel3D4" parent="Visual/Kart" unique_id=709825859 node_paths=PackedStringArray("grind_sparks") instance=ExtResource("2_k70jy")]
 transform = Transform3D(1, 0, 1.47027e-07, 0, 1, 0, -1.47027e-07, 0, 1, -0.6, 0.227493, -0.540219)
+is_front = false
 spring_rest_length = 0.5
+grind_sparks = NodePath("../Particles/DriftSparks/Particles")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Visual/Kart" unique_id=2079067462]
 libraries/ = SubResource("AnimationLibrary_f5n8r")
@@ -428,6 +435,41 @@ lifetime = 0.5
 process_material = SubResource("ParticleProcessMaterial_4e78f")
 draw_pass_1 = SubResource("QuadMesh_usafr")
 
+[node name="RailSparks" type="Node3D" parent="Visual/Kart/Particles" unique_id=1664551676]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.8673136)
+
+[node name="Particles" type="GPUParticles3D" parent="Visual/Kart/Particles/RailSparks" unique_id=2090229287]
+transform = Transform3D(1, 0, -2.13163e-14, 0, 1, 0, 2.13163e-14, 0, 1, -0.575, -0.0236623, -0.410105)
+material_override = ExtResource("9_ekr4a")
+amount = 4
+lifetime = 0.15
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_rli1m")
+draw_pass_1 = SubResource("QuadMesh_i3c53")
+
+[node name="Sparks" type="GPUParticles3D" parent="Visual/Kart/Particles/RailSparks/Particles" unique_id=930505809]
+material_override = ExtResource("9_ekr4a")
+amount = 5
+lifetime = 0.5
+process_material = SubResource("ParticleProcessMaterial_4e78f")
+draw_pass_1 = SubResource("QuadMesh_usafr")
+
+[node name="Particles2" type="GPUParticles3D" parent="Visual/Kart/Particles/RailSparks" unique_id=753569582]
+transform = Transform3D(1, 0, -2.13163e-14, 0, 1, 0, 2.13163e-14, 0, 1, 0.575, -0.0235636, -0.409877)
+material_override = ExtResource("9_ekr4a")
+amount = 4
+lifetime = 0.15
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_rli1m")
+draw_pass_1 = SubResource("QuadMesh_f5n8r")
+
+[node name="Sparks" type="GPUParticles3D" parent="Visual/Kart/Particles/RailSparks/Particles2" unique_id=304016723]
+material_override = ExtResource("9_ekr4a")
+amount = 5
+lifetime = 0.5
+process_material = SubResource("ParticleProcessMaterial_4e78f")
+draw_pass_1 = SubResource("QuadMesh_usafr")
+
 [node name="Boost" type="Node3D" parent="Visual/Kart/Particles" unique_id=1507947199]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.383602)
 
@@ -482,3 +524,6 @@ fixed_fps = 144
 trail_lifetime = 0.5
 process_material = SubResource("ParticleProcessMaterial_vekkg")
 draw_pass_1 = SubResource("PlaneMesh_tcnsm")
+
+[node name="RailDetector" type="RayCast3D" parent="." unique_id=1063808906]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.095, 0)

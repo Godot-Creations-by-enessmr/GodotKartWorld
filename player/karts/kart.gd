@@ -1,5 +1,6 @@
 class_name Kart extends CharacterBody3D
 
+# =============== Input Buffer ===============
 var wish_acceleration : float
 var wish_steering : float
 var wish_jump : bool
@@ -40,6 +41,15 @@ var is_hold_jump := false
 const TAP_THRESHOLD := 0.3
 const MAX_CHARGE_TIME := 2.5
 const MIN_JUMP_VELOCITY := 4.0
+
+# ----- RAIL GRIND -----
+var on_rail := false
+var current_rail_curve: Curve3D = null
+var rail_global_transform: Transform3D = Transform3D.IDENTITY
+var rail_progress: float = 0.0
+var rail_cooldown := 0.0
+@export var rail_grind_speed_normal: float = 20.0
+@onready var rail_detector: RayCast3D = $RailDetector
 
 # --- Adjustable feather parameters (exported) ---
 @export_group("Feather")
@@ -280,15 +290,18 @@ func _perform_charge_jump() -> void:
 	
 	in_water_timer = 0.0
 
-func play_item_roll_animation(item_type: ItemType) -> void:
-	if not animation_player:
-		return
-	
+func play_item_roll_animation(item_type: ItemType) -> StringName:
+	if not animation_player or item_type == null:
+		return &""
+
 	var base_name := item_type.name.to_lower().replace(" ", "_").replace("-", "_")
-	var animation_name := base_name + "_roll"
-	
+	var animation_name := StringName(base_name + "_roll")
+
 	if animation_player.has_animation(animation_name):
 		animation_player.play(animation_name)
+		return animation_name
+
+	return &""
 
 func set_boost(time : float):
 	boost_timer = min(boost_timer + time, max_boost_time)
@@ -342,13 +355,18 @@ func trigger_feather_boost() -> void:
 	feather_active = true
 
 func _apply_car_engine_force(delta : float) -> void:
-	var forward : Vector3 = -global_transform.basis.z
+	# Use a strictly horizontal forward to avoid tilting causing vertical velocity
+	var forward := -global_transform.basis.z
+	var horizontal_forward := Vector3(forward.x, 0, forward.z).normalized()
+	if horizontal_forward.length() < 0.001:
+		horizontal_forward = Vector3.FORWARD
+	
 	var horizontal_velocity := get_horizontal_velocity()
 	
 	horizontal_velocity = horizontal_velocity.lerp(Vector3.ZERO, 1 - pow(0.5, roll_resistance * delta))
 	
 	if not wish_drift:
-		horizontal_velocity = forward * forward.dot(horizontal_velocity)
+		horizontal_velocity = horizontal_forward * horizontal_forward.dot(horizontal_velocity)
 	
 	var speed = horizontal_velocity.length()
 	
@@ -364,16 +382,22 @@ func _apply_car_engine_force(delta : float) -> void:
 	if wish_break:
 		horizontal_velocity = horizontal_velocity.lerp(Vector3.ZERO, 1 - pow(0.5, break_resistance * delta))
 	elif boost_timer > 0 and speed < current_boost_speed:
-		horizontal_velocity += forward * delta * boost_acceleration
+		horizontal_velocity += horizontal_forward * delta * boost_acceleration
 	elif wish_acceleration > 0 and speed < current_top_speed:
-		horizontal_velocity += wish_acceleration * forward * delta * current_acceleration
+		horizontal_velocity += wish_acceleration * horizontal_forward * delta * current_acceleration
 	elif wish_acceleration < 0 and speed < top_reverse_speed:
-		horizontal_velocity += wish_acceleration * forward * delta * acceleration
+		horizontal_velocity += wish_acceleration * horizontal_forward * delta * acceleration
 
-	velocity = horizontal_velocity + Vector3.UP * velocity.y
+	# Preserve vertical velocity separately
+	velocity = Vector3(horizontal_velocity.x, velocity.y, horizontal_velocity.z)
 	
 func _apply_air_force(delta : float) -> void:
-	var forward : Vector3 = -global_transform.basis.z
+	# Use a strictly horizontal forward
+	var forward := -global_transform.basis.z
+	var horizontal_forward := Vector3(forward.x, 0, forward.z).normalized()
+	if horizontal_forward.length() < 0.001:
+		horizontal_forward = Vector3.FORWARD
+	
 	var horizontal_velocity := get_horizontal_velocity()
 	
 	var is_boosting := boost_timer > 0
@@ -390,9 +414,12 @@ func _apply_air_force(delta : float) -> void:
 	if current_speed > max_air_speed:
 		horizontal_velocity = horizontal_velocity.normalized() * max_air_speed
 	
-	horizontal_velocity = forward * forward.dot(horizontal_velocity)
+	horizontal_velocity = horizontal_forward * horizontal_forward.dot(horizontal_velocity)
 	
-	velocity = horizontal_velocity + Vector3.UP * velocity.y + gravity_acceleration * delta
+	# Apply gravity only to the vertical component
+	var new_vertical := velocity.y + gravity_acceleration.y * delta
+	
+	velocity = Vector3(horizontal_velocity.x, new_vertical, horizontal_velocity.z)
 	
 func _apply_water_force(delta : float) -> void:
 	if not water_buoyancy_sensor.is_in_water():
@@ -412,15 +439,180 @@ func _apply_water_force(delta : float) -> void:
 		var a := 50.0 if velocity.y < 0 else 5.0
 		velocity.y += (water_height - global_position.y) * delta * a
 
+# ==================== RAIL GRIND SYSTEM (FIXED) ====================
+
+func _detect_rail() -> Curve3D:
+	rail_detector.enabled = true
+	rail_detector.force_raycast_update()
+	if rail_detector.is_colliding():
+		var collider = rail_detector.get_collider()
+		if collider is Node3D:
+			var path = _find_path3d_child(collider)
+			if path and path.curve:
+				rail_global_transform = path.global_transform
+				rail_detector.enabled = false
+				return path.curve
+	rail_detector.enabled = false
+	return null
+
+func _find_path3d_child(node: Node3D) -> Path3D:
+	# Check direct children of the collider
+	for child in node.get_children():
+		if child is Path3D:
+			return child
+	# Check the parent (if collider is a child of the rail mesh)
+	var parent = node.get_parent()
+	if parent is Node3D:
+		for child in parent.get_children():
+			if child is Path3D:
+				return child
+	# Check siblings (if Path3D is alongside the collider)
+	if parent is Node3D and parent.get_parent() is Node3D:
+		for child in (parent.get_parent() as Node3D).get_children():
+			if child is Path3D:
+				return child
+	return null
+
+func _enter_rail(curve: Curve3D) -> void:
+	if rail_cooldown > 0.0:
+		return
+	
+	on_rail = true
+	current_rail_curve = curve
+	rail_progress = 0.0
+
+	air_time = 0.1
+	trick_triggered = false
+	feather_active = false
+
+	for wheel in wheels:
+		wheel.set_grinding(true, 1)
+
+	var hit_pos = rail_detector.get_collision_point()
+	var local_hit = rail_global_transform.affine_inverse() * hit_pos
+	
+	var baked = curve.get_baked_points()
+	var closest_dist = 1e6
+	var closest_idx = 0
+	for i in range(baked.size()):
+		var d = local_hit.distance_squared_to(baked[i])
+		if d < closest_dist:
+			closest_dist = d
+			closest_idx = i
+	var len = curve.get_baked_length()
+	if baked.size() > 1:
+		rail_progress = closest_idx * (len / (baked.size() - 1))
+
+	velocity = Vector3.ZERO
+	rail_cooldown = 0.0
+	rail_detector.enabled = false
+
+func _process_rail_grind(delta: float) -> void:
+	var curve = current_rail_curve
+	if not curve or curve.point_count == 0:
+		_exit_rail()
+		return
+
+	var spd = boost_speed if boost_timer > 0.0 else rail_grind_speed_normal
+	if star_power_active:
+		spd *= star_speed_multiplier
+
+	rail_progress += spd * delta
+
+	var total_length = curve.get_baked_length()
+	if total_length <= 0.0 or rail_progress >= total_length:
+		_exit_rail()
+		return
+
+	var local_pt = curve.sample_baked(rail_progress, true)
+	var local_tangent = curve.sample_baked(rail_progress, false)
+	
+	var global_pt = rail_global_transform * local_pt
+	var global_tangent = rail_global_transform.basis * local_tangent.normalized()
+	
+	global_position = global_pt
+	
+	if global_tangent.length() > 0.001:
+		var forward = global_tangent.normalized()
+		var up_ref = Vector3.UP
+		
+		var right = up_ref.cross(forward).normalized()
+		if right.length() < 0.001:
+			right = Vector3.RIGHT
+		up_ref = forward.cross(right).normalized()
+		
+		global_transform.basis = Basis(right, up_ref, forward)
+		velocity = global_tangent * spd
+	else:
+		velocity = -global_transform.basis.z * spd
+
+	if Input.is_action_just_pressed("move_jump"):
+		wish_jump = true
+	if wish_jump and not trick_triggered:
+		trick_triggered = true
+		animation_player.play("trick")
+		particles_manager.play_trick_particles()
+		set_boost(feather_trick_boost)
+	if not wish_jump:
+		trick_triggered = false
+
+	air_time += delta
+
+func _exit_rail() -> void:
+	if not on_rail:
+		return
+
+	for wheel in wheels:
+		wheel.set_grinding(false, 0)
+
+	on_rail = false
+	current_rail_curve = null
+	rail_global_transform = Transform3D.IDENTITY
+	rail_cooldown = 0.5
+
+	# ----- SLOW DOWN ON EXIT (UNLESS W or S IS PRESSED) -----
+	var pressing_forward = Input.is_action_pressed("move_forward")
+	var pressing_backward = Input.is_action_pressed("move_backward")
+	
+	if not (pressing_forward or pressing_backward):
+		var h_vel := get_horizontal_velocity()
+		h_vel *= 0.2   # adjust slowdown factor as desired
+		velocity = Vector3(h_vel.x, velocity.y, h_vel.z)
+	# else keep velocity as is
+
+	# ----- IMPROVED GROUND SNAPPING TO PREVENT CLIPPING -----
+	var space_state = get_world_3d().direct_space_state
+	# Cast from slightly above the kart to avoid starting inside the ground
+	var origin := global_position + Vector3.UP * 0.5
+	var target := origin - Vector3.UP * 5.0  # 5-meter ray
+	var query = PhysicsRayQueryParameters3D.create(origin, target)
+	query.collision_mask = 1  # adjust to your ground collision layer
+	var result = space_state.intersect_ray(query)
+
+	if not result.is_empty():
+		# Place the kart exactly on the surface with a tiny offset
+		global_position.y = result.position.y + 0.05
+		velocity.y = 0.0
+	# else: let gravity handle it naturally
+
+# ==================== END RAIL SYSTEM ====================
+
 func _physics_process(delta: float) -> void:
-	# ----- READ INPUT (fresh every physics step) -----
 	var move_vector = Input.get_vector("move_left", "move_right", "move_backward", "move_forward")
 	wish_steering = move_vector.x
 	wish_acceleration = move_vector.y
 	wish_break = Input.is_action_pressed("move_brake") \
 		or Input.is_action_pressed("move_forward") and Input.is_action_pressed("move_backward")
 	
-	# ----- DRIFT START (highest priority) -----
+	if rail_cooldown > 0.0:
+		rail_cooldown -= delta
+
+	if on_rail:
+		_process_rail_grind(delta)
+		move_and_slide()
+		reset_buffer()
+		return
+
 	if Input.is_action_just_pressed("move_jump"):
 		if abs(wish_steering) > 0.1 and wish_acceleration > 0 and is_on_ground():
 			wish_drift = true
@@ -431,94 +623,83 @@ func _physics_process(delta: float) -> void:
 			wish_jump = false
 			reset_buffer()
 			move_and_slide()
-			return  # skip the rest this physics tick
-	
-	# ----- CHARGE JUMP UPDATE (after drift check) -----
+			return
+
 	if is_hold_jump and is_on_ground() and abs(wish_steering) < 0.1 and not is_charging_jump and not wish_drift:
 		var elapsed = (Time.get_ticks_msec() / 1000.0) - jump_press_time
 		if elapsed > TAP_THRESHOLD:
 			_start_charge_jump()
-	
+
 	if is_charging_jump:
 		charge_time += delta
-		
 		if charge_time >= 1.5 and not is_charging_blue:
 			is_charging_blue = true
 			_set_charge_particle_color(Color(0.0, 0.4, 1.0, 0.8))
-		
 		if charge_particles:
 			var charge_percent = min(charge_time / MAX_CHARGE_TIME, 1.0)
 			charge_particles.scale = Vector3(1 + charge_percent * 3, 1 + charge_percent * 3, 1 + charge_percent * 3)
-		
 		if abs(wish_steering) > 0.1:
 			_cancel_charge_jump()
-	
-	# ----- JUMP / DRIFT RELEASE -----
+
 	if Input.is_action_just_released("move_jump"):
 		if is_charging_jump:
 			_perform_charge_jump()
 		elif wish_drift:
-			if drift_stage == 2:
-				set_boost(0.5)
-			if drift_stage == 3:
-				set_boost(1.0)
-			if drift_stage == 4:
-				set_boost(4.0)
+			if drift_stage == 2: set_boost(0.5)
+			if drift_stage == 3: set_boost(1.0)
+			if drift_stage == 4: set_boost(4.0)
 			wish_drift = false
 			_set_drifing_stage(0)
 		is_hold_jump = false
-	
-	# ----- DRIFT UPDATE -----
+
 	if wish_drift and is_on_ground() and not is_charging_jump:
-		if drift_stage < 1:
-			_set_drifing_stage(1)
-		if drift_timer > 0.8 and drift_stage < 2:
-			_set_drifing_stage(2)
+		if drift_stage < 1: _set_drifing_stage(1)
+		if drift_timer > 0.8 and drift_stage < 2: _set_drifing_stage(2)
 		drift_timer += delta
-		if drift_timer > 3.0 and drift_stage < 3:
-			_set_drifing_stage(3)
-		if drift_timer > 5.0 and drift_stage < 4:
-			_set_drifing_stage(4)
-	
-	# ----- STEERING & WATER FORCES -----
+		if drift_timer > 3.0 and drift_stage < 3: _set_drifing_stage(3)
+		if drift_timer > 5.0 and drift_stage < 4: _set_drifing_stage(4)
+
 	_apply_steering(delta)	
 	_apply_water_force(delta)	
-	
-	# ----- AIR / TRICK SYSTEM -----
+
 	var on_solid_ground := is_on_solid_ground()
 	var on_ground := is_on_ground()
-	
+
 	if on_solid_ground:
 		feather_active = false
 		trick_triggered = false
 		air_time = 0.0
 	else:
 		air_time += delta
-	
+
 	var can_trick := not on_solid_ground and air_time > 0.05 and not trick_triggered
-	
 	if can_trick and wish_jump:
 		trick_triggered = true
 		animation_player.play("trick")
 		particles_manager.play_trick_particles()
 		set_boost(feather_trick_boost)
-	
 	if not wish_jump:
 		trick_triggered = false
-	
-	# ----- TAP JUMP (instant hop) -----
+
 	if wish_jump and is_on_ground() and not is_charging_jump and not wish_drift:
 		velocity.y = MIN_JUMP_VELOCITY
 		in_water_timer = 0.0
 		wish_jump = false
-	
-	# ----- APPLY ENGINE / AIR FORCES -----
+
+	if not on_solid_ground and velocity.y < 0.0 and rail_cooldown <= 0.0:
+		var curve = _detect_rail()
+		if curve:
+			_enter_rail(curve)
+			_process_rail_grind(delta)
+			move_and_slide()
+			reset_buffer()
+			return
+
 	if on_ground:
 		_apply_car_engine_force(delta)
 	else:
 		_apply_air_force(delta)
-	
-	# ----- FINALIZE -----
+
 	reset_buffer()
 	move_and_slide()
 	
@@ -533,7 +714,6 @@ func _input(event: InputEvent) -> void:
 		wish_jump = true
 		jump_press_time = Time.get_ticks_msec() / 1000.0
 		is_hold_jump = true
-		
 	if event.is_action_released("move_jump"):
 		is_hold_jump = false
 
